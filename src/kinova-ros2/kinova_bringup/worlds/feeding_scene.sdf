@@ -1,9 +1,46 @@
 <?xml version="1.0" ?>
+<!--
+  feeding_scene.sdf  (v2 — arm ↔ monitor swapped)
+  ─────────────────────────────────────────────────────────────────────
+  LAYOUT  (top view, +X right, +Y up)
+
+                     Y
+                     ^
+  [MONITOR]          |            [PATIENT in chair]
+  (-0.10, 0)         +──────────► (0.75, 0)  facing −X
+  yaw=0, camera                   mouth at (0.84, 0, 0.99)
+  faces patient      |
+                     |   [FOOD TABLE]
+                     |   (0.55, -0.25)
+                     |        ●
+                     |   [ARM PEDESTAL]
+                     |   (0.40, -0.50)  arm base z=0.85 m
+                     +─────────────────────────────────> X
+
+  REACH VERIFICATION  (arm base 0.40, -0.50, 0.85)
+  ──────────────────────────────────────────────────
+    → patient mouth (0.84, 0, 0.99)   : 0.681 m  ✓
+    → food bowl     (0.55, -0.25, 0.83): 0.292 m  ✓
+    j2n6s300 max reach: ~0.90 m
+
+  CAMERA  (depth + RGB on monitor top, monitor at (-0.10, 0), yaw=0)
+  ─────────────────────────────────────────────────────────────────────
+    camera world pos   : (0.15,  0.0, 1.30)
+    patient head world : (0.75,  0.0, 1.04)
+    camera–head dist   : 0.654 m
+    sensor pitch       : 0.409 rad (23.4° down)  in model frame (yaw=0)
+    sensor yaw         : 0.0 rad  (model already faces patient)
+
+  ROBOT SPAWN (update in kinova_launch.py)
+  ─────────────────────────────────────────
+    arguments=['-name', 'j2n6s300', '-topic', 'robot_description',
+               '-x', '0.40', '-y', '-0.50', '-z', '0.85']
+-->
 
 <sdf version="1.9">
-<world name="feeding_world">
+<world name="feeding_scene">
 
-  <!-- ── Physics ── -->
+  <!-- ════════════════════ PHYSICS ════════════════════ -->
   <physics name="default_physics" default="true" type="ode">
     <max_step_size>0.005</max_step_size>
     <real_time_factor>1.0</real_time_factor>
@@ -18,39 +55,49 @@
     </ode>
   </physics>
 
-  <!-- ── Plugins ── -->
-  <plugin filename="gz-sim-physics-system"
-          name="gz::sim::systems::Physics"/>
-  <plugin filename="gz-sim-sensors-system"
-          name="gz::sim::systems::Sensors">
+  <!-- ════════════════════ PLUGINS ════════════════════ -->
+  <plugin filename="gz-sim-physics-system"   name="gz::sim::systems::Physics"/>
+  <plugin filename="gz-sim-sensors-system"   name="gz::sim::systems::Sensors">
     <render_engine>ogre2</render_engine>
   </plugin>
-  <plugin filename="gz-sim-scene-broadcaster-system"
-          name="gz::sim::systems::SceneBroadcaster"/>
-  <plugin filename="gz-sim-user-commands-system"
-          name="gz::sim::systems::UserCommands"/>
+  <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+  <plugin filename="gz-sim-user-commands-system"     name="gz::sim::systems::UserCommands"/>
 
-  <!-- ── Lighting ── -->
+  <!-- ════════════════════ LIGHTING ════════════════════ -->
   <light type="directional" name="ceiling_main">
     <cast_shadows>false</cast_shadows>
-    <pose>0.5 0 3.0 0 0 0</pose>
-    <diffuse>0.85 0.85 0.85 1</diffuse>
-    <specular>0.20 0.20 0.20 1</specular>
-    <direction>0.0 0.0 -1.0</direction>
-    <intensity>1.0</intensity>
+    <pose>0.4 0 4.0 0 0 0</pose>
+    <diffuse>0.90 0.92 0.92 1</diffuse>
+    <specular>0.22 0.22 0.22 1</specular>
+    <direction>0.05 0.0 -1.0</direction>
+    <intensity>1.10</intensity>
   </light>
-  <light type="point" name="fill_light">
-    <pose>0.05 -0.5 1.8 0 0 0</pose>
-    <diffuse>0.60 0.60 0.60 1</diffuse>
-    <specular>0.05 0.05 0.05 1</specular>
+
+  <!-- Fill: patient-side (arm side now -Y) -->
+  <light type="point" name="patient_fill">
+    <pose>0.80 -0.30 2.2 0 0 0</pose>
+    <diffuse>0.55 0.55 0.58 1</diffuse>
+    <specular>0.04 0.04 0.04 1</specular>
     <attenuation>
-      <range>6</range><constant>0.5</constant>
-      <linear>0.02</linear><quadratic>0.001</quadratic>
+      <range>5</range><constant>0.45</constant>
+      <linear>0.04</linear><quadratic>0.002</quadratic>
     </attenuation>
     <cast_shadows>false</cast_shadows>
   </light>
 
-  <!-- ── Ground ── -->
+  <!-- Fill: arm + food tray area -->
+  <light type="point" name="arm_fill">
+    <pose>0.50 -0.60 2.0 0 0 0</pose>
+    <diffuse>0.40 0.42 0.42 1</diffuse>
+    <specular>0.03 0.03 0.03 1</specular>
+    <attenuation>
+      <range>4</range><constant>0.55</constant>
+      <linear>0.05</linear><quadratic>0.002</quadratic>
+    </attenuation>
+    <cast_shadows>false</cast_shadows>
+  </light>
+
+  <!-- ════════════════════ GROUND ════════════════════ -->
   <model name="ground_plane">
     <static>true</static>
     <link name="link">
@@ -61,216 +108,415 @@
       <visual name="visual">
         <geometry><plane><normal>0 0 1</normal><size>20 20</size></plane></geometry>
         <material>
-          <ambient>0.40 0.40 0.40 1</ambient>
-          <diffuse>0.40 0.40 0.40 1</diffuse>
+          <ambient>0.82 0.82 0.84 1</ambient>
+          <diffuse>0.82 0.82 0.84 1</diffuse>
         </material>
       </visual>
     </link>
   </model>
 
-  <!-- ── Robot pedestal (0.20×0.20×0.75 m, top at z=0.75) ── -->
+  <!-- ════════════════════════════════════════════════════════════════
+       ROBOT PEDESTAL  — moved to (0.40, -0.50)
+       Arm base spawned at z = 0.85 m.
+       Update launch file: -x 0.40  -y -0.50  -z 0.85
+       ════════════════════════════════════════════════════════════════ -->
   <model name="robot_pedestal">
     <static>true</static>
-    <pose>0 0 0 0 0 0</pose>
+    <pose>0.40 -0.50 0 0 0 0</pose>
     <link name="link">
-      <pose>0 0 0.375 0 0 0</pose>
+      <pose>0 0 0.425 0 0 0</pose>
       <collision name="collision">
-        <geometry><box><size>0.20 0.20 0.75</size></box></geometry>
+        <geometry><box><size>0.20 0.20 0.85</size></box></geometry>
       </collision>
       <visual name="visual">
-        <geometry><box><size>0.20 0.20 0.75</size></box></geometry>
+        <geometry><box><size>0.20 0.20 0.85</size></box></geometry>
         <material>
-          <ambient>0.22 0.22 0.22 1</ambient>
-          <diffuse>0.22 0.22 0.22 1</diffuse>
-          <specular>0.05 0.05 0.05 1</specular>
+          <ambient>0.15 0.15 0.18 1</ambient>
+          <diffuse>0.15 0.15 0.18 1</diffuse>
+          <specular>0.12 0.12 0.12 1</specular>
         </material>
       </visual>
     </link>
   </model>
 
-  <!-- Robot j2n6s300 is spawned by the launch file via /robot_description -->
-
-  <!-- ── Table (top at z=0.75, centre at x=0.60) ── -->
-  <model name="table">
+  <!-- ════════════════════════════════════════════════════════════════
+       PATIENT CHAIR  at (0.75, 0)  — unchanged
+       ════════════════════════════════════════════════════════════════ -->
+  <model name="patient_chair">
     <static>true</static>
-    <pose>0.60 0 0 0 0 0</pose>
-    <link name="tabletop">
-      <pose>0 0 0.735 0 0 0</pose>
-      <collision name="collision">
-        <geometry><box><size>0.90 0.70 0.030</size></box></geometry>
-        <surface><friction><ode><mu>0.8</mu><mu2>0.8</mu2></ode></friction></surface>
-      </collision>
-      <visual name="visual">
-        <geometry><box><size>0.90 0.70 0.030</size></box></geometry>
-        <material>
-          <ambient>0.55 0.38 0.18 1</ambient>
-          <diffuse>0.55 0.38 0.18 1</diffuse>
-          <specular>0.05 0.03 0.01 1</specular>
-        </material>
-      </visual>
-    </link>
-    <link name="leg_fl"><pose> 0.40  0.30 0.365 0 0 0</pose>
-      <collision name="c"><geometry><box><size>0.05 0.05 0.73</size></box></geometry></collision>
-      <visual name="v"><geometry><box><size>0.05 0.05 0.73</size></box></geometry>
-        <material><ambient>0.40 0.25 0.10 1</ambient><diffuse>0.40 0.25 0.10 1</diffuse></material>
-      </visual>
-    </link>
-    <link name="leg_fr"><pose> 0.40 -0.30 0.365 0 0 0</pose>
-      <collision name="c"><geometry><box><size>0.05 0.05 0.73</size></box></geometry></collision>
-      <visual name="v"><geometry><box><size>0.05 0.05 0.73</size></box></geometry>
-        <material><ambient>0.40 0.25 0.10 1</ambient><diffuse>0.40 0.25 0.10 1</diffuse></material>
-      </visual>
-    </link>
-    <link name="leg_bl"><pose>-0.40  0.30 0.365 0 0 0</pose>
-      <collision name="c"><geometry><box><size>0.05 0.05 0.73</size></box></geometry></collision>
-      <visual name="v"><geometry><box><size>0.05 0.05 0.73</size></box></geometry>
-        <material><ambient>0.40 0.25 0.10 1</ambient><diffuse>0.40 0.25 0.10 1</diffuse></material>
-      </visual>
-    </link>
-    <link name="leg_br"><pose>-0.40 -0.30 0.365 0 0 0</pose>
-      <collision name="c"><geometry><box><size>0.05 0.05 0.73</size></box></geometry></collision>
-      <visual name="v"><geometry><box><size>0.05 0.05 0.73</size></box></geometry>
-        <material><ambient>0.40 0.25 0.10 1</ambient><diffuse>0.40 0.25 0.10 1</diffuse></material>
-      </visual>
-    </link>
-  </model>
-
-  <!-- ── Plate (world x=0.50, top face z=0.762) ── -->
-  <model name="plate">
-    <static>true</static>
-    <pose>0.50 0 0.756 0 0 0</pose>
+    <pose>0.75 0 0 0 0 0</pose>
     <link name="link">
-      <collision name="collision">
-        <geometry><cylinder><radius>0.130</radius><length>0.012</length></cylinder></geometry>
-        <surface><friction><ode><mu>0.6</mu><mu2>0.6</mu2></ode></friction></surface>
+
+      <collision name="seat_col">
+        <pose>0 0 0.44 0 0 0</pose>
+        <geometry><box><size>0.50 0.50 0.040</size></box></geometry>
       </collision>
-      <visual name="visual">
-        <geometry><cylinder><radius>0.130</radius><length>0.012</length></cylinder></geometry>
-        <material>
-          <ambient>0.95 0.95 0.95 1</ambient>
-          <diffuse>0.95 0.95 0.95 1</diffuse>
-          <specular>0.30 0.30 0.30 1</specular>
-        </material>
+      <visual name="seat_frame">
+        <pose>0 0 0.44 0 0 0</pose>
+        <geometry><box><size>0.50 0.50 0.040</size></box></geometry>
+        <material><ambient>0.58 0.58 0.60 1</ambient><diffuse>0.58 0.58 0.60 1</diffuse><specular>0.06 0.06 0.06 1</specular></material>
       </visual>
+      <visual name="seat_cushion">
+        <pose>0 0 0.472 0 0 0</pose>
+        <geometry><box><size>0.46 0.46 0.024</size></box></geometry>
+        <material><ambient>0.72 0.75 0.80 1</ambient><diffuse>0.72 0.75 0.80 1</diffuse></material>
+      </visual>
+      <collision name="backrest_col">
+        <pose>0.15 0 0.70 0 0 0</pose>
+        <geometry><box><size>0.040 0.46 0.54</size></box></geometry>
+      </collision>
+      <visual name="backrest_frame">
+        <pose>0.15 0 0.70 0 0 0</pose>
+        <geometry><box><size>0.040 0.46 0.54</size></box></geometry>
+        <material><ambient>0.58 0.58 0.60 1</ambient><diffuse>0.58 0.58 0.60 1</diffuse></material>
+      </visual>
+      <visual name="backrest_cushion">
+        <pose>0.128 0 0.70 0 0 0</pose>
+        <geometry><box><size>0.020 0.42 0.50</size></box></geometry>
+        <material><ambient>0.72 0.75 0.80 1</ambient><diffuse>0.72 0.75 0.80 1</diffuse></material>
+      </visual>
+      <visual name="armrest_left">
+        <pose>0 0.255 0.645 0 0 0</pose>
+        <geometry><box><size>0.44 0.040 0.028</size></box></geometry>
+        <material><ambient>0.52 0.52 0.55 1</ambient><diffuse>0.52 0.52 0.55 1</diffuse></material>
+      </visual>
+      <visual name="armrest_right">
+        <pose>0 -0.255 0.645 0 0 0</pose>
+        <geometry><box><size>0.44 0.040 0.028</size></box></geometry>
+        <material><ambient>0.52 0.52 0.55 1</ambient><diffuse>0.52 0.52 0.55 1</diffuse></material>
+      </visual>
+      <visual name="leg_fl"><pose>-0.20  0.20 0.215 0 0 0</pose><geometry><cylinder><radius>0.018</radius><length>0.43</length></cylinder></geometry><material><ambient>0.60 0.62 0.62 1</ambient><diffuse>0.60 0.62 0.62 1</diffuse><specular>0.30 0.30 0.30 1</specular></material></visual>
+      <visual name="leg_fr"><pose>-0.20 -0.20 0.215 0 0 0</pose><geometry><cylinder><radius>0.018</radius><length>0.43</length></cylinder></geometry><material><ambient>0.60 0.62 0.62 1</ambient><diffuse>0.60 0.62 0.62 1</diffuse><specular>0.30 0.30 0.30 1</specular></material></visual>
+      <visual name="leg_bl"><pose> 0.20  0.20 0.215 0 0 0</pose><geometry><cylinder><radius>0.018</radius><length>0.43</length></cylinder></geometry><material><ambient>0.60 0.62 0.62 1</ambient><diffuse>0.60 0.62 0.62 1</diffuse><specular>0.30 0.30 0.30 1</specular></material></visual>
+      <visual name="leg_br"><pose> 0.20 -0.20 0.215 0 0 0</pose><geometry><cylinder><radius>0.018</radius><length>0.43</length></cylinder></geometry><material><ambient>0.60 0.62 0.62 1</ambient><diffuse>0.60 0.62 0.62 1</diffuse><specular>0.30 0.30 0.30 1</specular></material></visual>
+
     </link>
   </model>
 
-  <!-- ── Food item (orange sphere) ── -->
-  <model name="food_item">
-    <pose>0.50 0 0.784 0 0 0</pose>
-    <link name="link">
-      <inertial>
-        <mass>0.040</mass>
-        <inertia>
-          <ixx>8e-6</ixx><ixy>0</ixy><ixz>0</ixz>
-          <iyy>8e-6</iyy><iyz>0</iyz><izz>8e-6</izz>
-        </inertia>
-      </inertial>
-      <collision name="collision">
-        <geometry><sphere><radius>0.022</radius></sphere></geometry>
-        <surface>
-          <friction><ode><mu>1.0</mu><mu2>1.0</mu2></ode></friction>
-          <contact><ode><kp>1e5</kp><kd>1.0</kd></ode></contact>
-        </surface>
-      </collision>
-      <visual name="visual">
-        <geometry><sphere><radius>0.022</radius></sphere></geometry>
-        <material>
-          <ambient>0.95 0.50 0.05 1</ambient>
-          <diffuse>0.95 0.50 0.05 1</diffuse>
-          <specular>0.10 0.05 0.00 1</specular>
-        </material>
-      </visual>
-    </link>
-  </model>
-
-  <!-- ── Patient (visual, seated at x=0.90, facing robot) ── -->
+  <!-- ════════════════════════════════════════════════════════════════
+       PATIENT  at (0.75, 0)  yaw=π  faces −X toward robot — unchanged
+       mouth_target world pos: (0.660, 0, 0.990)  [yaw=0 fix]
+       ════════════════════════════════════════════════════════════════ -->
   <model name="patient">
     <static>true</static>
-    <pose>0.90 0 0 0 0 3.14159265</pose>
+    <pose>0.75 0 0 0 0 0</pose>
     <link name="link">
+
+      <visual name="thigh_left"><pose>-0.12  0.11 0.46 0 1.5708 0</pose><geometry><cylinder><radius>0.052</radius><length>0.32</length></cylinder></geometry><material><ambient>0.25 0.38 0.62 1</ambient><diffuse>0.25 0.38 0.62 1</diffuse></material></visual>
+      <visual name="thigh_right"><pose>-0.12 -0.11 0.46 0 1.5708 0</pose><geometry><cylinder><radius>0.052</radius><length>0.32</length></cylinder></geometry><material><ambient>0.25 0.38 0.62 1</ambient><diffuse>0.25 0.38 0.62 1</diffuse></material></visual>
+      <visual name="shin_left"><pose>-0.26  0.11 0.25 0 0 0</pose><geometry><cylinder><radius>0.038</radius><length>0.42</length></cylinder></geometry><material><ambient>0.25 0.38 0.62 1</ambient><diffuse>0.25 0.38 0.62 1</diffuse></material></visual>
+      <visual name="shin_right"><pose>-0.26 -0.11 0.25 0 0 0</pose><geometry><cylinder><radius>0.038</radius><length>0.42</length></cylinder></geometry><material><ambient>0.25 0.38 0.62 1</ambient><diffuse>0.25 0.38 0.62 1</diffuse></material></visual>
+
       <visual name="torso">
-        <pose>0 0 0.90 0 0 0</pose>
-        <geometry><box><size>0.28 0.22 0.44</size></box></geometry>
-        <material>
-          <ambient>0.25 0.40 0.65 1</ambient>
-          <diffuse>0.25 0.40 0.65 1</diffuse>
-        </material>
+        <pose>0 0 0.74 0 0 0</pose>
+        <geometry><box><size>0.22 0.28 0.40</size></box></geometry>
+        <material><ambient>0.25 0.40 0.65 1</ambient><diffuse>0.25 0.40 0.65 1</diffuse></material>
       </visual>
+      <visual name="shoulder_l"><pose>0  0.17 0.88 0 0 0</pose><geometry><sphere><radius>0.054</radius></sphere></geometry><material><ambient>0.25 0.40 0.65 1</ambient><diffuse>0.25 0.40 0.65 1</diffuse></material></visual>
+      <visual name="shoulder_r"><pose>0 -0.17 0.88 0 0 0</pose><geometry><sphere><radius>0.054</radius></sphere></geometry><material><ambient>0.25 0.40 0.65 1</ambient><diffuse>0.25 0.40 0.65 1</diffuse></material></visual>
+      <visual name="arm_left"><pose>0.04  0.26 0.66 0 0 0</pose><geometry><cylinder><radius>0.038</radius><length>0.36</length></cylinder></geometry><material><ambient>0.88 0.72 0.58 1</ambient><diffuse>0.88 0.72 0.58 1</diffuse></material></visual>
+      <visual name="arm_right"><pose>0.04 -0.26 0.66 0 0 0</pose><geometry><cylinder><radius>0.038</radius><length>0.36</length></cylinder></geometry><material><ambient>0.88 0.72 0.58 1</ambient><diffuse>0.88 0.72 0.58 1</diffuse></material></visual>
+
       <visual name="neck">
-        <pose>0 0 1.12 0 0 0</pose>
-        <geometry><cylinder><radius>0.030</radius><length>0.06</length></cylinder></geometry>
+        <pose>0 0 0.965 0 0 0</pose>
+        <geometry><cylinder><radius>0.030</radius><length>0.055</length></cylinder></geometry>
         <material><ambient>0.88 0.72 0.58 1</ambient><diffuse>0.88 0.72 0.58 1</diffuse></material>
       </visual>
       <visual name="head">
-        <pose>0 0 1.15 0 0 0</pose>
-        <geometry><sphere><radius>0.100</radius></sphere></geometry>
-        <material>
-          <ambient>0.88 0.72 0.58 1</ambient>
-          <diffuse>0.88 0.72 0.58 1</diffuse>
-          <specular>0.05 0.04 0.03 1</specular>
-        </material>
+        <pose>0 0 1.040 0 0 0</pose>
+        <geometry><sphere><radius>0.098</radius></sphere></geometry>
+        <material><ambient>0.88 0.72 0.58 1</ambient><diffuse>0.88 0.72 0.58 1</diffuse><specular>0.06 0.04 0.03 1</specular></material>
       </visual>
+      <visual name="eye_left"><pose>-0.086  0.032 1.058 0 0 0</pose><geometry><sphere><radius>0.012</radius></sphere></geometry><material><ambient>0.08 0.06 0.05 1</ambient><diffuse>0.08 0.06 0.05 1</diffuse></material></visual>
+      <visual name="eye_right"><pose>-0.086 -0.032 1.058 0 0 0</pose><geometry><sphere><radius>0.012</radius></sphere></geometry><material><ambient>0.08 0.06 0.05 1</ambient><diffuse>0.08 0.06 0.05 1</diffuse></material></visual>
+      <visual name="nose"><pose>-0.094 0 1.030 0 0 0</pose><geometry><sphere><radius>0.012</radius></sphere></geometry><material><ambient>0.84 0.68 0.54 1</ambient><diffuse>0.84 0.68 0.54 1</diffuse></material></visual>
+
+      <!-- ── MOUTH TARGET (food delivery point) ───────────────────────
+           local (-0.09, 0, 0.990) + yaw=π  → world (0.84, 0, 0.99)
+           Red glowing sphere = RL goal, visible in RViz
+           ─────────────────────────────────────────────────────────── -->
       <visual name="mouth_target">
-        <pose>-0.05 0 1.095 0 0 0</pose>
-        <geometry><sphere><radius>0.018</radius></sphere></geometry>
+        <pose>-0.09 0 0.990 0 0 0</pose>
+        <geometry><sphere><radius>0.014</radius></sphere></geometry>
         <material>
-          <ambient>0.85 0.15 0.10 1</ambient>
-          <diffuse>0.85 0.15 0.10 1</diffuse>
-          <specular>0.10 0.02 0.01 1</specular>
+          <ambient>0.90 0.10 0.08 1</ambient>
+          <diffuse>0.90 0.10 0.08 1</diffuse>
+          <specular>0.12 0.02 0.01 1</specular>
+          <emissive>0.30 0.02 0.01 1</emissive>
         </material>
       </visual>
+
     </link>
   </model>
 
-  <!-- ── Camera stand ── -->
-  <model name="camera_stand">
+  <!-- ════════════════════════════════════════════════════════════════
+       FOOD SIDE TABLE  — moved close to new arm position
+       World (0.55, -0.25).  Top surface z = 0.765 m.
+       Arm reach: 0.292 m  ✓
+       ════════════════════════════════════════════════════════════════ -->
+  <model name="food_side_table">
     <static>true</static>
-    <pose>0.05 -0.55 0 0 0 0</pose>
-    <link name="pole">
-      <pose>0 0 0.65 0 0 0</pose>
-      <visual name="vis">
-        <geometry><cylinder><radius>0.018</radius><length>1.30</length></cylinder></geometry>
-        <material><ambient>0.3 0.3 0.3 1</ambient><diffuse>0.3 0.3 0.3 1</diffuse></material>
+    <pose>0.55 -0.25 0 0 0 0</pose>
+    <link name="link">
+
+      <collision name="top_col">
+        <pose>0 0 0.765 0 0 0</pose>
+        <geometry><box><size>0.40 0.40 0.030</size></box></geometry>
+        <surface><friction><ode><mu>0.8</mu><mu2>0.8</mu2></ode></friction></surface>
+      </collision>
+      <visual name="tabletop">
+        <pose>0 0 0.765 0 0 0</pose>
+        <geometry><box><size>0.40 0.40 0.030</size></box></geometry>
+        <material><ambient>0.88 0.88 0.90 1</ambient><diffuse>0.88 0.88 0.90 1</diffuse><specular>0.18 0.18 0.18 1</specular></material>
+      </visual>
+      <visual name="edge_strip">
+        <pose>0 0 0.747 0 0 0</pose>
+        <geometry><box><size>0.40 0.40 0.006</size></box></geometry>
+        <material><ambient>0.70 0.70 0.72 1</ambient><diffuse>0.70 0.70 0.72 1</diffuse></material>
+      </visual>
+      <visual name="leg_fl"><pose> 0.17  0.17 0.375 0 0 0</pose><geometry><box><size>0.030 0.030 0.750</size></box></geometry><material><ambient>0.62 0.62 0.65 1</ambient><diffuse>0.62 0.62 0.65 1</diffuse></material></visual>
+      <visual name="leg_fr"><pose> 0.17 -0.17 0.375 0 0 0</pose><geometry><box><size>0.030 0.030 0.750</size></box></geometry><material><ambient>0.62 0.62 0.65 1</ambient><diffuse>0.62 0.62 0.65 1</diffuse></material></visual>
+      <visual name="leg_bl"><pose>-0.17  0.17 0.375 0 0 0</pose><geometry><box><size>0.030 0.030 0.750</size></box></geometry><material><ambient>0.62 0.62 0.65 1</ambient><diffuse>0.62 0.62 0.65 1</diffuse></material></visual>
+      <visual name="leg_br"><pose>-0.17 -0.17 0.375 0 0 0</pose><geometry><box><size>0.030 0.030 0.750</size></box></geometry><material><ambient>0.62 0.62 0.65 1</ambient><diffuse>0.62 0.62 0.65 1</diffuse></material></visual>
+
+    </link>
+  </model>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       FOOD BOWL  at world (0.55, -0.25, 0.793)
+       ════════════════════════════════════════════════════════════════ -->
+  <model name="food_bowl">
+    <static>true</static>
+    <pose>0.55 -0.25 0.793 0 0 0</pose>
+    <link name="link">
+      <collision name="col">
+        <geometry><cylinder><radius>0.080</radius><length>0.038</length></cylinder></geometry>
+        <surface><friction><ode><mu>0.6</mu><mu2>0.6</mu2></ode></friction></surface>
+      </collision>
+      <visual name="bowl_body">
+        <geometry><cylinder><radius>0.080</radius><length>0.038</length></cylinder></geometry>
+        <material><ambient>0.94 0.94 0.96 1</ambient><diffuse>0.94 0.94 0.96 1</diffuse><specular>0.45 0.45 0.45 1</specular></material>
+      </visual>
+      <visual name="bowl_rim">
+        <pose>0 0 0.019 0 0 0</pose>
+        <geometry><cylinder><radius>0.084</radius><length>0.005</length></cylinder></geometry>
+        <material><ambient>0.88 0.88 0.90 1</ambient><diffuse>0.88 0.88 0.90 1</diffuse><specular>0.50 0.50 0.50 1</specular></material>
+      </visual>
+      <visual name="bowl_band">
+        <pose>0 0 0.008 0 0 0</pose>
+        <geometry><cylinder><radius>0.081</radius><length>0.006</length></cylinder></geometry>
+        <material><ambient>0.20 0.40 0.75 1</ambient><diffuse>0.20 0.40 0.75 1</diffuse></material>
       </visual>
     </link>
   </model>
 
-  <!-- ── Mouth camera ── -->
-  <model name="mouth_camera_mount">
+  <!-- ════════════════════════════════════════════════════════════════
+       FOOD ITEMS  — 3 orange spheres in the bowl at (0.55, -0.25)
+       ════════════════════════════════════════════════════════════════ -->
+  <model name="food_item_1">
+    <pose>0.550 -0.250 0.834 0 0 0</pose>
+    <link name="link">
+      <inertial><mass>0.038</mass><inertia><ixx>7.8e-6</ixx><ixy>0</ixy><ixz>0</ixz><iyy>7.8e-6</iyy><iyz>0</iyz><izz>7.8e-6</izz></inertia></inertial>
+      <collision name="col"><geometry><sphere><radius>0.021</radius></sphere></geometry><surface><friction><ode><mu>0.90</mu><mu2>0.90</mu2></ode></friction><contact><ode><kp>1e5</kp><kd>1.0</kd></ode></contact></surface></collision>
+      <visual name="vis"><geometry><sphere><radius>0.021</radius></sphere></geometry><material><ambient>0.95 0.52 0.05 1</ambient><diffuse>0.95 0.52 0.05 1</diffuse><specular>0.12 0.05 0.00 1</specular></material></visual>
+    </link>
+  </model>
+  <model name="food_item_2">
+    <pose>0.526 -0.262 0.834 0 0 0</pose>
+    <link name="link">
+      <inertial><mass>0.038</mass><inertia><ixx>7.8e-6</ixx><ixy>0</ixy><ixz>0</ixz><iyy>7.8e-6</iyy><iyz>0</iyz><izz>7.8e-6</izz></inertia></inertial>
+      <collision name="col"><geometry><sphere><radius>0.021</radius></sphere></geometry><surface><friction><ode><mu>0.90</mu><mu2>0.90</mu2></ode></friction><contact><ode><kp>1e5</kp><kd>1.0</kd></ode></contact></surface></collision>
+      <visual name="vis"><geometry><sphere><radius>0.021</radius></sphere></geometry><material><ambient>0.88 0.42 0.06 1</ambient><diffuse>0.88 0.42 0.06 1</diffuse><specular>0.12 0.05 0.00 1</specular></material></visual>
+    </link>
+  </model>
+  <model name="food_item_3">
+    <pose>0.574 -0.238 0.834 0 0 0</pose>
+    <link name="link">
+      <inertial><mass>0.038</mass><inertia><ixx>7.8e-6</ixx><ixy>0</ixy><ixz>0</ixz><iyy>7.8e-6</iyy><iyz>0</iyz><izz>7.8e-6</izz></inertia></inertial>
+      <collision name="col"><geometry><sphere><radius>0.021</radius></sphere></geometry><surface><friction><ode><mu>0.90</mu><mu2>0.90</mu2></ode></friction><contact><ode><kp>1e5</kp><kd>1.0</kd></ode></contact></surface></collision>
+      <visual name="vis"><geometry><sphere><radius>0.021</radius></sphere></geometry><material><ambient>0.98 0.62 0.02 1</ambient><diffuse>0.98 0.62 0.02 1</diffuse><specular>0.12 0.05 0.00 1</specular></material></visual>
+    </link>
+  </model>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       SPOON  — near food bowl on side table
+       ════════════════════════════════════════════════════════════════ -->
+  <model name="spoon">
     <static>true</static>
-    <pose>0.05 -0.45 1.30 0 0.22 0.51</pose>
-    <link name="camera_link">
-      <visual name="housing">
-        <geometry><box><size>0.035 0.085 0.025</size></box></geometry>
-        <material><ambient>0.08 0.08 0.08 1</ambient><diffuse>0.08 0.08 0.08 1</diffuse></material>
+    <pose>0.535 -0.185 0.800 0 0 -0.524</pose>
+    <link name="link">
+      <visual name="handle">
+        <pose>-0.076 0 0 0 0 0</pose>
+        <geometry><box><size>0.160 0.009 0.004</size></box></geometry>
+        <material><ambient>0.78 0.78 0.80 1</ambient><diffuse>0.78 0.78 0.80 1</diffuse><specular>0.55 0.55 0.55 1</specular></material>
       </visual>
-      <sensor name="camera_mouth_color" type="camera">
+      <visual name="neck">
+        <pose>0.046 0 0 0 0 0</pose>
+        <geometry><box><size>0.030 0.007 0.003</size></box></geometry>
+        <material><ambient>0.78 0.78 0.80 1</ambient><diffuse>0.78 0.78 0.80 1</diffuse><specular>0.55 0.55 0.55 1</specular></material>
+      </visual>
+      <visual name="spoon_bowl">
+        <pose>0.068 0 0.003 0 0 0</pose>
+        <geometry><sphere><radius>0.017</radius></sphere></geometry>
+        <material><ambient>0.78 0.78 0.80 1</ambient><diffuse>0.78 0.78 0.80 1</diffuse><specular>0.60 0.60 0.60 1</specular></material>
+      </visual>
+      <collision name="spoon_col">
+        <pose>-0.076 0 0 0 0 0</pose>
+        <geometry><box><size>0.220 0.020 0.008</size></box></geometry>
+      </collision>
+    </link>
+  </model>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       PATIENT MONITOR  — moved to (-0.10, 0.0)  yaw = 0
+       Screen faces directly toward patient (+X direction, yaw=0).
+
+       Camera geometry (MODEL frame, yaw=0 so model=world for XY):
+         pose:  (0.25, 0, 1.30, 0, 0.409, 0)
+         pitch: 0.409 rad = 23.4° down  → aims at patient head
+         Camera world pos  : (0.15,  0.0, 1.30)
+         Patient head world: (0.75,  0.0, 1.04)
+         Distance           : 0.654 m  ✓
+
+       Topics:
+         /camera_mouth/color/image_raw
+         /camera_mouth/depth/image_rect_raw
+       ════════════════════════════════════════════════════════════════ -->
+  <model name="patient_monitor">
+    <static>true</static>
+    <pose>-0.10 0.0 0 0 0 0</pose>
+    <link name="monitor_link">
+
+      <!-- Stand base -->
+      <collision name="base_col">
+        <pose>0 0 0.018 0 0 0</pose>
+        <geometry><box><size>0.35 0.35 0.036</size></box></geometry>
+      </collision>
+      <visual name="stand_base">
+        <pose>0 0 0.018 0 0 0</pose>
+        <geometry><box><size>0.35 0.35 0.036</size></box></geometry>
+        <material><ambient>0.14 0.14 0.16 1</ambient><diffuse>0.14 0.14 0.16 1</diffuse><specular>0.12 0.12 0.12 1</specular></material>
+      </visual>
+
+      <!-- Vertical pole -->
+      <collision name="pole_col">
+        <pose>0 0 0.50 0 0 0</pose>
+        <geometry><cylinder><radius>0.022</radius><length>1.00</length></cylinder></geometry>
+      </collision>
+      <visual name="stand_pole">
+        <pose>0 0 0.50 0 0 0</pose>
+        <geometry><cylinder><radius>0.022</radius><length>1.00</length></cylinder></geometry>
+        <material><ambient>0.20 0.20 0.22 1</ambient><diffuse>0.20 0.20 0.22 1</diffuse><specular>0.18 0.18 0.18 1</specular></material>
+      </visual>
+
+      <!-- Horizontal arm toward patient (+X) -->
+      <visual name="arm_h">
+        <pose>0.115 0 1.010 0 0 0</pose>
+        <geometry><box><size>0.230 0.018 0.016</size></box></geometry>
+        <material><ambient>0.20 0.20 0.22 1</ambient><diffuse>0.20 0.20 0.22 1</diffuse></material>
+      </visual>
+      <visual name="vesa_mount">
+        <pose>0.240 0 1.010 0 0 0</pose>
+        <geometry><box><size>0.028 0.065 0.065</size></box></geometry>
+        <material><ambient>0.20 0.20 0.22 1</ambient><diffuse>0.20 0.20 0.22 1</diffuse></material>
+      </visual>
+
+      <!-- Monitor housing -->
+      <collision name="monitor_col">
+        <pose>0.265 0 1.130 0 0 0</pose>
+        <geometry><box><size>0.038 0.395 0.280</size></box></geometry>
+      </collision>
+      <visual name="monitor_housing">
+        <pose>0.265 0 1.130 0 0 0</pose>
+        <geometry><box><size>0.038 0.395 0.280</size></box></geometry>
+        <material><ambient>0.10 0.10 0.12 1</ambient><diffuse>0.10 0.10 0.12 1</diffuse><specular>0.06 0.06 0.06 1</specular></material>
+      </visual>
+
+      <!-- Screen face (emissive) -->
+      <visual name="screen_face">
+        <pose>0.286 0 1.130 0 0 0</pose>
+        <geometry><box><size>0.004 0.370 0.255</size></box></geometry>
+        <material>
+          <ambient>0.05 0.18 0.40 1</ambient>
+          <diffuse>0.05 0.18 0.40 1</diffuse>
+          <specular>0.85 0.85 0.85 1</specular>
+          <emissive>0.03 0.12 0.28 1</emissive>
+        </material>
+      </visual>
+
+      <!-- Bezels -->
+      <visual name="bezel_top">   <pose>0.282 0  1.274 0 0 0</pose><geometry><box><size>0.014 0.398 0.016</size></box></geometry><material><ambient>0.08 0.08 0.10 1</ambient><diffuse>0.08 0.08 0.10 1</diffuse></material></visual>
+      <visual name="bezel_bottom"><pose>0.282 0  0.984 0 0 0</pose><geometry><box><size>0.014 0.398 0.016</size></box></geometry><material><ambient>0.08 0.08 0.10 1</ambient><diffuse>0.08 0.08 0.10 1</diffuse></material></visual>
+      <visual name="bezel_left">  <pose>0.282  0.196 1.130 0 0 0</pose><geometry><box><size>0.014 0.008 0.260</size></box></geometry><material><ambient>0.08 0.08 0.10 1</ambient><diffuse>0.08 0.08 0.10 1</diffuse></material></visual>
+      <visual name="bezel_right"> <pose>0.282 -0.196 1.130 0 0 0</pose><geometry><box><size>0.014 0.008 0.260</size></box></geometry><material><ambient>0.08 0.08 0.10 1</ambient><diffuse>0.08 0.08 0.10 1</diffuse></material></visual>
+
+      <!-- Camera housing on bezel top -->
+      <visual name="camera_housing">
+        <pose>0.286 0 1.283 0 0 0</pose>
+        <geometry><box><size>0.042 0.096 0.020</size></box></geometry>
+        <material><ambient>0.06 0.06 0.08 1</ambient><diffuse>0.06 0.06 0.08 1</diffuse></material>
+      </visual>
+      <visual name="camera_lens">
+        <pose>0.309 0 1.283 0 1.5708 0</pose>
+        <geometry><cylinder><radius>0.007</radius><length>0.005</length></cylinder></geometry>
+        <material><ambient>0.01 0.01 0.01 1</ambient><diffuse>0.01 0.01 0.01 1</diffuse><specular>0.90 0.90 0.90 1</specular></material>
+      </visual>
+      <visual name="ir_dot_l">
+        <pose>0.309  0.025 1.283 0 1.5708 0</pose>
+        <geometry><cylinder><radius>0.004</radius><length>0.003</length></cylinder></geometry>
+        <material><ambient>0.80 0.02 0.02 1</ambient><diffuse>0.80 0.02 0.02 1</diffuse><emissive>0.40 0.00 0.00 1</emissive></material>
+      </visual>
+      <visual name="ir_dot_r">
+        <pose>0.309 -0.025 1.283 0 1.5708 0</pose>
+        <geometry><cylinder><radius>0.004</radius><length>0.003</length></cylinder></geometry>
+        <material><ambient>0.80 0.02 0.02 1</ambient><diffuse>0.80 0.02 0.02 1</diffuse><emissive>0.40 0.00 0.00 1</emissive></material>
+      </visual>
+
+      <!-- ── RGBD CAMERA  (replaces separate camera + depth_camera) ──────
+           type="rgbd_camera" is the ONLY sensor type in Ignition Fortress
+           that publishes ALL FOUR topics needed for a point cloud in RViz:
+
+             <topic>/image         → sensor_msgs/Image  (RGB)
+             <topic>/depth_image   → sensor_msgs/Image  (32-bit float depth)
+             <topic>/points        → sensor_msgs/PointCloud2  ← the missing one
+             <topic>/camera_info   → sensor_msgs/CameraInfo  ← needed by rviz
+
+           With the old separate camera+depth_camera approach, Gazebo never
+           publishes /points or /camera_info, so RViz has nothing to display.
+
+           Pose in model frame: (0.25, 0, 1.30, 0, 0.409, 0)
+             model at (-0.10, 0, 0)  yaw=0
+           → camera world pos  : (0.15, 0, 1.30)
+           → patient head world : (0.75, 0, 1.04)  distance = 0.654 m  ✓
+           ─────────────────────────────────────────────────────────── -->
+      <sensor name="camera_mouth_rgbd" type="rgbd_camera">
+        <pose>0.25 0 1.30 0 0.409 0</pose>
         <always_on>true</always_on>
         <update_rate>15</update_rate>
         <visualize>false</visualize>
-        <camera name="color">
-          <horizontal_fov>1.047196</horizontal_fov>
-          <image><width>640</width><height>480</height><format>R8G8B8</format></image>
-          <clip><near>0.05</near><far>3.0</far></clip>
-          <noise><type>gaussian</type><mean>0.0</mean><stddev>0.005</stddev></noise>
+        <camera name="camera_mouth">
+          <horizontal_fov>1.047196</horizontal_fov>   <!-- 60 deg FOV -->
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.10</near>
+            <far>4.0</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.004</stddev>
+          </noise>
         </camera>
-        <topic>/camera_mouth/color/image_raw</topic>
-        <gz_frame_id>camera_mouth_color_optical_frame</gz_frame_id>
+        <!-- Base topic prefix — Gazebo appends /image, /depth_image,
+             /points, /camera_info automatically for rgbd_camera.        -->
+        <topic>/camera_mouth</topic>
+        <gz_frame_id>camera_mouth_optical_frame</gz_frame_id>
       </sensor>
-      <sensor name="camera_mouth_depth" type="depth_camera">
-        <always_on>true</always_on>
-        <update_rate>15</update_rate>
-        <visualize>false</visualize>
-        <camera name="depth">
-          <horizontal_fov>1.047196</horizontal_fov>
-          <image><width>640</width><height>480</height><format>R_FLOAT32</format></image>
-          <clip><near>0.05</near><far>3.0</far></clip>
-          <noise><type>gaussian</type><mean>0.0</mean><stddev>0.003</stddev></noise>
-        </camera>
-        <topic>/camera_mouth/depth/image_rect_raw</topic>
-        <gz_frame_id>camera_mouth_depth_optical_frame</gz_frame_id>
-      </sensor>
+
     </link>
   </model>
 

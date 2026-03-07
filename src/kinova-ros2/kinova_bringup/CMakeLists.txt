@@ -138,7 +138,9 @@ find_package(ament_cmake REQUIRED)
 install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}
 )
-
+install(PROGRAMS scripts/feeding_node.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 install(DIRECTORY moveit_resource
   DESTINATION share/${PROJECT_NAME}
 )

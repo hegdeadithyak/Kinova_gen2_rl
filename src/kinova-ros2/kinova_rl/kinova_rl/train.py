@@ -1,90 +1,90 @@
 """
-train.py
-────────
-Train a PPO agent on the Kinova j2n6s300 reach task.
+train.py  (v2 — SAC + HER)
+───────────────────────────
+Trains a SAC agent with Hindsight Experience Replay on the
+Kinova j2n6s300 reach task.
+
+Why SAC instead of PPO?
+  SAC is off-policy and works with HER. PPO is on-policy and cannot
+  use HER. For sparse goal-reaching tasks like this, SAC+HER is the
+  standard approach and typically converges 5-10x faster.
+
+Why HER?
+  After every failed episode, HER replays the trajectory pretending
+  the place the arm actually ended up was the intended goal.
+  This means the agent gets a positive learning signal from EVERY
+  episode, even when it never touches the real target sphere.
 
 Usage
 ─────
-  # Headless (fast, no GUI needed):
+  # Headless training (recommended):
   ros2 run kinova_rl train -- --headless
 
-  # Visualization (see robot move in Gazebo + RViz + thoughts dashboard):
+  # Visualization + thoughts dashboard:
   ros2 run kinova_rl train -- --viz
 
-  # Resume from a checkpoint:
+  # Resume:
   ros2 run kinova_rl train -- --headless --resume ~/kinova_rl_logs/best_model
-
-Outputs
-───────
-  ~/kinova_rl_logs/
-    tensorboard/          TensorBoard event files
-    checkpoints/          Model saved every --save-freq steps
-    best_model.zip        Best model seen so far
-    train_config.yaml     Config snapshot for reproducibility
 
 TensorBoard
 ───────────
   tensorboard --logdir ~/kinova_rl_logs/tensorboard
-  # Then open http://localhost:6006
+  Open http://localhost:6006
 
-What you will see
-─────────────────
-  - rollout/ep_rew_mean      : mean episode reward
-  - rollout/ep_len_mean      : mean episode length
-  - custom/mean_distance     : mean distance to target at end of episode
-  - custom/success_rate      : fraction of episodes that reached target
-  - train/value_loss         : critic loss
-  - train/policy_gradient_loss
-  - train/entropy_loss       : exploration entropy
-  - train/explained_variance : how well value fn predicts returns
+  Key plots to watch:
+    custom/success_rate      → should climb toward 1.0
+    custom/mean_distance     → should fall toward 0.05 m
+    rollout/ep_rew_mean      → should increase
+    train/actor_loss         → should be stable/decreasing
+    train/critic_loss        → should decrease then plateau
+    train/ent_coef           → entropy coefficient (auto-tuned by SAC)
 """
 
 import os
-import sys
 import argparse
-import yaml
 import time
+import yaml
 from pathlib import Path
 
 import numpy as np
 
-# ── SB3 + Gymnasium ───────────────────────────────────────────────────
-from stable_baselines3 import PPO
-from stable_baselines3.common.env_util import make_vec_env
+from stable_baselines3 import SAC
+from stable_baselines3.her.her_replay_buffer import HerReplayBuffer
 from stable_baselines3.common.callbacks import (
-    BaseCallback,
-    CheckpointCallback,
-    EvalCallback,
+    BaseCallback, CheckpointCallback, EvalCallback,
 )
-from stable_baselines3.common.logger import configure as sb3_configure
 from stable_baselines3.common.monitor import Monitor
+from stable_baselines3.common.env_util import make_vec_env
+from stable_baselines3.common.vec_env import VecNormalize
 
 from kinova_rl.jaco_reach_env import JacoReachEnv
 
 
 # ─────────────────────────────── CONFIG ───────────────────────────────
 DEFAULT_CONFIG = {
-    # Training
-    'total_timesteps':    1_000_000,
-    'save_freq':          10_000,
-    'eval_freq':          5_000,
-    'n_eval_episodes':    5,
-    'log_dir':            os.path.expanduser('~/kinova_rl_logs'),
+    'total_timesteps': 500_000,      # SAC+HER converges much faster than PPO
+    'save_freq':       10_000,
+    'eval_freq':       5_000,
+    'n_eval_episodes': 5,
+    'log_dir':         os.path.expanduser('~/kinova_rl_logs'),
 
-    # PPO hyper-parameters
-    'learning_rate':      3e-4,
-    'n_steps':            2048,
-    'batch_size':         64,
-    'n_epochs':           10,
-    'gamma':              0.99,
-    'gae_lambda':         0.95,
-    'clip_range':         0.2,
-    'ent_coef':           0.01,
-    'vf_coef':            0.5,
-    'max_grad_norm':      0.5,
+    # SAC hyper-parameters (well-tuned for continuous reach tasks)
+    'learning_rate':        3e-4,
+    'buffer_size':          200_000,  # replay buffer size
+    'learning_starts':      1_0,    # random exploration steps before training
+    'batch_size':           256,
+    'tau':                  0.005,    # soft update coefficient
+    'gamma':                0.98,     # slightly lower γ for shorter horizons
+    'train_freq':           1,
+    'gradient_steps':       1,
+    'ent_coef':             'auto',   # SAC auto-tunes entropy
+
+    # HER
+    'her_n_sampled_goal':   4,        # HER relabels 4 extra goals per transition
+    'her_goal_selection_strategy': 'future',  # best strategy for reach tasks
 
     # Network
-    'net_arch':           [256, 256],
+    'net_arch': [256, 256, 256],      # slightly deeper for HER
 }
 
 
@@ -92,108 +92,99 @@ DEFAULT_CONFIG = {
 
 class RichLoggingCallback(BaseCallback):
     """
-    Prints a live rich-formatted table every N episodes showing:
-    - Episode number
-    - Total reward
-    - Mean distance to target
-    - Success rate
-    - Entropy (exploration measure — the agent's "confidence")
-    - Value estimate (the agent's predicted future reward — its "thought")
+    Prints a live table every N episodes.
+    Shows: reward, distance, success rate, SAC entropy coefficient,
+    Q-value estimates (critic's belief about how good each state is).
     """
 
     def __init__(self, print_freq: int = 10, verbose: int = 0):
         super().__init__(verbose)
-        self.print_freq   = print_freq
-        self._ep_count    = 0
-        self._rewards     = []
-        self._distances   = []
-        self._successes   = []
-        self._start_time  = time.time()
+        self.print_freq  = print_freq
+        self._ep_count   = 0
+        self._rewards    = []
+        self._distances  = []
+        self._successes  = []
+        self._shapings   = []
+        self._start_time = time.time()
 
         try:
             from rich.console import Console
-            from rich.table import Table
-            from rich.live import Live
-            self._rich = True
+            self._rich    = True
             self._console = Console()
         except ImportError:
             self._rich = False
-            print('[train] rich not installed — using plain logging. '
-                  'Install with: pip install rich')
 
     def _on_step(self) -> bool:
-        # Collect episode stats from info buffer
         for info in self.locals.get('infos', []):
             if 'episode' in info:
                 self._ep_count += 1
                 self._rewards.append(info['episode']['r'])
-            if 'distance' in info:
-                self._distances.append(info['distance'])
-            if 'success' in info and info['success']:
-                self._successes.append(1)
-            elif 'success' in info:
-                self._successes.append(0)
+            if 'distance'  in info: self._distances.append(info['distance'])
+            if 'is_success' in info: self._successes.append(float(info['is_success']))
+            if 'r_shaping'  in info: self._shapings.append(info['r_shaping'])
 
-        # Log custom metrics to TensorBoard every step
-        if len(self._distances) > 0:
+        if self._distances:
             self.logger.record('custom/mean_distance',
-                               float(np.mean(self._distances[-100:])))
-        if len(self._successes) > 0:
+                               float(np.mean(self._distances[-200:])))
+        if self._successes:
             self.logger.record('custom/success_rate',
-                               float(np.mean(self._successes[-100:])))
+                               float(np.mean(self._successes[-200:])))
 
-        # Print rich table every N episodes
         if self._ep_count > 0 and self._ep_count % self.print_freq == 0:
-            self._print_table()
-
+            self._print()
         return True
 
-    def _print_table(self):
-        elapsed = time.time() - self._start_time
-        recent_r   = self._rewards[-self.print_freq:]
-        recent_d   = self._distances[-self.print_freq:] if self._distances else [0]
-        recent_s   = self._successes[-self.print_freq:] if self._successes else [0]
+    def _print(self):
+        elapsed   = time.time() - self._start_time
+        recent_r  = self._rewards[-self.print_freq:]
+        recent_d  = self._distances[-self.print_freq:] if self._distances else [0]
+        recent_s  = self._successes[-self.print_freq:] if self._successes else [0]
+        recent_sh = self._shapings[-self.print_freq:]  if self._shapings  else [0]
 
-        # Get agent thoughts from SB3 internals
-        entropy = 0.0
-        value   = 0.0
+        ent_coef = 0.0
+        q_val    = 0.0
         try:
-            entropy = float(self.locals.get('entropy_losses', [0])[-1] or 0)
-            value   = float(self.locals.get('values', np.zeros(1)).mean())
+            ent_coef = float(self.model.ent_coef_tensor.item())
+            # Approximate mean Q-value from logger
+            q_val = float(
+                self.locals.get('critic_values', np.zeros(1)).mean()
+                if hasattr(self.locals.get('critic_values', None), 'mean')
+                else 0.0
+            )
         except Exception:
             pass
 
         if self._rich:
             from rich.table import Table
-            from rich.panel import Panel
             t = Table(
-                title=f'[bold cyan]Kinova j2n6s300 RL Training[/bold cyan] — '
-                      f'Episode {self._ep_count} | '
-                      f'Steps {self.num_timesteps:,} | '
-                      f'Elapsed {elapsed:.0f}s',
-                show_header=True,
-                header_style='bold magenta',
+                title=(
+                    f'[bold cyan]Kinova j2n6s300 — SAC+HER Training[/bold cyan]  '
+                    f'Ep {self._ep_count} | Steps {self.num_timesteps:,} | '
+                    f'{elapsed:.0f}s'
+                ),
+                show_header=True, header_style='bold magenta',
             )
-            t.add_column('Metric',         style='cyan',  width=30)
-            t.add_column('Last Episode',   style='white', width=20)
-            t.add_column(f'Mean ({self.print_freq} ep)', style='green', width=20)
+            t.add_column('Metric',                  style='cyan',  width=36)
+            t.add_column('Last episode',            style='white', width=18)
+            t.add_column(f'Mean ({self.print_freq} ep)', style='green', width=18)
 
             t.add_row('🏆 Episode Reward',
-                      f'{recent_r[-1]:.2f}',
-                      f'{np.mean(recent_r):.2f}')
+                      f'{recent_r[-1]:.2f}', f'{np.mean(recent_r):.2f}')
             t.add_row('📏 Distance to Target (m)',
                       f'{recent_d[-1]:.4f}' if recent_d else '–',
-                      f'{np.mean(recent_d):.4f}' if recent_d else '–')
+                      f'{np.mean(recent_d):.4f}')
             t.add_row('✅ Success Rate',
                       '✓' if (recent_s and recent_s[-1]) else '✗',
-                      f'{np.mean(recent_s)*100:.1f}%' if recent_s else '0%')
-            t.add_row('🎲 Entropy (exploration)',
-                      f'{entropy:.4f}', '–')
-            t.add_row('💭 Value Estimate (expected Σr)',
-                      f'{value:.3f}', '–')
+                      f'{np.mean(recent_s)*100:.1f}%')
+            t.add_row('🔥 Reward Shaping (Φ term)',
+                      f'{recent_sh[-1]:.3f}' if recent_sh else '–',
+                      f'{np.mean(recent_sh):.3f}' if recent_sh else '–')
+            t.add_row('🎲 Entropy coef (α, auto-tuned)',
+                      f'{ent_coef:.5f}', '→ decreases as policy converges')
+            t.add_row('💭 Q-value estimate',
+                      f'{q_val:.3f}', '→ critic\'s belief about state value')
             t.add_row('⚡ Steps/sec',
                       f'{self.num_timesteps / max(elapsed, 1):.0f}', '–')
-
             self._console.print(t)
         else:
             print(
@@ -201,136 +192,101 @@ class RichLoggingCallback(BaseCallback):
                 f'rew={np.mean(recent_r):7.2f} | '
                 f'dist={np.mean(recent_d):.4f}m | '
                 f'success={np.mean(recent_s)*100:.1f}% | '
-                f'entropy={entropy:.4f} | '
-                f'value={value:.3f} | '
+                f'ent_coef={ent_coef:.5f} | '
                 f'steps={self.num_timesteps:,}'
             )
 
 
-class SuccessRateCallback(BaseCallback):
-    """Records success rate to TensorBoard for plotting."""
 
-    def __init__(self):
-        super().__init__()
-        self._successes = []
-
-    def _on_step(self) -> bool:
-        for info in self.locals.get('infos', []):
-            if 'success' in info:
-                self._successes.append(float(info['success']))
-        if self._successes:
-            self.logger.record(
-                'custom/success_rate_tb',
-                float(np.mean(self._successes[-200:])),
-            )
-        return True
-
-
-# ─────────────────────────────── MAIN ─────────────────────────────────
 
 def parse_args():
-    p = argparse.ArgumentParser(description='Train PPO on Kinova reach task')
+    p = argparse.ArgumentParser(description='Train SAC+HER on Kinova reach task')
     mode = p.add_mutually_exclusive_group()
-    mode.add_argument('--headless', action='store_true', default=True,
-                      help='Train without visualization (default)')
-    mode.add_argument('--viz', action='store_true',
-                      help='Train with Gazebo + RViz visualization and '
-                           'agent-thoughts publishing (slower)')
-    p.add_argument('--resume', type=str, default=None,
-                   help='Path to a saved model to resume training from')
-    p.add_argument('--timesteps', type=int,
-                   default=DEFAULT_CONFIG['total_timesteps'])
-    p.add_argument('--log-dir', type=str,
-                   default=DEFAULT_CONFIG['log_dir'])
-    p.add_argument('--save-freq', type=int,
-                   default=DEFAULT_CONFIG['save_freq'])
-    p.add_argument('--seed', type=int, default=42)
+    mode.add_argument('--headless', action='store_true', default=True)
+    mode.add_argument('--viz',      action='store_true',
+                      help='Train with Gazebo + RViz + thoughts dashboard')
+    p.add_argument('--resume',    type=str, default=None)
+    p.add_argument('--timesteps', type=int, default=DEFAULT_CONFIG['total_timesteps'])
+    p.add_argument('--log-dir',   type=str, default=DEFAULT_CONFIG['log_dir'])
+    p.add_argument('--seed',      type=int, default=42)
     return p.parse_args()
 
 
 def main():
-    args = parse_args()
+    args     = parse_args()
     headless = not args.viz
-
-    cfg = DEFAULT_CONFIG.copy()
-    cfg['log_dir']     = args.log_dir
-    cfg['save_freq']   = args.save_freq
+    cfg      = DEFAULT_CONFIG.copy()
+    cfg['log_dir']         = args.log_dir
     cfg['total_timesteps'] = args.timesteps
 
-    log_dir    = Path(cfg['log_dir'])
-    tb_dir     = log_dir / 'tensorboard'
-    ckpt_dir   = log_dir / 'checkpoints'
-    best_model = log_dir / 'best_model'
-
+    log_dir  = Path(cfg['log_dir'])
+    tb_dir   = log_dir / 'tensorboard'
+    ckpt_dir = log_dir / 'checkpoints'
     for d in [log_dir, tb_dir, ckpt_dir]:
         d.mkdir(parents=True, exist_ok=True)
 
-    # Save config snapshot
     with open(log_dir / 'train_config.yaml', 'w') as f:
-        yaml.dump({**cfg, 'headless': headless, 'seed': args.seed}, f)
+        yaml.dump({**cfg, 'headless': headless, 'seed': args.seed,
+                   'algorithm': 'SAC+HER'}, f)
 
-    print(f'\n{"="*60}')
-    print(f'  Kinova j2n6s300 RL Training')
-    print(f'  Mode     : {"HEADLESS" if headless else "VISUALIZATION"}')
-    print(f'  Log dir  : {log_dir}')
-    print(f'  Timesteps: {cfg["total_timesteps"]:,}')
-    print(f'{"="*60}\n')
+    print(f'\n{"="*62}')
+    print(f'  Kinova j2n6s300 RL — SAC + Hindsight Experience Replay')
+    print(f'  Mode      : {"HEADLESS" if headless else "VISUALIZATION"}')
+    print(f'  Log dir   : {log_dir}')
+    print(f'  Timesteps : {cfg["total_timesteps"]:,}')
+    print(f'  Algorithm : SAC + HER (future strategy, {cfg["her_n_sampled_goal"]} goals/step)')
+    print(f'{"="*62}')
     if not headless:
-        print('  ► Make sure Gazebo + RViz are running (kinova_launch.py)')
-        print('  ► Run: ros2 run kinova_rl thoughts  (in another terminal)')
+        print('  ► Gazebo + RViz must already be running (kinova_launch.py)')
+        print('  ► Run: ros2 run kinova_rl thoughts   (live dashboard)')
         print(f'  ► TensorBoard: tensorboard --logdir {tb_dir}\n')
 
     # ── Environment ───────────────────────────────────────────────────
-    def make_env():
-        env = JacoReachEnv(headless=headless)
-        env = Monitor(env)
-        return env
+    # NOTE: HerReplayBuffer requires n_envs=1 (SB3 limitation)
+    env = Monitor(JacoReachEnv(headless=headless))
 
-    # NOTE: n_envs=1 because we have one Gazebo instance.
-    # For parallel training you would need multiple Gazebo instances.
-    env = make_vec_env(make_env, n_envs=1, seed=args.seed)
+    eval_env = Monitor(JacoReachEnv(headless=True))
 
-    # Eval env always headless (faster) — separate instance
-    eval_env = make_vec_env(
-        lambda: Monitor(JacoReachEnv(headless=True)),
-        n_envs=1, seed=args.seed + 1,
-    )
-
-    # ── Model ─────────────────────────────────────────────────────────
+    # ── Model: SAC + HER ──────────────────────────────────────────────
     policy_kwargs = dict(net_arch=cfg['net_arch'])
 
     if args.resume:
         print(f'[train] Resuming from: {args.resume}')
-        model = PPO.load(
-            args.resume, env=env,
-            learning_rate=cfg['learning_rate'],
-        )
+        model = SAC.load(args.resume, env=env)
     else:
-        model = PPO(
-            'MlpPolicy',
+        model = SAC(
+            'MultiInputPolicy',         # required for Dict observation spaces
             env,
-            learning_rate    = cfg['learning_rate'],
-            n_steps          = cfg['n_steps'],
-            batch_size       = cfg['batch_size'],
-            n_epochs         = cfg['n_epochs'],
-            gamma            = cfg['gamma'],
-            gae_lambda       = cfg['gae_lambda'],
-            clip_range       = cfg['clip_range'],
-            ent_coef         = cfg['ent_coef'],
-            vf_coef          = cfg['vf_coef'],
-            max_grad_norm    = cfg['max_grad_norm'],
-            policy_kwargs    = policy_kwargs,
-            tensorboard_log  = str(tb_dir),
-            verbose          = 1,
-            seed             = args.seed,
+            replay_buffer_class=HerReplayBuffer,
+            replay_buffer_kwargs={
+                'n_sampled_goal':        cfg['her_n_sampled_goal'],
+                'goal_selection_strategy': cfg['her_goal_selection_strategy'],
+            },
+            learning_rate   = cfg['learning_rate'],
+            buffer_size     = cfg['buffer_size'],
+            learning_starts = cfg['learning_starts'],
+            batch_size      = cfg['batch_size'],
+            tau             = cfg['tau'],
+            gamma           = cfg['gamma'],
+            train_freq      = cfg['train_freq'],
+            gradient_steps  = cfg['gradient_steps'],
+            ent_coef        = cfg['ent_coef'],
+            policy_kwargs   = policy_kwargs,
+            tensorboard_log = str(tb_dir),
+            verbose         = 1,
+            seed            = args.seed,
         )
+
+    print(f'\n[train] Replay buffer: {cfg["buffer_size"]:,} transitions')
+    print(f'[train] HER: {cfg["her_n_sampled_goal"]} relabelled goals per real transition')
+    print(f'[train] Exploration starts after {cfg["learning_starts"]:,} random steps\n')
 
     # ── Callbacks ─────────────────────────────────────────────────────
     callbacks = [
         CheckpointCallback(
             save_freq=cfg['save_freq'],
             save_path=str(ckpt_dir),
-            name_prefix='ppo_kinova',
+            name_prefix='sac_her_kinova',
         ),
         EvalCallback(
             eval_env,
@@ -342,7 +298,6 @@ def main():
             render=False,
         ),
         RichLoggingCallback(print_freq=10),
-        SuccessRateCallback(),
     ]
 
     # ── Train ─────────────────────────────────────────────────────────
@@ -351,20 +306,20 @@ def main():
             total_timesteps=cfg['total_timesteps'],
             callback=callbacks,
             reset_num_timesteps=args.resume is None,
-            tb_log_name='PPO_kinova_reach',
+            tb_log_name='SAC_HER_kinova_reach',
+            progress_bar=True,
         )
     except KeyboardInterrupt:
-        print('\n[train] Interrupted — saving model...')
+        print('\n[train] Interrupted — saving...')
     finally:
-        final_path = str(log_dir / 'final_model')
-        model.save(final_path)
-        print(f'[train] Model saved to {final_path}.zip')
+        final = str(log_dir / 'final_model')
+        model.save(final)
+        print(f'\n[train] Saved → {final}.zip')
         env.close()
         eval_env.close()
 
-    print('\n[train] Done.')
-    print(f'  Best model : {best_model}.zip')
-    print(f'  TensorBoard: tensorboard --logdir {tb_dir}')
+    print(f'\n[train] Best model : {log_dir}/best_model.zip')
+    print(f'[train] TensorBoard: tensorboard --logdir {tb_dir}')
 
 
 if __name__ == '__main__':

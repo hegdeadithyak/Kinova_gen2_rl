@@ -20,7 +20,7 @@ Panels:
       - /Current View1
     Name: Views
     Splitter Ratio: 0.5
-  - Class: moveit_rviz_plugin/MotionPlanning
+  - Class: moveit_ros_visualization/MotionPlanning
     Expanded: ~
     Name: MotionPlanning
     Splitter Ratio: 0.5
@@ -75,7 +75,7 @@ Visualization Manager:
       Update Interval: 0
       Value: false
 
-    - Class: moveit_rviz_plugin/MotionPlanning
+    - Class: moveit_ros_visualization/MotionPlanning
       Enabled: true
       Move Group Namespace: ""
       Motion Planning:

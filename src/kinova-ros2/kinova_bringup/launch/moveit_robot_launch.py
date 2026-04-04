@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 """
-kinova_launch.py  — Kinova j2n6s300 + Ignition Gazebo (Fortress) + MoveIt2
+kinova_launch.py  — Kinova j2n6s200 + Ignition Gazebo (Fortress) + MoveIt2
 
-FIXES IN THIS VERSION
-─────────────────────
- FIX A  Spawn position: arm pedestal is at world (0.40, -0.50).
-         Old launch had -x 0.0 -y 0.0 → robot spawned at origin (wrong).
-         New:  -x 0.40  -y -0.50  -z 0.85
+PLANNING PIPELINES
+──────────────────
+  ompl     → default, all motion planning (OMPL)
+  elliptic → EllipticArc delivery planner (food-to-mouth arc)
 
- FIX B  Patient yaw=0 in feeding_scene.sdf:
-         yaw=π → face points +X (away from monitor)  ✗
-         yaw=0 → face points -X (toward monitor)      ✓
-         mouth world position: (0.660, 0, 0.990)
-
- FIX C  gz_bridge: 4 camera topics bridged, no trailing ']'.
+In RViz: MotionPlanning → Planning tab → Pipeline dropdown → select pipeline
+In Python:
+  move_group.set_planning_pipeline_id("elliptic")
+  move_group.set_planner_id("EllipticArc")
 """
 
 import os, re, pathlib, yaml
@@ -24,7 +21,7 @@ from ament_index_python.packages import get_package_share_directory, get_package
 import xacro
 
 PACKAGE_NAME          = 'kinova_bringup'
-ROBOT_NAME            = 'j2n6s300'
+ROBOT_NAME            = 'j2n6s200'
 WORLD_FILE            = os.path.expanduser(
     '~/kinova_ws/src/kinova-ros2/kinova_bringup/worlds/feeding_scene.sdf')
 ROS2_CONTROLLERS_YAML = os.path.expanduser(
@@ -32,10 +29,9 @@ ROS2_CONTROLLERS_YAML = os.path.expanduser(
 CONTROLLER_MANAGER_NS = '/controller_manager'
 SIM_TIME = {'use_sim_time': True}
 
-# ── ARM SPAWN — must match pedestal world position in feeding_scene.sdf ──
-ARM_SPAWN_X =  '0.40'   # pedestal world X
-ARM_SPAWN_Y = '-0.50'   # pedestal world Y
-ARM_SPAWN_Z =  '0.85'   # top of pedestal (height = 0.85 m)
+ARM_SPAWN_X =  '0.40'
+ARM_SPAWN_Y = '-0.50'
+ARM_SPAWN_Z =  '0.85'
 
 
 def _patch_urdf(raw_xml):
@@ -70,17 +66,17 @@ def _patch_urdf(raw_xml):
 
     blocks = ''.join(jblock(j) for j in arm_j + finger_j)
     insertion = f"""
-  <ros2_control name="GazeboSystem" type="system">
-    <hardware><plugin>gz_ros2_control/GazeboSimSystem</plugin></hardware>{blocks}
-  </ros2_control>
-  <gazebo>
-    <plugin filename="gz_ros2_control-system"
-            name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-      <parameters>{ROS2_CONTROLLERS_YAML}</parameters>
-      <ros><remapping>~/robot_description:=robot_description</remapping></ros>
-    </plugin>
-  </gazebo>
-"""
+        <ros2_control name="GazeboSystem" type="system">
+            <hardware><plugin>gz_ros2_control/GazeboSimSystem</plugin></hardware>{blocks}
+        </ros2_control>
+        <gazebo>
+            <plugin filename="gz_ros2_control-system"
+                    name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+            <parameters>{ROS2_CONTROLLERS_YAML}</parameters>
+            <ros><remapping>~/robot_description:=robot_description</remapping></ros>
+            </plugin>
+        </gazebo>
+        """
     p = p.replace('</robot>', insertion + '</robot>', 1)
     with open('/tmp/patched_robot.urdf', 'w') as f:
         f.write(p)
@@ -89,9 +85,9 @@ def _patch_urdf(raw_xml):
 
 
 def generate_launch_description():
-    pkg_dir = get_package_share_directory(PACKAGE_NAME)
-    read_file = lambda n: pathlib.Path(pkg_dir, 'moveit_resource', n).read_text()
-    read_yaml = lambda n: yaml.safe_load(read_file(n))
+    pkg_dir    = get_package_share_directory(PACKAGE_NAME)
+    read_file  = lambda n: pathlib.Path(pkg_dir, 'moveit_resource', n).read_text()
+    read_yaml  = lambda n: yaml.safe_load(read_file(n))
     moveit_res = lambda n: str(pathlib.Path(pkg_dir, 'moveit_resource', n))
 
     xacro_file = os.path.join(get_package_share_directory('kinova_description'),
@@ -119,7 +115,6 @@ def generate_launch_description():
     rsp = Node(package='robot_state_publisher', executable='robot_state_publisher',
                output='screen', parameters=[description, SIM_TIME])
 
-    # ── SPAWN — pedestal at (0.40, -0.50), arm base at z=0.85 ─────────
     spawn_robot = Node(
         package='ros_gz_sim', executable='create',
         name=f'spawn_{ROBOT_NAME}', output='screen',
@@ -127,13 +122,12 @@ def generate_launch_description():
         arguments=[
             '-name',  ROBOT_NAME,
             '-topic', 'robot_description',
-            '-x', ARM_SPAWN_X,   #  0.40
-            '-y', ARM_SPAWN_Y,   # -0.50
-            '-z', ARM_SPAWN_Z,   #  0.85
+            '-x', ARM_SPAWN_X,
+            '-y', ARM_SPAWN_Y,
+            '-z', ARM_SPAWN_Z,
         ],
     )
 
-    # ── BRIDGE — clock + all 4 rgbd_camera topics ─────────────────────
     gz_bridge = Node(
         package='ros_gz_bridge', executable='parameter_bridge',
         name='gz_ros_bridge', output='screen',
@@ -151,9 +145,6 @@ def generate_launch_description():
         ],
     )
 
-    # ── CAMERA TF ─────────────────────────────────────────────────────
-    # Camera world pos: monitor(-0.10,0) + local(0.25,0,1.30) = (0.15,0,1.30)
-    # Pitched 0.409 rad (23.4°) down toward patient face
     camera_tf = Node(
         package='tf2_ros', executable='static_transform_publisher',
         name='camera_mouth_tf', output='screen',
@@ -162,7 +153,6 @@ def generate_launch_description():
                    'world', 'camera_mouth_optical_frame'],
     )
 
-    # ── DEPTH → PointCloud2 (filtered) ────────────────────────────────
     depth_proc = Node(
         package='depth_image_proc', executable='point_cloud_xyz_node',
         name='camera_mouth_pointcloud', output='screen',
@@ -174,19 +164,17 @@ def generate_launch_description():
         ],
     )
 
-    # ── FINGER TIP JOINT PUBLISHER ────────────────────────────────────
     finger_tip_pub = Node(
         package='joint_state_publisher', executable='joint_state_publisher',
         name='finger_tip_state_publisher', output='screen',
         parameters=[SIM_TIME, {
             'rate': 50,
-            'j2n6s300_joint_finger_tip_1': 0.0,
-            'j2n6s300_joint_finger_tip_2': 0.0,
-            'j2n6s300_joint_finger_tip_3': 0.0,
+            'j2n6s200_joint_finger_tip_1': 0.0,
+            'j2n6s200_joint_finger_tip_2': 0.0,
+            'j2n6s200_joint_finger_tip_3': 0.0,
         }],
     )
 
-    # ── CONTROLLERS ───────────────────────────────────────────────────
     def _spawner(name):
         args = [name, '--controller-manager', CONTROLLER_MANAGER_NS,
                 '--controller-manager-timeout', '60']
@@ -204,9 +192,11 @@ def generate_launch_description():
     nodes = [gazebo, rsp, spawn_robot, gz_bridge,
              camera_tf, depth_proc, finger_tip_pub, controller_spawners]
 
-    # ── MOVEIT 2 ──────────────────────────────────────────────────────
+    # ── MoveIt2 ───────────────────────────────────────────────────────────────
     if 'moveit' in get_packages_with_prefixes():
-        ompl = {'move_group': {
+
+        # ── Pipeline 1: OMPL (default, approach + general motion) ────────────
+        ompl_pipeline = {
             'planning_plugin': 'ompl_interface/OMPLPlanner',
             'request_adapters': (
                 'default_planner_request_adapters/AddTimeOptimalParameterization '
@@ -215,32 +205,69 @@ def generate_launch_description():
                 'default_planner_request_adapters/FixStartStateCollision '
                 'default_planner_request_adapters/FixStartStatePathConstraints'),
             'start_state_max_bounds_error': 0.1,
-        }}
-        ompl['move_group'].update(read_yaml('ompl_planning.yaml'))
+        }
+        ompl_pipeline.update(read_yaml('ompl_planning.yaml'))
+
+        # ── Pipeline 2: EllipticArc (food-to-mouth delivery) ─────────────────
+        elliptic_pipeline = {
+            'planning_plugin': 'elliptic_planner/EllipticPlannerManager',
+            'request_adapters': (
+                'default_planner_request_adapters/AddTimeOptimalParameterization '
+                'default_planner_request_adapters/FixWorkspaceBounds '
+                'default_planner_request_adapters/FixStartStateBounds'),
+            'lift_height': 0.10,   # arc apex height above midpoint (m)
+            'n_waypoints': 40,     # IK waypoints along arc
+            'total_time':  4.0,    # delivery duration (s)
+        }
+
+        # ── move_group parameters ─────────────────────────────────────────────
+        # planning_pipelines declares both pipelines.
+        # default_planning_pipeline sets which one RViz opens with.
+        # Each pipeline's config is nested under its name key.
+        move_group_params = [
+            description,
+            SIM_TIME,
+            description_semantic,
+            description_kinematics,
+            description_planning,
+            {
+                # Declare both pipelines
+                'planning_pipelines':        ['ompl', 'elliptic'],
+                'default_planning_pipeline': 'ompl',
+
+                # OMPL pipeline config
+                'ompl': ompl_pipeline,
+
+                # Elliptic pipeline config
+                'elliptic': elliptic_pipeline,
+            },
+            {
+                'moveit_simple_controller_manager': read_yaml('controllers.yaml'),
+                'moveit_controller_manager':
+                    'moveit_simple_controller_manager/MoveItSimpleControllerManager',
+            },
+            {
+                'current_state_monitor_wait_time': 10.0,
+                'trajectory_execution.execution_duration_monitoring': False,
+                'trajectory_execution.allowed_execution_duration_scaling': 2.0,
+                'trajectory_execution.allowed_goal_duration_margin': 1.0,
+                'trajectory_execution.allowed_start_tolerance': 0.05,
+                'publish_robot_description': True,
+                'publish_robot_description_semantic': True,
+                'planning_scene_monitor_options': {
+                    'publish_planning_scene': True,
+                    'publish_geometry_updates': True,
+                    'publish_state_updates': True,
+                    'publish_transforms_updates': True,
+                },
+                'plan_with_sensing': False,
+            },
+        ]
 
         move_group = Node(
             package='moveit_ros_move_group', executable='move_group',
             output='screen',
-            parameters=[
-                description, SIM_TIME, description_semantic,
-                description_kinematics, description_planning, ompl,
-                {'moveit_simple_controller_manager': read_yaml('controllers.yaml'),
-                 'moveit_controller_manager':
-                     'moveit_simple_controller_manager/MoveItSimpleControllerManager'},
-                {'current_state_monitor_wait_time': 10.0,
-                 'trajectory_execution.execution_duration_monitoring': False,
-                 'trajectory_execution.allowed_execution_duration_scaling': 2.0,
-                 'trajectory_execution.allowed_goal_duration_margin': 1.0,
-                 'trajectory_execution.allowed_start_tolerance': 0.05,
-                 'publish_robot_description': True,
-                 'publish_robot_description_semantic': True,
-                 'planning_scene_monitor_options': {
-                     'publish_planning_scene': True,
-                     'publish_geometry_updates': True,
-                     'publish_state_updates': True,
-                     'publish_transforms_updates': True},
-                 'plan_with_sensing': False},
-            ],
+            parameters=move_group_params,
         )
 
         rviz = Node(
@@ -249,7 +276,9 @@ def generate_launch_description():
             parameters=[description, SIM_TIME, description_semantic,
                         description_kinematics, description_planning],
         )
+
         nodes.append(TimerAction(period=35.0, actions=[move_group, rviz]))
+
     else:
         nodes.append(LogInfo(msg='moveit not found — skipping move_group + rviz2.'))
 

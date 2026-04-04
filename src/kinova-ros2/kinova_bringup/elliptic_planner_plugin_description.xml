@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+  elliptic_planner_plugin_description.xml
+  Tells pluginlib where to find the EllipticPlannerManager class.
+  The 'path' attribute must match the shared library name in CMakeLists.
+-->
+<library path="elliptic_planner_plugin">
+  <class
+    name="elliptic_planner/EllipticPlannerManager"
+    type="elliptic_planner::EllipticPlannerManager"
+    base_class_type="planning_interface::PlannerManager">
+    <description>
+      Elliptic arc planner for assistive feeding.
+      Moves end-effector from current position to goal along a
+      minimum-jerk parameterized elliptic arc. Ignores obstacles.
+      Use for the final food-to-mouth delivery phase only.
+    </description>
+  </class>
+</library>

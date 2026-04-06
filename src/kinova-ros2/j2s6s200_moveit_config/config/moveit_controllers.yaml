@@ -1,0 +1,24 @@
+moveit_simple_controller_manager:
+  controller_names:
+    - arm_controller
+    - gripper_controller
+
+  arm_controller:
+    type: FollowJointTrajectory
+    action_ns: /j2s6s200_driver/arm/follow_joint_trajectory
+    default: true
+    joints:
+      - j2s6s200_joint_1
+      - j2s6s200_joint_2
+      - j2s6s200_joint_3
+      - j2s6s200_joint_4
+      - j2s6s200_joint_5
+      - j2s6s200_joint_6
+
+  gripper_controller:
+    type: FollowJointTrajectory
+    action_ns: /j2s6s200_driver/fingers/follow_joint_trajectory
+    default: false
+    joints:
+      - j2s6s200_joint_finger_1
+      - j2s6s200_joint_finger_2

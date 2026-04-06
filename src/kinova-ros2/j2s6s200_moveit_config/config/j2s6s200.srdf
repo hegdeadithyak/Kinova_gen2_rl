@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="j2s6s200">
+
+  <!-- ── GROUPS ───────────────────────────────────────────── -->
+  <group name="arm">
+    <chain base_link="root" tip_link="j2s6s200_end_effector"/>
+  </group>
+
+  <group name="gripper">
+    <link  name="j2s6s200_link_finger_1"/>
+    <link  name="j2s6s200_link_finger_2"/>
+    <link  name="j2s6s200_end_effector"/>
+    <joint name="j2s6s200_joint_finger_1"/>
+    <joint name="j2s6s200_joint_finger_2"/>
+  </group>
+
+  <!-- ── PASSIVE JOINTS (underactuated finger tips) ────────── -->
+  <passive_joint name="j2s6s200_joint_finger_tip_1"/>
+  <passive_joint name="j2s6s200_joint_finger_tip_2"/>
+
+  <!-- ── NAMED STATES ──────────────────────────────────────── -->
+  <group_state name="Home" group="arm">
+    <joint name="j2s6s200_joint_1" value="4.8046852"/>
+    <joint name="j2s6s200_joint_2" value="2.92482"/>
+    <joint name="j2s6s200_joint_3" value="1.002"/>
+    <joint name="j2s6s200_joint_4" value="4.2031852"/>
+    <joint name="j2s6s200_joint_5" value="1.4458"/>
+    <joint name="j2s6s200_joint_6" value="1.3233"/>
+  </group_state>
+
+  <group_state name="Retract" group="arm">
+    <joint name="j2s6s200_joint_1" value="-1.56695"/>
+    <joint name="j2s6s200_joint_2" value="2.6189"/>
+    <joint name="j2s6s200_joint_3" value="0.4688"/>
+    <joint name="j2s6s200_joint_4" value="-1.6088"/>
+    <joint name="j2s6s200_joint_5" value="0.0904"/>
+    <joint name="j2s6s200_joint_6" value="1.741"/>
+  </group_state>
+
+  <group_state name="Vertical" group="arm">
+    <joint name="j2s6s200_joint_1" value="3.1415"/>
+    <joint name="j2s6s200_joint_2" value="3.1415"/>
+    <joint name="j2s6s200_joint_3" value="3.1415"/>
+    <joint name="j2s6s200_joint_4" value="3.1415"/>
+    <joint name="j2s6s200_joint_5" value="3.1415"/>
+    <joint name="j2s6s200_joint_6" value="3.1415"/>
+  </group_state>
+
+  <group_state name="Open" group="gripper">
+    <joint name="j2s6s200_joint_finger_1" value="0.2"/>
+    <joint name="j2s6s200_joint_finger_2" value="0.2"/>
+  </group_state>
+
+  <group_state name="Close" group="gripper">
+    <joint name="j2s6s200_joint_finger_1" value="1.2"/>
+    <joint name="j2s6s200_joint_finger_2" value="1.2"/>
+  </group_state>
+
+  <!-- ── END EFFECTOR ──────────────────────────────────────── -->
+  <end_effector name="end_effector" parent_link="j2s6s200_end_effector" group="gripper"/>
+
+  <!-- ── VIRTUAL JOINT ─────────────────────────────────────── -->
+  <virtual_joint name="world_to_root" type="fixed" parent_frame="world" child_link="root"/>
+
+  <!-- ── DISABLED COLLISIONS ───────────────────────────────── -->
+  <!-- end_effector -->
+  <disable_collisions link1="j2s6s200_end_effector" link2="j2s6s200_link_1"            reason="Never"/>
+  <disable_collisions link1="j2s6s200_end_effector" link2="j2s6s200_link_2"            reason="Never"/>
+  <disable_collisions link1="j2s6s200_end_effector" link2="j2s6s200_link_3"            reason="Never"/>
+  <disable_collisions link1="j2s6s200_end_effector" link2="j2s6s200_link_4"            reason="Never"/>
+  <disable_collisions link1="j2s6s200_end_effector" link2="j2s6s200_link_5"            reason="Never"/>
+  <disable_collisions link1="j2s6s200_end_effector" link2="j2s6s200_link_6"            reason="Adjacent"/>
+  <disable_collisions link1="j2s6s200_end_effector" link2="j2s6s200_link_base"         reason="Never"/>
+  <disable_collisions link1="j2s6s200_end_effector" link2="j2s6s200_link_finger_1"     reason="Never"/>
+  <disable_collisions link1="j2s6s200_end_effector" link2="j2s6s200_link_finger_2"     reason="Never"/>
+  <disable_collisions link1="j2s6s200_end_effector" link2="j2s6s200_link_finger_tip_1" reason="Never"/>
+  <disable_collisions link1="j2s6s200_end_effector" link2="j2s6s200_link_finger_tip_2" reason="Never"/>
+  <disable_collisions link1="j2s6s200_end_effector" link2="root"                       reason="Never"/>
+
+  <!-- link_1 -->
+  <disable_collisions link1="j2s6s200_link_1" link2="j2s6s200_link_2"    reason="Adjacent"/>
+  <disable_collisions link1="j2s6s200_link_1" link2="j2s6s200_link_3"    reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_1" link2="j2s6s200_link_4"    reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_1" link2="j2s6s200_link_base" reason="Adjacent"/>
+  <disable_collisions link1="j2s6s200_link_1" link2="root"               reason="Never"/>
+
+  <!-- link_2 -->
+  <disable_collisions link1="j2s6s200_link_2" link2="j2s6s200_link_3"    reason="Adjacent"/>
+  <disable_collisions link1="j2s6s200_link_2" link2="j2s6s200_link_4"    reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_2" link2="j2s6s200_link_base" reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_2" link2="root"               reason="Never"/>
+
+  <!-- link_3 -->
+  <disable_collisions link1="j2s6s200_link_3" link2="j2s6s200_link_4"            reason="Adjacent"/>
+  <disable_collisions link1="j2s6s200_link_3" link2="j2s6s200_link_5"            reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_3" link2="j2s6s200_link_6"            reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_3" link2="j2s6s200_link_base"         reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_3" link2="j2s6s200_link_finger_1"     reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_3" link2="j2s6s200_link_finger_2"     reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_3" link2="j2s6s200_link_finger_tip_1" reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_3" link2="j2s6s200_link_finger_tip_2" reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_3" link2="root"                       reason="Never"/>
+
+  <!-- link_4 -->
+  <disable_collisions link1="j2s6s200_link_4" link2="j2s6s200_link_5"            reason="Adjacent"/>
+  <disable_collisions link1="j2s6s200_link_4" link2="j2s6s200_link_6"            reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_4" link2="j2s6s200_link_finger_1"     reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_4" link2="j2s6s200_link_finger_2"     reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_4" link2="j2s6s200_link_finger_tip_1" reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_4" link2="j2s6s200_link_finger_tip_2" reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_4" link2="root"                       reason="Never"/>
+
+  <!-- link_5 -->
+  <disable_collisions link1="j2s6s200_link_5" link2="j2s6s200_link_6"            reason="Adjacent"/>
+  <disable_collisions link1="j2s6s200_link_5" link2="j2s6s200_link_finger_1"     reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_5" link2="j2s6s200_link_finger_2"     reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_5" link2="j2s6s200_link_finger_tip_1" reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_5" link2="j2s6s200_link_finger_tip_2" reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_5" link2="root"                       reason="Never"/>
+
+  <!-- link_6 (hand) -->
+  <disable_collisions link1="j2s6s200_link_6" link2="j2s6s200_link_finger_1"     reason="Adjacent"/>
+  <disable_collisions link1="j2s6s200_link_6" link2="j2s6s200_link_finger_2"     reason="Adjacent"/>
+  <disable_collisions link1="j2s6s200_link_6" link2="j2s6s200_link_finger_tip_1" reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_6" link2="j2s6s200_link_finger_tip_2" reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_6" link2="root"                       reason="Never"/>
+
+  <!-- link_base -->
+  <disable_collisions link1="j2s6s200_link_base" link2="root" reason="Adjacent"/>
+
+  <!-- fingers -->
+  <disable_collisions link1="j2s6s200_link_finger_1" link2="j2s6s200_link_finger_2"     reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_finger_1" link2="j2s6s200_link_finger_tip_1" reason="Adjacent"/>
+  <disable_collisions link1="j2s6s200_link_finger_1" link2="j2s6s200_link_finger_tip_2" reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_finger_1" link2="root"                       reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_finger_2" link2="j2s6s200_link_finger_tip_1" reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_finger_2" link2="j2s6s200_link_finger_tip_2" reason="Adjacent"/>
+  <disable_collisions link1="j2s6s200_link_finger_2" link2="root"                       reason="Never"/>
+
+  <!-- finger tips — allowed to touch (pinch grasp) -->
+  <disable_collisions link1="j2s6s200_link_finger_tip_1" link2="j2s6s200_link_finger_tip_2" reason="Allowed"/>
+  <disable_collisions link1="j2s6s200_link_finger_tip_1" link2="root"                       reason="Never"/>
+  <disable_collisions link1="j2s6s200_link_finger_tip_2" link2="root"                       reason="Never"/>
+
+</robot>

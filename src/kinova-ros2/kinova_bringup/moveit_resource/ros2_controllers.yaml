@@ -1,0 +1,66 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    finger_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+joint_state_broadcaster:
+  ros__parameters:
+    joints:
+      - j2n6s300_joint_1
+      - j2n6s300_joint_2
+      - j2n6s300_joint_3
+      - j2n6s300_joint_4
+      - j2n6s300_joint_5
+      - j2n6s300_joint_6
+      - j2n6s300_joint_finger_1
+      - j2n6s300_joint_finger_2
+      - j2n6s300_joint_finger_3
+      # Leave finger tips out — they have no hw interface
+    extra_joints:
+      - j2n6s300_joint_finger_tip_1
+      - j2n6s300_joint_finger_tip_2
+      - j2n6s300_joint_finger_tip_3
+
+joint_trajectory_controller:
+  ros__parameters:
+    joints:
+      - j2n6s300_joint_1
+      - j2n6s300_joint_2
+      - j2n6s300_joint_3
+      - j2n6s300_joint_4
+      - j2n6s300_joint_5
+      - j2n6s300_joint_6
+    command_interfaces: [position]
+    state_interfaces: [position, velocity]
+    state_publish_rate: 100.0
+    action_monitor_rate: 20.0
+    allow_partial_joints_goal: false
+    constraints:
+      goal_time: 1.0
+      stopped_velocity_tolerance: 0.02
+
+
+finger_trajectory_controller:
+  ros__parameters:
+    joints:
+      - j2n6s300_joint_finger_1
+      - j2n6s300_joint_finger_2
+      - j2n6s300_joint_finger_3
+    command_interfaces: [position]
+    state_interfaces: [position, velocity]
+    state_publish_rate: 100.0
+    action_monitor_rate: 20.0
+    allow_partial_joints_goal: true
+    allow_integration_in_goal_trajectories: false
+    hold_position_at_success: true
+    constraints:
+      goal_time: 1.0
+      stopped_velocity_tolerance: 0.02

@@ -1,0 +1,41 @@
+planning_plugin: ompl_interface/OMPLPlanner
+
+move_group:
+  request_adapters: >-
+    default_planner_request_adapters/AddTimeOptimalParameterization
+    default_planner_request_adapters/FixWorkspaceBounds
+    default_planner_request_adapters/FixStartStateBounds
+    default_planner_request_adapters/FixStartStateCollision
+    default_planner_request_adapters/FixStartStatePathConstraints
+start_state_max_bounds_error: 0.1
+
+planner_configs:
+  RRTConnectkConfigDefault:
+    type: geometric::RRTConnect
+    range: 0.0   # auto
+  RRTkConfigDefault:
+    type: geometric::RRT
+    range: 0.0
+  RRTstarkConfigDefault:
+    type: geometric::RRTstar
+  ESTkConfigDefault:
+    type: geometric::EST
+  PRMkConfigDefault:
+    type: geometric::PRM
+
+arm:
+  default_planner_config: RRTConnectkConfigDefault
+  planner_configs:
+    - RRTConnectkConfigDefault
+    - RRTkConfigDefault
+    - RRTstarkConfigDefault
+    - ESTkConfigDefault
+    - PRMkConfigDefault
+  projection_evaluator: joints(j2s6s200_joint_1,j2s6s200_joint_2)
+  longest_valid_segment_fraction: 0.005
+
+gripper:
+  default_planner_config: RRTConnectkConfigDefault
+  planner_configs:
+    - RRTConnectkConfigDefault
+  longest_valid_segment_fraction: 0.005

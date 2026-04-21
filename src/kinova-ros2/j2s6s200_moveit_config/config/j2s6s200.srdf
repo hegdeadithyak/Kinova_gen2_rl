@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <robot name="j2s6s200">
-
+  <ros2_control name="GazeboSystem" type="system">
+  <hardware>
+    <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+  </hardware>
+  </ros2_control> 
   <!-- ── GROUPS ───────────────────────────────────────────── -->
   <group name="arm">
     <chain base_link="root" tip_link="j2s6s200_end_effector"/>
@@ -141,5 +145,9 @@
   <disable_collisions link1="j2s6s200_link_finger_tip_1" link2="j2s6s200_link_finger_tip_2" reason="Allowed"/>
   <disable_collisions link1="j2s6s200_link_finger_tip_1" link2="root"                       reason="Never"/>
   <disable_collisions link1="j2s6s200_link_finger_tip_2" link2="root"                       reason="Never"/>
-
+  <gazebo>
+  <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+    <parameters>$(find j2s6s200_moveit_config)/config/ros2_controllers.yaml</parameters>
+  </plugin>
+</gazebo>
 </robot>

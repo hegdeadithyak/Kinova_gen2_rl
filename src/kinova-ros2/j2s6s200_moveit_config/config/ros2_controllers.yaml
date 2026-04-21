@@ -1,15 +1,13 @@
 controller_manager:
   ros__parameters:
     update_rate: 100  # Hz
-
-    arm_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
-
-    gripper_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
+    use_sim_time: true
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
+
+    arm_controller:  # (Name this whatever your moveit_controllers.yaml expects)
+      type: joint_trajectory_controller/JointTrajectoryController
 
 arm_controller:
   ros__parameters:
@@ -25,20 +23,3 @@ arm_controller:
     state_interfaces:
       - position
       - velocity
-    state_publish_rate: 100.0
-    action_monitor_rate: 20.0
-    allow_partial_joints_goal: false
-
-gripper_controller:
-  ros__parameters:
-    joints:
-      - j2s6s200_joint_finger_1
-      - j2s6s200_joint_finger_2
-    command_interfaces:
-      - position
-    state_interfaces:
-      - position
-      - velocity
-    state_publish_rate: 100.0
-    action_monitor_rate: 20.0
-    allow_partial_joints_goal: false

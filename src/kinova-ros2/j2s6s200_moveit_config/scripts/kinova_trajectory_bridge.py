@@ -209,6 +209,23 @@ class KinovaTrajectoryBridge(Node):
             wp_t.append(t)
             wp_q.append(q)
 
+        # ---- Normalize trajectory to driver's angle frame --------------
+        # MoveIt may plan in a different 2π cycle than the driver reports
+        # (e.g. planner uses [-π, π] while driver reports [0, 2π]).
+        # Compute per-joint integer-2π offsets so the trajectory start
+        # aligns with the measured position, then apply to all waypoints.
+        if wp_q:
+            for j in range(NJ):
+                diff = q_start[j] - wp_q[0][j]
+                offset = round(diff / (2.0 * math.pi)) * (2.0 * math.pi)
+                if abs(offset) > 1e-6:
+                    self.get_logger().info(
+                        f'Joint {j+1}: applying 2π offset of '
+                        f'{math.degrees(offset):.1f} deg to trajectory'
+                    )
+                    for wp in wp_q:
+                        wp[j] += offset
+
         # Synthetic t=0 from measured pose -> smooth single-waypoint goals
         if wp_t[0] > 1e-3:
             wp_t.insert(0, 0.0)
@@ -274,6 +291,12 @@ class KinovaTrajectoryBridge(Node):
                     return result
 
                 err = [q_target[j] - q_meas[j] for j in range(NJ)]
+                # Shortest-path normalization — handles any residual wrap
+                for j in range(NJ):
+                    while err[j] >  math.pi:
+                        err[j] -= 2.0 * math.pi
+                    while err[j] < -math.pi:
+                        err[j] += 2.0 * math.pi
                 max_err = max(abs(e) for e in err)
 
                 if max_err > PATH_TOLERANCE:

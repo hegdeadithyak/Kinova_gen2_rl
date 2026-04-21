@@ -168,6 +168,11 @@ install(PROGRAMS scripts/go_feed.py
   RENAME go_feed
 )
 
+install(PROGRAMS scripts/mouth_feeding_planner.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME mouth_feeding_planner
+)
+
 install(DIRECTORY moveit_resource
   DESTINATION share/${PROJECT_NAME}
 )

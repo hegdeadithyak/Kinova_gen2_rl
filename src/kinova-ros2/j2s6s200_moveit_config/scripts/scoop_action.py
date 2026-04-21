@@ -10,9 +10,21 @@ from moveit_msgs.srv import GetCartesianPath
 from control_msgs.action import FollowJointTrajectory
 from std_srvs.srv import Trigger
 from rclpy.action import ActionClient
-from tf_transformations import quaternion_from_euler
 from builtin_interfaces.msg import Duration
 import math
+
+
+def quaternion_from_euler(roll: float, pitch: float, yaw: float):
+    """Returns [x, y, z, w] — avoids tf_transformations / transforms3d numpy issue."""
+    cr, sr = math.cos(roll  / 2), math.sin(roll  / 2)
+    cp, sp = math.cos(pitch / 2), math.sin(pitch / 2)
+    cy, sy = math.cos(yaw   / 2), math.sin(yaw   / 2)
+    return [
+        sr * cp * cy - cr * sp * sy,
+        cr * sp * cy + sr * cp * sy,
+        cr * cp * sy - sr * sp * cy,
+        cr * cp * cy + sr * sp * sy,
+    ]
 
 
 class ScoopAction(Node):

@@ -13,3 +13,11 @@ arm_controller:
     - j2s6s200_joint_4
     - j2s6s200_joint_5
     - j2s6s200_joint_6
+  constraints:
+    goal_time: 5.0          # allow 5 s overrun before declaring goal failure
+    j2s6s200_joint_1: { goal: 0.05, trajectory: 0.5 }
+    j2s6s200_joint_2: { goal: 0.05, trajectory: 0.5 }
+    j2s6s200_joint_3: { goal: 0.05, trajectory: 0.5 }
+    j2s6s200_joint_4: { goal: 0.05, trajectory: 0.5 }
+    j2s6s200_joint_5: { goal: 0.05, trajectory: 0.5 }
+    j2s6s200_joint_6: { goal: 0.05, trajectory: 0.5 }

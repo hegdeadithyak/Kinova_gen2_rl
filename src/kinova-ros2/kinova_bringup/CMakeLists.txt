@@ -147,6 +147,27 @@ install(PROGRAMS scripts/trajectory_executor.py
   DESTINATION lib/${PROJECT_NAME}
   RENAME trajectory_executor
 )
+
+install(PROGRAMS scripts/kinova_trajectory_bridge.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME kinova_trajectory_bridge
+)
+
+install(PROGRAMS scripts/kinova_trajectory_bridge.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME kinova_trajectory_bridge
+)
+
+install(PROGRAMS scripts/go_to_prescoop.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME go_to_prescoop
+)
+
+install(PROGRAMS scripts/go_feed.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME go_feed
+)
+
 install(DIRECTORY moveit_resource
   DESTINATION share/${PROJECT_NAME}
 )

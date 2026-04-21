@@ -118,23 +118,52 @@ def generate_launch_description():
                     description_joint_limits,
                     sim_time
                 ],
-                remappings=[('/joint_states', '/j2s6s200_driver/out/joint_state')],
+                # remappings=[('/joint_states', '/j2s6s200_driver/out/joint_state')],
+            )
+        )
+        # launch_description_nodes.append(
+        #     Node(
+        #         package='j2s6s200_moveit_config',
+        #         executable='trajectory_executor',
+        #         name='kinova_hw_bridge',
+        #         output='screen',
+        #         additional_env={
+        #             'LD_LIBRARY_PATH': (
+        #                 SDK_LIB_DIR + ':' + os.environ.get('LD_LIBRARY_PATH', '')
+        #             )
+        #         },
+        #         # parameters=[NO_SIM],
+        #     )
+        # )
+        launch_description_nodes.append(
+            Node(
+                package='j2s6s200_moveit_config',
+                executable='joint_state_relay',
+                output='screen'
             )
         )
         launch_description_nodes.append(
             Node(
                 package='j2s6s200_moveit_config',
-                executable='trajectory_executor',
-                name='kinova_hw_bridge',
+                executable='scoop_action',
+                name='scoop_action',
                 output='screen',
-                additional_env={
-                    'LD_LIBRARY_PATH': (
-                        SDK_LIB_DIR + ':' + os.environ.get('LD_LIBRARY_PATH', '')
-                    )
-                },
-                # parameters=[NO_SIM],
             )
         )
+        # prescoop_node = Node(
+        #     package='kinova_bringup',       # Where you saved the python script
+        #     executable='go_to_prescoop', # The python script above
+        #     name='prescoop_planner',
+        #     parameters=[description,
+        #             description_semantic,
+        #             description_kinematics,
+        #             moveit_controllers,
+        #             ompl_planning_pipeline_config,
+        #             description_joint_limits,
+        #             sim_time],     # Injecting MoveIt configs here is mandatory
+        #     output='screen'
+        # )
+        # launch_description_nodes.append(prescoop_node)
     else:
         launch_description_nodes.append(LogInfo(msg='"moveit" package is not installed, \
                                                 please install it in order to run this demo.'))

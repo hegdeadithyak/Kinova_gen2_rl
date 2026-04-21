@@ -5,7 +5,6 @@ from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration
-
 import xacro
 import yaml
 
@@ -19,63 +18,72 @@ configurable_parameters = [
     {'name': 'tolerance',             'default': "2.0"},
 ]
 
-
 def declare_configurable_parameters(parameters):
-    return [DeclareLaunchArgument(param['name'], default_value=param['default']) for param in parameters]
-
+    return [DeclareLaunchArgument(p['name'], default_value=p['default']) for p in parameters]
 
 def set_configurable_parameters(parameters):
-    return dict([(param['name'], LaunchConfiguration(param['name'])) for param in parameters])
-
+    return {p['name']: LaunchConfiguration(p['name']) for p in parameters}
 
 def yaml_to_dict(path_to_yaml):
-    with open(path_to_yaml, "r") as f:
+    with open(path_to_yaml) as f:
         return yaml.load(f, Loader=yaml.SafeLoader)
-
 
 def launch_setup(context, *args, **kwargs):
     _config_file = os.path.join(
         get_package_share_directory('kinova_bringup'),
-        'launch/config',
-        'robot_parameters.yaml'
+        'launch/config', 'robot_parameters.yaml'
     )
     params_from_file = yaml_to_dict(_config_file)
-
-    robot_name = LaunchConfiguration("kinova_robotName").perform(context)
     robot_type = LaunchConfiguration("kinova_robotType").perform(context)
+
     kinova_driver = Node(
         package='kinova_driver',
-        name=robot_type+'_driver',
+        name=robot_type + '_driver',
         executable='kinova_arm_driver',
         parameters=[set_configurable_parameters(configurable_parameters), params_from_file],
         output='screen',
     )
-    
+
     kinova_tf_updater = Node(
         package='kinova_driver',
-        name=robot_type+'_tf_updater',
+        name=robot_type + '_tf_updater',
         executable='kinova_tf_updater',
-        parameters=[{'base_frame': 'root'}, set_configurable_parameters(configurable_parameters), params_from_file],
-        remappings=[(robot_type+'_tf_updater/in/joint_angles', robot_type+'_driver/out/joint_angles')],
+        parameters=[{'base_frame': 'root'},
+                    set_configurable_parameters(configurable_parameters),
+                    params_from_file],
+        remappings=[(robot_type + '_tf_updater/in/joint_angles',
+                     robot_type + '_driver/out/joint_angles')],
         output='screen',
         condition=UnlessCondition(LaunchConfiguration("use_urdf")),
     )
-    
-    xacro_file = os.path.join(get_package_share_directory('kinova_description'), 'urdf', robot_type + '_standalone.xacro')
-    doc = xacro.process_file(xacro_file)
-    robot_desc = doc.toprettyxml(indent='  ')
+
+    xacro_file = os.path.join(
+        get_package_share_directory('kinova_description'),
+        'urdf', robot_type + '_standalone.xacro'
+    )
+    robot_desc = xacro.process_file(xacro_file).toprettyxml(indent='  ')
+
     robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
-        remappings=[('joint_states', robot_type+'_driver/out/joint_state')],
+        remappings=[('joint_states', robot_type + '_driver/out/joint_state')],
         output='screen',
-        parameters=[{'robot_description': robot_desc},],
+        parameters=[{'robot_description': robot_desc}],
         condition=IfCondition(LaunchConfiguration("use_urdf")),
     )
-    
-    return [kinova_driver, kinova_tf_updater, robot_state_publisher]
+
+    # ── Trajectory bridge — converts action goals → joint velocity commands ──
+    trajectory_bridge = Node(
+        package='kinova_bringup',          # change to wherever you install the script
+        executable='kinova_trajectory_bridge',
+        name='kinova_trajectory_bridge',
+        output='screen',
+    )
+
+    return [kinova_driver, kinova_tf_updater, robot_state_publisher, trajectory_bridge]
 
 def generate_launch_description():
-    return LaunchDescription(declare_configurable_parameters(configurable_parameters) + [
-        OpaqueFunction(function = launch_setup)
-    ])
+    return LaunchDescription(
+        declare_configurable_parameters(configurable_parameters) +
+        [OpaqueFunction(function=launch_setup)]
+    )

@@ -12,6 +12,7 @@
   <depend>cv_bridge</depend>
   <depend>geometry_msgs</depend>
   <depend>message_filters</depend>
+  <depend>image_geometry</depend>
   <depend>mediapipe</depend>
 
   <test_depend>ament_copyright</test_depend>

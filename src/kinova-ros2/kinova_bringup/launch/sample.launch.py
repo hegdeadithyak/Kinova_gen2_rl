@@ -1,258 +1,309 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+"""Launch the Kinova feeding stack.
 
-# Copyright 1996-2021 Cyberbotics Ltd.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+This brings up:
+- MoveIt2 + arm controller integration
+- RealSense camera driver
+- TF2 static frames for robot/camera alignment
+- mouth_tracker (publishes /mouth_3d_point)
+- mouth_feeding_planner (waits for /feed_trigger)
 
-"""Launch Kinova j2s6s200 arm + MoveIt2 + mouth-triggered feeding planner."""
+The planner itself performs the trigger-driven motion sequence:
+1) read the latest mouth point
+2) transform it into the base/world frame with TF2
+3) solve IK for approach/feed waypoints
+4) execute joint trajectories directly
+"""
+
+from __future__ import annotations
 
 import os
 import pathlib
+from typing import Dict, List
+
 import yaml
-from launch.actions import LogInfo, DeclareLaunchArgument
-from launch import LaunchDescription
-from launch_ros.actions import Node
-from launch.substitutions import LaunchConfiguration
-from ament_index_python.packages import get_package_share_directory, get_packages_with_prefixes
 import xacro
-KINOVA_SRC   = '/home/amma/kinova_ws/rl_v2-master/src/kinova-ros2'
 
-SDK_LIB_DIR  = f'{KINOVA_SRC}/kinova_driver/lib/x86_64-linux-gnu'
+from ament_index_python.packages import get_package_share_directory, get_packages_with_prefixes
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, LogInfo, OpaqueFunction
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
 
-PACKAGE_NAME = 'j2s6s200_moveit_config'
+
+PACKAGE_NAME = "j2s6s200_moveit_config"
+KINOVA_DESC_PKG = "kinova_description"
+KINOVA_BRINGUP_PKG = "kinova_bringup"
+REALSENSE_PKG = "realsense2_camera"
+
+
+def _load_text(package_name: str, relative_path: str) -> str:
+    base = get_package_share_directory(package_name)
+    return pathlib.Path(os.path.join(base, relative_path)).read_text()
+
+
+def _load_yaml(package_name: str, relative_path: str):
+    return yaml.safe_load(_load_text(package_name, relative_path))
+
+
+def _moveit_node_params() -> List[Dict]:
+    """Build MoveIt-related parameter dictionaries."""
+    package_dir = get_package_share_directory(PACKAGE_NAME)
+
+    xacro_file = os.path.join(
+        get_package_share_directory(KINOVA_DESC_PKG),
+        "urdf",
+        "j2s6s200_standalone.xacro",
+    )
+    robot_doc = xacro.process_file(xacro_file)
+
+    robot_description = {"robot_description": robot_doc.toprettyxml(indent="  ")}
+    robot_semantic = {"robot_description_semantic": _load_text(PACKAGE_NAME, "config/j2s6s200.srdf")}
+    robot_kinematics = {"robot_description_kinematics": _load_yaml(PACKAGE_NAME, "config/kinematics.yaml")}
+    robot_joint_limits = {"robot_description_planning": _load_yaml(PACKAGE_NAME, "config/joint_limits.yaml")}
+    sim_time = {"use_sim_time": False}
+
+    ompl_planning = {
+        "move_group": {
+            "planning_plugin": "ompl_interface/OMPLPlanner",
+            "request_adapters": (
+                "default_planner_request_adapters/AddTimeOptimalParameterization "
+                "default_planner_request_adapters/FixWorkspaceBounds "
+                "default_planner_request_adapters/FixStartStateBounds "
+                "default_planner_request_adapters/FixStartStateCollision "
+                "default_planner_request_adapters/FixStartStatePathConstraints"
+            ),
+            "start_state_max_bounds_error": 0.1,
+        }
+    }
+    ompl_planning["move_group"].update(_load_yaml(PACKAGE_NAME, "config/ompl_planning.yaml"))
+
+    moveit_controllers = {
+        "moveit_controller_manager": "moveit_simple_controller_manager/MoveItSimpleControllerManager",
+        "moveit_simple_controller_manager": {
+            "controller_names": ["arm_controller"],
+            "arm_controller": {
+                "type": "FollowJointTrajectory",
+                "action_ns": "follow_joint_trajectory",
+                "default": True,
+                "joints": [
+                    "j2s6s200_joint_1",
+                    "j2s6s200_joint_2",
+                    "j2s6s200_joint_3",
+                    "j2s6s200_joint_4",
+                    "j2s6s200_joint_5",
+                    "j2s6s200_joint_6",
+                ],
+            },
+        },
+    }
+
+    return [
+        robot_description,
+        robot_semantic,
+        robot_kinematics,
+        robot_joint_limits,
+        moveit_controllers,
+        ompl_planning,
+        sim_time,
+    ]
+
+
+def _launch_setup(context, *args, **kwargs):
+    nodes = []
+
+    if "moveit" not in get_packages_with_prefixes():
+        return [
+            LogInfo(
+                msg=(
+                    'WARNING: the "moveit" package is not installed. '
+                    "Install MoveIt2 before launching the feeding stack."
+                )
+            )
+        ]
+
+    # Optional RViz launch.
+    if LaunchConfiguration("use_rviz").perform(context).lower() == "true":
+        bringup_dir = get_package_share_directory(KINOVA_BRINGUP_PKG)
+        rviz_config_file = os.path.join(bringup_dir, "moveit_resource", "visualization.rviz")
+        nodes.append(
+            Node(
+                package="rviz2",
+                executable="rviz2",
+                name="rviz2",
+                output="screen",
+                arguments=["-d", rviz_config_file],
+                parameters=_moveit_node_params(),
+            )
+        )
+
+    # MoveIt2 move_group is required because the feeding planner calls /compute_ik.
+    nodes.append(
+        Node(
+            package="moveit_ros_move_group",
+            executable="move_group",
+            name="move_group",
+            output="screen",
+            parameters=_moveit_node_params(),
+        )
+    )
+
+    # Controller/relay helpers used by the existing Kinova setup.
+    nodes.append(
+        Node(
+            package=PACKAGE_NAME,
+            executable="joint_state_relay",
+            name="joint_state_relay",
+            output="screen",
+        )
+    )
+
+    nodes.append(
+        Node(
+            package=PACKAGE_NAME,
+            executable="scoop_action",
+            name="scoop_action",
+            output="screen",
+        )
+    )
+
+    # World/root TF bridge. The SRDF uses a virtual world->root relation.
+    nodes.append(
+        Node(
+            package="tf2_ros",
+            executable="static_transform_publisher",
+            name="world_to_root",
+            output="screen",
+            arguments=[
+                "--x", "0",
+                "--y", "0",
+                "--z", "0",
+                "--roll", "0",
+                "--pitch", "0",
+                "--yaw", "0",
+                "--frame-id", "world",
+                "--child-frame-id", "root",
+            ],
+        )
+    )
+
+    # EE → camera_color_optical_frame static TF.
+    # Values are the INVERSE of the HandEye panel output (panel shows sensor→EE;
+    # we need EE→sensor here).  Rerun convert_calibration.py after any re-calibration.
+    nodes.append(
+        Node(
+            package="tf2_ros",
+            executable="static_transform_publisher",
+            name="ee_to_camera_optical",
+            output="screen",
+            arguments=[
+                "--x", LaunchConfiguration("cam_x"),
+                "--y", LaunchConfiguration("cam_y"),
+                "--z", LaunchConfiguration("cam_z"),
+                "--roll", LaunchConfiguration("cam_roll"),
+                "--pitch", LaunchConfiguration("cam_pitch"),
+                "--yaw", LaunchConfiguration("cam_yaw"),
+                "--frame-id", "j2s6s200_end_effector",
+                "--child-frame-id", "camera_color_optical_frame",
+            ],
+        )
+    )
+
+    # RealSense driver.
+    # publish_tf is False because we provide our own EE→camera_color_optical_frame
+    # above; letting the driver also publish camera_color_frame→camera_color_optical_frame
+    # would create a TF conflict (two parents for the same frame).
+    try:
+        rs_share = get_package_share_directory(REALSENSE_PKG)
+        nodes.append(
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([rs_share, "/launch/rs_launch.py"]),
+                launch_arguments={
+                    "camera_name": "camera",
+                    "enable_color": "true",
+                    "enable_depth": "true",
+                    "align_depth.enable": "true",
+                    "pointcloud.enable": "true",
+                    "depth_module.profile": "640x480x30",
+                    "rgb_camera.profile": "640x480x30",
+                    "publish_tf": "false",
+                }.items(),
+            )
+        )
+    except Exception:
+        nodes.append(
+            LogInfo(
+                msg=(
+                    "WARNING: realsense2_camera is not installed. "
+                    "Install it with: sudo apt install ros-humble-realsense2-camera"
+                )
+            )
+        )
+
+    # Mouth tracker: must publish /mouth_3d_point for the feeding planner.
+    nodes.append(
+        Node(
+            package="mouth_tracking",
+            executable="mouth_tracker",
+            name="mouth_tracker",
+            output="screen",
+        )
+    )
+
+    # Demo-based feeding planner: record a good pose with remote control,
+    # then /feed_trigger corrects it for the current mouth position.
+    #   ros2 service call /record_feed_pose std_srvs/srv/Trigger
+    #   ros2 service call /feed_trigger     std_srvs/srv/Trigger
+    nodes.append(
+        Node(
+            package=KINOVA_BRINGUP_PKG,
+            executable="demo_feed_planner",
+            name="demo_feed_planner",
+            output="screen",
+        )
+    )
+
+    return nodes
 
 
 def generate_launch_description():
-    launch_description_nodes = []
-    package_dir = get_package_share_directory(PACKAGE_NAME)
-
-    # ── Camera TF arguments ───────────────────────────────────────────────────
-    # Hand-eye calibration (gripper ↔ camera).  The correct rigid transform is
-    # what "AX = XB" hand-eye calibration solves for; without proper data we
-    # pick a physically reasonable default and let the user tune with CLI args.
-    #
-    # Parent frame: j2s6s200_end_effector  (NOT link_6).
-    #   link_6 → end_effector has rotation (roll=180°, yaw=90°) and z=-0.16 m,
-    #   meaning link_6's +Z points AWAY from the tool.  Using end_effector as
-    #   the parent gives us a clean frame whose +Z is the tool (spoon) axis.
-    #
-    # Camera optical frame convention:  +X right, +Y down, +Z forward (out of
-    # lens).  For the lens to look along the tool axis (end_effector +Z), we
-    # need camera +Z ≡ end_effector +Z.  With roll=pitch=yaw=0 below this is
-    # already satisfied, but the image "up" direction depends on how the
-    # camera is physically rotated around its own Z axis — tune cam_yaw if
-    # the image appears upside-down or sideways.
-    #
-    # cam_x / cam_y / cam_z are measured from end_effector origin (in
-    # end_effector frame, metres).  Defaults assume the camera sits ~5 cm
-    # above the spoon mount on the +Y side of the gripper.
-    #
-    # Override at launch time, e.g.:
-    #   ros2 launch kinova_bringup sample.launch.py \
-    #       cam_x:=0.0 cam_y:=0.05 cam_z:=0.0 cam_yaw:=0.0
-    cam_args = [
-        DeclareLaunchArgument('cam_x',     default_value='0.0'),
-        DeclareLaunchArgument('cam_y',     default_value='0.05'),
-        DeclareLaunchArgument('cam_z',     default_value='0.0'),
-        DeclareLaunchArgument('cam_roll',  default_value='0.0'),
-        DeclareLaunchArgument('cam_pitch', default_value='0.0'),
-        DeclareLaunchArgument('cam_yaw',   default_value='0.0'),
+    declared_arguments = [
+        DeclareLaunchArgument(
+            "cam_x",
+            default_value="-0.04934",
+            description="EE -> camera_color_optical_frame translation X in meters",
+        ),
+        DeclareLaunchArgument(
+            "cam_y",
+            default_value="-0.12927",
+            description="EE -> camera_color_optical_frame translation Y in meters",
+        ),
+        DeclareLaunchArgument(
+            "cam_z",
+            default_value="0.14613",
+            description="EE -> camera_color_optical_frame translation Z in meters",
+        ),
+        DeclareLaunchArgument(
+            "cam_roll",
+            default_value="0.13855",
+            description="EE -> camera_color_optical_frame roll in radians",
+        ),
+        DeclareLaunchArgument(
+            "cam_pitch",
+            default_value="-0.49254",
+            description="EE -> camera_color_optical_frame pitch in radians",
+        ),
+        DeclareLaunchArgument(
+            "cam_yaw",
+            default_value="0.23797",
+            description="EE -> camera_color_optical_frame yaw in radians",
+        ),
+        DeclareLaunchArgument(
+            "use_rviz",
+            default_value="true",
+            description="Launch RViz with the MoveIt config",
+        ),
     ]
-    launch_description_nodes.extend(cam_args)
 
-    def load_file(filename):
-        return pathlib.Path(os.path.join(package_dir, 'config', filename)).read_text()
-
-    def load_yaml(filename):
-        return yaml.safe_load(load_file(filename))
-
-    # Check if moveit is installed
-    if 'moveit' in get_packages_with_prefixes():
-        # Configuration
-        xacro_file = os.path.join(get_package_share_directory('kinova_description'), 'urdf', 'j2s6s200_standalone.xacro')
-        doc = xacro.process_file(xacro_file)
-        description = {'robot_description': doc.toprettyxml(indent='  ')}
-
-        description_semantic = {'robot_description_semantic': load_file('j2s6s200.srdf')}
-        description_kinematics = {'robot_description_kinematics': load_yaml('kinematics.yaml')}
-        description_joint_limits = {'robot_description_planning': load_yaml('joint_limits.yaml')}
-        sim_time = {'use_sim_time': False}
-
-        # Rviz node
-        rviz_config_file = os.path.join(package_dir, 'config', 'visualization.rviz')
-
-        launch_description_nodes.append(
-            Node(
-                package='rviz2',
-                executable='rviz2',
-                name='rviz2',
-                arguments=['-d', rviz_config_file],
-                parameters=[
-                    description,
-                    description_semantic,
-                    description_kinematics,
-                    description_joint_limits,
-                    sim_time
-                ],
-            )
-        )
-
-        # Planning Configuration
-        ompl_planning_pipeline_config = {
-            "move_group": {
-                "planning_plugin": "ompl_interface/OMPLPlanner",
-                "request_adapters": """default_planner_request_adapters/AddTimeOptimalParameterization default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints""",
-                "start_state_max_bounds_error": 0.1,
-            }
-        }
-        # MoveIt2 node
-        ompl_planning_yaml = load_yaml('ompl_planning.yaml')
-        ompl_planning_pipeline_config["move_group"].update(ompl_planning_yaml)
-
-        moveit_controllers = {
-            "moveit_controller_manager": "moveit_simple_controller_manager/MoveItSimpleControllerManager",
-            "moveit_simple_controller_manager": {
-                "controller_names": ["arm_controller"],
-                "arm_controller": {
-                    "type": "FollowJointTrajectory",
-                    "action_ns": "follow_joint_trajectory",   # NOT the full path
-                    "default": True,
-                    "joints": [
-                        "j2s6s200_joint_1",
-                        "j2s6s200_joint_2",
-                        "j2s6s200_joint_3",
-                        "j2s6s200_joint_4",
-                        "j2s6s200_joint_5",
-                        "j2s6s200_joint_6",
-                    ],
-                },
-            },
-        }
-
-        launch_description_nodes.append(
-            Node(
-                package='moveit_ros_move_group',
-                executable='move_group',
-                output='screen',
-                parameters=[
-                    description,
-                    description_semantic,
-                    description_kinematics,
-                    moveit_controllers,
-                    ompl_planning_pipeline_config,
-                    description_joint_limits,
-                    sim_time
-                ],
-                # remappings=[('/joint_states', '/j2s6s200_driver/out/joint_state')],
-            )
-        )
-        # launch_description_nodes.append(
-        #     Node(
-        #         package='j2s6s200_moveit_config',
-        #         executable='trajectory_executor',
-        #         name='kinova_hw_bridge',
-        #         output='screen',
-        #         additional_env={
-        #             'LD_LIBRARY_PATH': (
-        #                 SDK_LIB_DIR + ':' + os.environ.get('LD_LIBRARY_PATH', '')
-        #             )
-        #         },
-        #         # parameters=[NO_SIM],
-        #     )
-        # )
-        launch_description_nodes.append(
-            Node(
-                package='j2s6s200_moveit_config',
-                executable='joint_state_relay',
-                output='screen'
-            )
-        )
-        launch_description_nodes.append(
-            Node(
-                package='j2s6s200_moveit_config',
-                executable='scoop_action',
-                name='scoop_action',
-                output='screen',
-            )
-        )
-
-        # ── Static TF: world → root (identity) ───────────────────────────────
-        # The SRDF declares a virtual joint world→root, but nothing broadcasts
-        # it. Without this, `world` is a dangling frame and TF lookups from
-        # world to any arm link fail with "two or more unconnected trees".
-        launch_description_nodes.append(
-            Node(
-                package='tf2_ros',
-                executable='static_transform_publisher',
-                name='world_to_root',
-                output='screen',
-                arguments=[
-                    '--x', '0', '--y', '0', '--z', '0',
-                    '--roll', '0', '--pitch', '0', '--yaw', '0',
-                    '--frame-id', 'world',
-                    '--child-frame-id', 'root',
-                ],
-            )
-        )
-
-        # ── Static TF: j2s6s200_link_6 → camera_color_optical_frame ──────────
-        # Publishes the camera's fixed pose so mouth points can be transformed
-        # into the robot world frame.  Adjust the cam_* launch args to match
-        # your physical camera mounting.
-        launch_description_nodes.append(
-            Node(
-                package='tf2_ros',
-                executable='static_transform_publisher',
-                name='camera_tf',
-                output='screen',
-                arguments=[
-                    '--x',           LaunchConfiguration('cam_x'),
-                    '--y',           LaunchConfiguration('cam_y'),
-                    '--z',           LaunchConfiguration('cam_z'),
-                    '--roll',        LaunchConfiguration('cam_roll'),
-                    '--pitch',       LaunchConfiguration('cam_pitch'),
-                    '--yaw',         LaunchConfiguration('cam_yaw'),
-                    '--frame-id',    'j2s6s200_end_effector',
-                    '--child-frame-id', 'camera_color_optical_frame',
-                ],
-            )
-        )
-
-        # ── Mouth tracker (RealSense + MediaPipe face landmark) ───────────────
-        launch_description_nodes.append(
-            Node(
-                package='mouth_tracking',
-                executable='mouth_tracker',
-                name='mouth_tracker',
-                output='screen',
-            )
-        )
-
-        # ── Feeding planner — call /feed_trigger to activate ─────────────────
-        # On trigger: reads /mouth_3d_point, transforms to world frame,
-        # computes EE pose 10 cm back (= 5 cm gap + 5 cm spoon), flat wrist,
-        # plans Cartesian path, executes via arm_controller.
-        launch_description_nodes.append(
-            Node(
-                package='kinova_bringup',
-                executable='mouth_feeding_planner',
-                name='mouth_feeding_planner',
-                output='screen',
-            )
-        )
-
-    else:
-        launch_description_nodes.append(LogInfo(msg='"moveit" package is not installed, \
-                                                please install it in order to run this demo.'))
-
-    return LaunchDescription(launch_description_nodes)
+    return LaunchDescription(declared_arguments + [OpaqueFunction(function=_launch_setup)])

@@ -7,8 +7,9 @@ Panels:
         - /Global Options1
         - /PointCloud2 (Patient Depth)1
         - /Image (RGB)1
+        - /Marker1
       Splitter Ratio: 0.5
-    Tree Height: 755
+    Tree Height: 237
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -24,7 +25,6 @@ Panels:
     Expanded: ~
     Name: MotionPlanning
     Splitter Ratio: 0.5
-
 Visualization Manager:
   Class: ""
   Displays:
@@ -46,20 +46,89 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-
-    - Class: rviz_default_plugins/RobotModel
+    - Alpha: 1
+      Class: rviz_default_plugins/RobotModel
       Collision Enabled: false
       Description File: ""
       Description Source: Topic
-      Description Topic: /robot_description
+      Description Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /robot_description
       Enabled: true
-      Links: {}
+      Links:
+        All Links Enabled:
+          {}
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+        j2s6s200_end_effector:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        j2s6s200_link_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        j2s6s200_link_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        j2s6s200_link_3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        j2s6s200_link_4:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        j2s6s200_link_5:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        j2s6s200_link_6:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        j2s6s200_link_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        j2s6s200_link_finger_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        j2s6s200_link_finger_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        j2s6s200_link_finger_tip_1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        j2s6s200_link_finger_tip_2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        root:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        world:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+      Mass Properties:
+        Inertia: false
+        Mass: false
       Name: RobotModel
       TF Prefix: ""
       Update Interval: 0
       Value: true
       Visual Enabled: true
-
     - Class: rviz_default_plugins/TF
       Enabled: false
       Frame Timeout: 15
@@ -74,119 +143,163 @@ Visualization Manager:
         {}
       Update Interval: 0
       Value: false
-
-    - Class: moveit_rviz_plugin/MotionPlanning
+    - Acceleration_Scaling_Factor: 0.1
+      Class: moveit_rviz_plugin/MotionPlanning
       Enabled: true
       Move Group Namespace: ""
-      Motion Planning:
-        Allow Approximate IK Solutions: false
-        Allow External Program Communication: false
-        Allow Replanning: false
-        Allow Sensor Positioning: false
-        Cartesian Space Jump Threshold: 0.10000000149011612
-        Enable Visual Tools Communication: false
-        Goal State:
-          <Choose Goal State>: <current>
-          Override End Effector: false
-        Hide 8DOF Joints: false
-        Joints:
-          Expand Joint Groups: true
-          Expand Links: true
-          Expand Tree: false
-          Link Tree Style: "Links in Alphabetical Order"
-        Maximum Waypoint Count: 25
-        Path Constraints: ""
-        Planned Trajectory Topic: /move_group/display_planned_path
-        Planning Attempts: 10
-        Planning Library: OMPL
-        Planning Plugin: ompl_interface/OMPLPlanner
-        Planning Scene Robot:
-          Attached Body Color:
-            A: 1
-            B: 0.5
-            G: 0.5
-            R: 0.5
-          Links Shown: true
-          Octree Rendering:
-            Octree Coloring: Z-Axis
-            Octree Depth: 0
-            Octree Max Size: 0.004999999888241291
-            Voxel Rendering: Occupied Voxels
-          Render Style: Collision
-          Robot Alpha: 0.8999999761581421
-          Show Robot Visual: true
-        Planning Time: 5
-        Query Goal State:
-          <Choose Goal State>: <current>
-          Color: 0; 255; 0
-          Show: true
-        Query Start State:
-          <Choose Goal State>: <current>
-          Color: 0; 255; 0
-          Show: true
-        Request Cartesian Interp: false
-        Request Queue Size: 2
-        Sensor Manager:
-          Move Group Sensor Manager: ""
-          Self Filter: false
-        Show FPS: false
-        Show Work Area: true
-        Start State: <current>
-        Use Cartesian Path: false
-        Use Sim Time: false
-        Workspace:
-          Center:
-            X: 0
-            Y: 0
-            Z: 0
-          Size:
-            X: 2
-            Y: 2
-            Z: 2
+      MoveIt_Allow_Approximate_IK: false
+      MoveIt_Allow_External_Program: false
+      MoveIt_Allow_Replanning: false
+      MoveIt_Allow_Sensor_Positioning: false
+      MoveIt_Planning_Attempts: 10
+      MoveIt_Planning_Time: 5
+      MoveIt_Use_Cartesian_Path: false
+      MoveIt_Use_Constraint_Aware_IK: false
+      MoveIt_Workspace:
+        Center:
+          X: 0
+          Y: 0
+          Z: 0
+        Size:
+          X: 2
+          Y: 2
+          Z: 2
       Name: MotionPlanning
-      Planning Scene:
-        Planning Scene Enabled: true
-        Robot Description: robot_description
-        Scene Alpha: 1
-        Scene Color:
-          A: 1
-          B: 0.6000000238418579
-          G: 0.6000000238418579
-          R: 0.6000000238418579
+      Planned Path:
+        Color Enabled: false
+        Interrupt Display: false
+        Links:
+          All Links Enabled: true
+          Expand Joint Details: false
+          Expand Link Details: false
+          Expand Tree: false
+          Link Tree Style: Links in Alphabetic Order
+        Loop Animation: false
+        Robot Alpha: 0.5
+        Robot Color: 150; 50; 150
+        Show Robot Collision: false
+        Show Robot Visual: true
+        Show Trail: false
+        State Display Time: 3x
+        Trail Step Size: 1
+        Trajectory Topic: /display_planned_path
+        Use Sim Time: false
+      Planning Metrics:
+        Payload: 1
+        Show Joint Torques: false
+        Show Manipulability: false
+        Show Manipulability Index: false
+        Show Weight Limit: false
+        TextHeight: 0.07999999821186066
+      Planning Request:
+        Colliding Link Color: 255; 0; 0
+        Goal State Alpha: 1
+        Goal State Color: 250; 128; 0
+        Interactive Marker Size: 0
+        Joint Violation Color: 255; 0; 255
+        Planning Group: arm
+        Query Goal State: true
+        Query Start State: false
+        Show Workspace: false
+        Start State Alpha: 1
+        Start State Color: 0; 255; 0
+      Planning Scene Topic: /monitored_planning_scene
+      Robot Description: robot_description
+      Scene Geometry:
+        Scene Alpha: 0.8999999761581421
+        Scene Color: 50; 230; 50
         Scene Display Time: 0.009999999776482582
         Show Scene Geometry: true
-        Show Scene Robot:
-          Links Shown: true
-          Octree Rendering:
-            Octree Coloring: Z-Axis
-            Octree Depth: 0
-            Octree Max Size: 0.004999999888241291
-            Voxel Rendering: Occupied Voxels
-          Render Style: Collision
-          Robot Alpha: 1
-          Show Robot Visual: true
-        World Geometry:
-          Collision Object:
-            Line Width: 0.029999999329447746
-            Show Bounding Boxes: false
-          Octomap:
-            Enabled: false
-            Max Octree Depth: 0
-            Octree Coloring: Z-Axis
-            Octree Voxel Rendering: Occupied Voxels
-          Point Cloud Clusters:
-            Channel Name: x
-            Queue Size: 1
-            Size (m): 0.009999999776482582
-            Style: Flat Squares
-            Topic: /interactive_object_recognition_result
+        Voxel Coloring: Z-Axis
+        Voxel Rendering: Occupied Voxels
+      Scene Robot:
+        Attached Body Color: 150; 50; 150
+        Links:
+          All Links Enabled: true
+          Expand Joint Details: false
+          Expand Link Details: false
+          Expand Tree: false
+          Link Tree Style: Links in Alphabetic Order
+        Robot Alpha: 1
+        Show Robot Collision: false
+        Show Robot Visual: true
       Value: true
-
-    # ── POINT CLOUD 2 (Patient Depth) ─────────────────────────────
-    # Gazebo rgbd_camera publishes this on /camera_mouth/points
-    # Bridge: /camera_mouth/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked
-    - Class: rviz_default_plugins/PointCloud2
-      Alpha: 0.85
+      Velocity_Scaling_Factor: 0.1
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        camera_color_frame:
+          Value: true
+        camera_color_optical_frame:
+          Value: true
+        camera_depth_frame:
+          Value: true
+        camera_depth_optical_frame:
+          Value: true
+        camera_link:
+          Value: true
+        j2s6s200_end_effector:
+          Value: true
+        j2s6s200_link_1:
+          Value: true
+        j2s6s200_link_2:
+          Value: true
+        j2s6s200_link_3:
+          Value: true
+        j2s6s200_link_4:
+          Value: true
+        j2s6s200_link_5:
+          Value: true
+        j2s6s200_link_6:
+          Value: true
+        j2s6s200_link_base:
+          Value: true
+        j2s6s200_link_finger_1:
+          Value: true
+        j2s6s200_link_finger_2:
+          Value: true
+        j2s6s200_link_finger_tip_1:
+          Value: true
+        j2s6s200_link_finger_tip_2:
+          Value: true
+        root:
+          Value: true
+        world:
+          Value: true
+      Marker Scale: 0.15000000596046448
+      Name: TF
+      Show Arrows: false
+      Show Axes: true
+      Show Names: true
+      Tree:
+        world:
+          root:
+            j2s6s200_link_base:
+              j2s6s200_link_1:
+                j2s6s200_link_2:
+                  j2s6s200_link_3:
+                    j2s6s200_link_4:
+                      j2s6s200_link_5:
+                        j2s6s200_link_6:
+                          j2s6s200_end_effector:
+                            camera_link:
+                              camera_color_frame:
+                                camera_color_optical_frame:
+                                  {}
+                              camera_depth_frame:
+                                camera_depth_optical_frame:
+                                  {}
+                          j2s6s200_link_finger_1:
+                            j2s6s200_link_finger_tip_1:
+                              {}
+                          j2s6s200_link_finger_2:
+                            j2s6s200_link_finger_tip_2:
+                              {}
+      Update Interval: 0
+      Value: true
+    - Alpha: 0.8500000238418579
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
         Max Value: 10
@@ -206,10 +319,9 @@ Visualization Manager:
       Min Intensity: 0
       Name: PointCloud2 (Patient Depth)
       Position Transformer: XYZ
-      Reliable: false
-      Queue Size: 5
-      Size (Pixels): 3
-      Size (m): 0.004
+      Selectable: true
+      Size (Pixels): 2
+      Size (m): 0.003000000026077032
       Style: Points
       Topic:
         Depth: 5
@@ -217,63 +329,64 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Value: /camera_mouth/points
+        Value: /camera/depth/color/points
       Use Fixed Frame: true
-      Use rainbow: true
+      Use rainbow: false
       Value: true
-
-    # ── RGB IMAGE VIEW ─────────────────────────────────────────────
     - Class: rviz_default_plugins/Image
-      Enabled: true
+      Enabled: false
       Max Value: 1
       Median window: 5
       Min Value: 0
       Name: Image (RGB)
       Normalize Range: true
-      Queue Size: 5
       Topic:
         Depth: 5
         Durability Policy: Volatile
-        Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Value: /camera_mouth/color/image_raw
-      Value: true
-
-    # ── DEPTH IMAGE VIEW ──────────────────────────────────────────
+        Value: /mouth_tracker/debug_image
+      Value: false
     - Class: rviz_default_plugins/Image
-      Enabled: true
+      Enabled: false
       Max Value: 4
       Median window: 5
       Min Value: 0
       Name: Image (Depth)
       Normalize Range: true
-      Queue Size: 5
       Topic:
         Depth: 5
         Durability Policy: Volatile
-        Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Value: /camera_mouth/depth/image_rect_raw
-      Value: true
-
-    # ── RL TARGET MARKER ─────────────────────────────────────────
+        Value: /camera/aligned_depth_to_color/image_raw
+      Value: false
     - Class: rviz_default_plugins/Marker
       Enabled: true
-      Name: RL Target (Mouth)
+      Name: Feeding Waypoints
       Namespaces:
-        rl_target: true
-      Queue Size: 5
+        {}
       Topic:
         Depth: 5
         Durability Policy: Volatile
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /rl/target_marker
+        Value: /feeding_marker
       Value: true
-
+    - Class: rviz_default_plugins/Marker
+      Enabled: true
+      Name: Marker
+      Namespaces:
+        {}
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /click_pointer/target_marker
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 30; 30; 30
@@ -282,7 +395,7 @@ Visualization Manager:
   Name: root
   Tools:
     - Class: rviz_default_plugins/Interact
-      Hide Inactive Icons: false
+      Hide Inactive Objects: true
     - Class: rviz_default_plugins/MoveCamera
     - Class: rviz_default_plugins/Select
     - Class: rviz_default_plugins/FocusCamera
@@ -313,6 +426,9 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /clicked_point
+  Transformation:
+    Current:
+      Class: rviz_default_plugins/TF
   Value: true
   Views:
     Current:
@@ -324,18 +440,18 @@ Visualization Manager:
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.4
-        Y: -0.1
-        Z: 0.6
+        X: 0.4000000059604645
+        Y: -0.10000000149011612
+        Z: 0.6000000238418579
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4
+      Pitch: 0.6249998211860657
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.1
+      Yaw: 4.310001373291016
     Saved: ~
 Window Geometry:
   Displays:
@@ -343,9 +459,15 @@ Window Geometry:
   Height: 1400
   Hide Left Dock: false
   Hide Right Dock: false
+  Image (Depth):
+    collapsed: false
+  Image (RGB):
+    collapsed: false
   MotionPlanning:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd000000040000000000000156000004dcfc0200000009fb0000001200530065006c006500630074006900
+  MotionPlanning - Trajectory Slider:
+    collapsed: false
+  QMainWindow State: 000000ff00000000fd0000000100000000000002b40000051efc0200000009fb0000001a0049006d00610067006500200028004400650070007400680029000000003d000000290000002800fffffffb000000160049006d006100670065002000280052004700420029000000006b000000280000002800fffffffb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004100fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000003d0000019b0000017d00fffffffb000000100044006900730070006c00610079007301000001de00000178000000c900fffffffb0000001200530065006c0065006300740069006f006e010000035c000000630000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007301000003c5000000630000005c00fffffffb0000000a00560069006500770073010000042e000000b1000000a400fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000004e5000000760000006e00ffffff000006a60000051e00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Tool Properties:
@@ -354,4 +476,4 @@ Window Geometry:
     collapsed: false
   Width: 2400
   X: 0
-  Y: 0
+  Y: 27

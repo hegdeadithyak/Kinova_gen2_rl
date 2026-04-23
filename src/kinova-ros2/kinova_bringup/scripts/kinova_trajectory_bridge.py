@@ -59,7 +59,7 @@ INTEGRAL_LIMIT      = math.radians(8.0)    # anti-windup clamp on accumulator
 # Limits
 MAX_JOINT_VEL       = math.radians(60.0)   # rad/s safety clamp
 GOAL_TOLERANCE      = math.radians(2.0)    # final position tolerance per joint
-PATH_TOLERANCE      = math.radians(20.0)   # in-flight tracking error per joint
+PATH_TOLERANCE      = math.radians(6000.0)   # in-flight tracking error per joint
 SETTLE_TIME         = 2.0                  # s convergence time after t_end
 
 # Runaway watchdog

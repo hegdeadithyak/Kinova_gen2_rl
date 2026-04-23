@@ -172,6 +172,28 @@ install(PROGRAMS scripts/mouth_feeding_planner.py
   DESTINATION lib/${PROJECT_NAME}
   RENAME mouth_feeding_planner
 )
+install(PROGRAMS scripts/pointer_feed_planner.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME pointer_feed_planner
+)
+install(PROGRAMS scripts/demo_feed_planner.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME demo_feed_planner
+)
+install(PROGRAMS scripts/feed_recorder.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME feed_recorder
+)
+
+install(PROGRAMS scripts/mouth_tracker_node.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME mouth_tracker_node
+)
+
+install(PROGRAMS scripts/feeding_executor_node.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME feeding_executor_node
+)
 
 install(DIRECTORY moveit_resource
   DESTINATION share/${PROJECT_NAME}

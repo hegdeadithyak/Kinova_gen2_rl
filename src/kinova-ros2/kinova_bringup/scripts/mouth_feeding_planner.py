@@ -1,352 +1,486 @@
-#!/usr/bin/env python3 # Shebang line telling the OS to execute this script using the Python 3 interpreter
+#!/usr/bin/env python3
+"""
+mouth_feeding_planner.py
+========================
+Adapted from your original MouthFeedingPlanner.
+Subscribes to /mouth_3d_point (PointStamped published by mouth_tracker_node),
+and executes a 3-phase feeding motion on /feed_trigger.
 
-import math # Import the standard Python math library for mathematical operations like square root
+Robot: Kinova j2s6s300 (6DOF, 3-finger)
+Arm group: 'arm'  |  EE link: 'j2s6s200_end_effector'  ← adjust if needed
 
-import rclpy # Import the main ROS 2 Python client library
-import rclpy.time # Import the ROS 2 time module for handling ROS time objects
-import rclpy.duration # Import the ROS 2 duration module for handling time intervals
-from builtin_interfaces.msg import Duration # Import the standard Duration message type for trajectory timing
-from control_msgs.action import FollowJointTrajectory # Import the action type used to command the robot arm trajectory
-from geometry_msgs.msg import Point, Pose, Quaternion, PointStamped # Import geometry message types for 3D points, orientations, and poses
-from moveit_msgs.msg import RobotState # Import the RobotState message type to represent the robot's kinematic state
-from moveit_msgs.srv import GetCartesianPath # Import the service type used to ask MoveIt to compute a linear path
-from rclpy.action import ActionClient # Import ActionClient to send goals to ROS 2 action servers
-from rclpy.callback_groups import ReentrantCallbackGroup # Import ReentrantCallbackGroup to allow parallel callback execution
-from rclpy.executors import MultiThreadedExecutor # Import MultiThreadedExecutor to run the node with multiple threads
-from rclpy.node import Node # Import the base Node class required to create a ROS 2 node
-from sensor_msgs.msg import JointState # Import the JointState message type to read the current angles of the robot joints
-from std_srvs.srv import Trigger # Import the Trigger service type for a simple "go" command with no arguments
-from tf2_ros import Buffer, TransformListener, LookupException, ExtrapolationException # Import TF2 classes and exceptions for coordinate frame math
-from tf2_geometry_msgs import do_transform_point # Import the utility function to apply TF2 spatial transformations to points
-from visualization_msgs.msg import Marker # Import the Marker message type to draw shapes in the RViz 3D viewer
+Motion sequence on /feed_trigger:
+  Phase 1 · Height   — raise/lower EE to mouth height (keep x,y)
+  Phase 2 · Lateral  — move to approach point 10 cm in front of mouth
+  Phase 3 · Feed     — advance spoon tip to 5 cm from mouth
+  Hold               — wait HOLD_SECONDS at feed position
+  Return             — return to saved start joint configuration
+"""
 
+import copy
+import math
+import time
+from typing import Optional, List
 
-SPOON_LENGTH_M = 0.05 # Define the physical length of the spoon in meters (5 cm)
-SAFETY_GAP_M   = 0.05 # Define an extra safety buffer distance from the mouth in meters (5 cm)
-TOTAL_OFFSET_M = SPOON_LENGTH_M + SAFETY_GAP_M   # Calculate total standoff distance: 0.10 m (10 cm)
+import rclpy
+from rclpy.duration import Duration
+from rclpy.time import Time
+from rclpy.node import Node
+from rclpy.callback_groups import ReentrantCallbackGroup
+from rclpy.executors import MultiThreadedExecutor
+from rclpy.action import ActionClient
 
-WORLD_FRAME = 'world' # Define the name of the static global reference frame
-CAM_FRAME   = 'camera_color_optical_frame' # Define the name of the reference frame originating from the camera lens
-EE_LINK     = 'j2s6s200_end_effector' # Define the name of the robot's end-effector (hand/tool) frame
-ARM_GROUP   = 'arm' # Define the MoveIt planning group name for the manipulator
+from builtin_interfaces.msg import Duration as DurationMsg
+from control_msgs.action import FollowJointTrajectory
+from geometry_msgs.msg import Point, PointStamped, Pose, PoseStamped, Quaternion
+from moveit_msgs.srv import GetPositionIK
+from sensor_msgs.msg import JointState
+from std_srvs.srv import Trigger
+from tf2_geometry_msgs import do_transform_point
+from tf2_ros import (Buffer, TransformListener,
+                     LookupException, ExtrapolationException, ConnectivityException)
+from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+from visualization_msgs.msg import Marker
 
-CART_STEP  = 0.01    # Define the maximum distance (1 cm) between points in the computed Cartesian path
-FEED_SPEED = 0.15    # Define the execution speed for the arm movement in meters per second
-MIN_DT     = 0.02    # Define the minimum time delta (seconds) between trajectory waypoints to respect acceleration limits
-MAX_REACH  = 0.85    # Define the maximum safe reachable radius of the Kinova j2s6s200 arm in meters
+# ── Constants ────────────────────────────────────────────────────────
+SPOON_LENGTH_M      = 0.05
+SAFETY_GAP_M        = 0.05
+STOP_BEFORE_MOUTH_M = SPOON_LENGTH_M + SAFETY_GAP_M   # 0.10 m approach waypoint
+FEED_GAP_M          = SAFETY_GAP_M                    # 0.05 m spoon tip at mouth
+HOLD_SECONDS        = 5.0
 
+BASE_FRAME  = 'j2s6s200_link_base'        # Kinova base TF frame
+CAM_FRAME   = 'camera_color_optical_frame'
+EE_LINK     = 'j2s6s200_end_effector'       # ← change to j2s6s300_end_effector if needed
+ARM_GROUP   = 'arm'
 
+ARM_JOINT_NAMES = [
+    'j2s6s200_joint_1',
+    'j2s6s200_joint_2',
+    'j2s6s200_joint_3',
+    'j2s6s200_joint_4',
+    'j2s6s200_joint_5',
+    'j2s6s200_joint_6',
+]
 
-class MouthFeedingPlanner(Node): # Define the main ROS 2 node class inheriting from rclpy.node.Node
-    def __init__(self): # Define the constructor method for the node initialization
-        super().__init__('mouth_feeding_planner') # Initialize the parent Node class with the name 'mouth_feeding_planner'
-        self._cb = ReentrantCallbackGroup() # Create a reentrant callback group to allow overlapping callback executions
-
-        self._tf_buf = Buffer() # Initialize a TF2 buffer to store coordinate frame transformations over time
-        self._tf_listener = TransformListener(self._tf_buf, self) # Initialize a TF2 listener to populate the buffer with incoming transforms
-
-        self._latest_mouth: PointStamped | None = None # Initialize a class variable to store the latest perceived mouth position
-        self.create_subscription( # Create a ROS 2 subscriber to listen for mouth coordinates
-            PointStamped, '/mouth_3d_point', # Specify the message type and the topic name to subscribe to
-            self._mouth_cb, 10, callback_group=self._cb, # Assign the callback function, queue size of 10, and the callback group
-        ) # Close the create_subscription call
-
-        self._latest_js: JointState | None = None # Initialize a class variable to store the latest robot joint states
-        self.create_subscription( # Create a ROS 2 subscriber to listen for robot joint states
-            JointState, '/joint_states', # Specify the message type and the topic name to subscribe to
-            self._js_cb, 10, callback_group=self._cb, # Assign the callback function, queue size of 10, and the callback group
-        ) # Close the create_subscription call
-
-        self._marker_pub = self.create_publisher(Marker, '/feeding_marker', 10) # Create a publisher to send visual markers to RViz
-
-        self._cart_client = self.create_client( # Create a ROS 2 service client to request Cartesian path planning
-            GetCartesianPath, '/compute_cartesian_path', # Specify the service type and the MoveIt service topic name
-            callback_group=self._cb, # Assign the service client to the reentrant callback group
-        ) # Close the create_client call
-        self._traj_client = ActionClient( # Create an Action Client to send trajectory execution goals to the arm controller
-            self, FollowJointTrajectory, # Pass the node instance and the action type
-            '/arm_controller/follow_joint_trajectory', # Specify the action server topic name
-            callback_group=self._cb, # Assign the action client to the reentrant callback group
-        ) # Close the ActionClient initialization
-
-        self._busy = False # Initialize a boolean flag to track if a feeding motion is currently in progress
-        self.create_service( # Create a ROS 2 service server to trigger the feeding action
-            Trigger, '/feed_trigger', # Specify the service type and the topic name for the trigger
-            self._trigger_cb, callback_group=self._cb, # Assign the service callback function and the callback group
-        ) # Close the create_service call
-
-        self.get_logger().info('Waiting for MoveIt / controller …') # Print a log message indicating the node is waiting for external servers
-        self._cart_client.wait_for_service(timeout_sec=30.0) # Block execution until the Cartesian planning service is available (up to 30s)
-        self._traj_client.wait_for_server(timeout_sec=30.0) # Block execution until the trajectory action server is available (up to 30s)
-        self.get_logger().info('MouthFeedingPlanner ready — call /feed_trigger.') # Print a log message indicating initialization is complete
-
-    # Callbacks # Comment denoting the start of the callback functions section
-    def _mouth_cb(self, msg: PointStamped): # Define the callback function that runs every time a mouth point is received
-        self._latest_mouth = msg # Store the received PointStamped message into the class variable
-        # Continuously visualise the mouth and the camera's forward axis in # Existing comment explaining the diagnostic visualization
-        # world frame — this is the hand-eye-calibration diagnostic. # Existing comment explaining the diagnostic visualization
-        # If the pink ball stays fixed on the user's mouth as the arm moves, # Existing comment explaining the diagnostic visualization
-        # the camera-to-end-effector TF is correct.  If it drifts, the # Existing comment explaining the diagnostic visualization
-        # cam_x/y/z/roll/pitch/yaw args in the launch file need tuning. # Existing comment explaining the diagnostic visualization
-        self._publish_camera_diagnostic(msg) # Call the helper method to render diagnostic markers in RViz
-
-    def _publish_camera_diagnostic(self, mouth_cam: PointStamped): # Define the helper method to publish diagnostic markers
-        try: # Start a try-except block to catch potential TF transformation errors
-            tf = self._tf_buf.lookup_transform( # Ask the TF buffer for the transform between two frames
-                WORLD_FRAME, CAM_FRAME, # Specify the target frame (world) and source frame (camera)
-                rclpy.time.Time(), # Request the most recent available transform (time 0)
-                timeout=rclpy.duration.Duration(seconds=0.2), # Allow up to 0.2 seconds to wait for the transform to become available
-            ) # Close the lookup_transform call
-        except (LookupException, ExtrapolationException): # Catch exceptions if the transform isn't found or is too old/new
-            return # Exit the function early if the transform fails
-
-        mouth_w = do_transform_point(mouth_cam, tf) # Apply the retrieved transform to convert the mouth point to the world frame
-        self._publish_sphere( # Call the helper method to draw a sphere at the transformed mouth coordinates
-            mouth_w.point.x, mouth_w.point.y, mouth_w.point.z, # Pass the X, Y, and Z coordinates of the mouth in the world frame
-            mid=0, rgba=(1.0, 0.4, 0.7, 0.9), diameter=0.05, # Pass marker ID 0, pinkish RGBA color, and a 5cm diameter
-        ) # Close the _publish_sphere call
-
-        # Arrow along camera +Z in world — shows where the lens points. # Existing comment explaining the arrow marker
-        cam_origin = PointStamped() # Create a new PointStamped message to represent the camera's origin
-        cam_origin.header.frame_id = CAM_FRAME # Set the frame of reference for the origin point to the camera frame
-        cam_origin.point.x = cam_origin.point.y = cam_origin.point.z = 0.0 # Set the origin coordinates to exactly (0, 0, 0)
-        cam_tip = PointStamped() # Create a new PointStamped message to represent the tip of the diagnostic arrow
-        cam_tip.header.frame_id = CAM_FRAME # Set the frame of reference for the tip to the camera frame
-        cam_tip.point.z = 0.20  # Set the Z coordinate to 0.20 meters (camera points along positive Z)
-        p0 = do_transform_point(cam_origin, tf).point # Transform the camera origin to the world frame and extract the point geometry
-        p1 = do_transform_point(cam_tip, tf).point # Transform the camera tip to the world frame and extract the point geometry
-
-        arrow = Marker() # Create a new Marker message object for the arrow
-        arrow.header.frame_id = WORLD_FRAME # Set the arrow's reference frame to the world frame
-        arrow.header.stamp    = self.get_clock().now().to_msg() # Timestamp the marker with the current ROS time
-        arrow.ns = 'feeding' # Set the marker namespace to 'feeding' to group it in RViz
-        arrow.id = 2 # Assign a unique integer ID to this marker
-        arrow.type   = Marker.ARROW # Set the marker shape type to ARROW
-        arrow.action = Marker.ADD # Set the action to ADD (which creates or updates the marker)
-        arrow.points = [Point(x=p0.x, y=p0.y, z=p0.z), # Define the start point of the arrow (p0)
-                        Point(x=p1.x, y=p1.y, z=p1.z)] # Define the end point of the arrow (p1)
-        arrow.scale.x = 0.01   # Set the arrow shaft diameter to 1 cm
-        arrow.scale.y = 0.02   # Set the arrow head diameter to 2 cm
-        arrow.scale.z = 0.03   # Set the arrow head length to 3 cm
-        arrow.color.r, arrow.color.g, arrow.color.b, arrow.color.a = ( # Start assigning the RGBA color values for the arrow
-            0.2, 0.6, 1.0, 0.9 # Set the arrow color to a translucent blue
-        ) # Close the color assignment
-        arrow.pose.orientation.w = 1.0 # Initialize the quaternion's W component to 1.0 (valid unrotated quaternion)
-        self._marker_pub.publish(arrow) # Publish the constructed arrow marker to the RViz topic
-
-    def _js_cb(self, msg: JointState): # Define the callback function for incoming joint state messages
-        self._latest_js = msg # Update the class variable with the most recently received joint state
-
-    # ── Trigger ────────────────────────────────────────────────────────── # Comment denoting the section for the trigger service
-    def _trigger_cb(self, _req, response): # Define the callback function that executes when the /feed_trigger service is called
-        if self._busy: # Check if the robot is already executing a feeding motion
-            response.success = False # Set the service response status to failure
-            response.message = 'Feed already in progress.' # Set the failure message indicating the system is busy
-            return response # Return the failed response to the caller
-        if self._latest_mouth is None: # Check if a mouth position has been received yet
-            response.success = False # Set the service response status to failure
-            response.message = 'No mouth point yet — is mouth_tracker running?' # Set the failure message indicating missing data
-            return response # Return the failed response to the caller
-
-        self._busy = True # Lock the system by setting the busy flag to True
-        try: # Start a try block to handle the feeding execution sequence safely
-            ok, msg = self._execute_feed() # Call the main feeding logic method and capture its success boolean and message
-            response.success = ok # Populate the service response success field with the execution result
-            response.message = msg # Populate the service response message field with the execution message
-        except Exception as exc: # Catch any unexpected Python exceptions during the execution
-            response.success = False # Set the service response status to failure due to exception
-            response.message = f'Exception: {exc}' # Format the exception message into the response string
-            self.get_logger().error(response.message) # Log the error message to the ROS console
-        finally: # Execute this block regardless of success or failure
-            self._busy = False # Release the lock by setting the busy flag back to False
-        return response # Return the populated service response back to the caller
-
-    # ── Markers ────────────────────────────────────────────────────────── # Comment denoting the section for marker publishing helpers
-    def _publish_sphere(self, x, y, z, mid, rgba, diameter=0.04): # Define a helper method to easily publish spherical markers
-        m = Marker() # Create a new Marker message object
-        m.header.frame_id = WORLD_FRAME # Set the sphere's reference frame to the world frame
-        m.header.stamp    = self.get_clock().now().to_msg() # Timestamp the marker with the current ROS time
-        m.ns              = 'feeding' # Assign the marker to the 'feeding' namespace
-        m.id              = mid # Set the marker's unique integer ID (allows updating specific markers)
-        m.type            = Marker.SPHERE # Set the marker shape type to SPHERE
-        m.action          = Marker.ADD # Set the action to ADD (create or update)
-        m.pose.position.x = float(x) # Cast and assign the X coordinate of the sphere
-        m.pose.position.y = float(y) # Cast and assign the Y coordinate of the sphere
-        m.pose.position.z = float(z) # Cast and assign the Z coordinate of the sphere
-        m.pose.orientation.w = 1.0 # Set valid default quaternion orientation (w=1)
-        m.scale.x = m.scale.y = m.scale.z = diameter # Set the X, Y, and Z scale to create a uniform sphere of the given diameter
-        m.color.r, m.color.g, m.color.b, m.color.a = rgba # Unpack and assign the RGBA color tuple to the marker
-        m.lifetime.sec = 0    # Set the marker lifetime to 0 seconds, meaning it persists forever until overwritten
-        self._marker_pub.publish(m) # Publish the sphere marker to the visualization topic
-
-    # ── Core ───────────────────────────────────────────────────────────── # Comment denoting the section for core logic
-    def _execute_feed(self): # Define the main procedural method to calculate and execute the feeding motion
-        # 1. Snapshot the mouth observation (decouple from the live topic) # Existing comment explaining snapping the mouth position
-        snap = PointStamped() # Create a new PointStamped message to hold the static snapshot
-        snap.header = self._latest_mouth.header # Copy the header (frame and timestamp) from the latest live mouth data
-        snap.point  = self._latest_mouth.point # Copy the geometric point coordinates from the latest live mouth data
-
-        # 2. mouth → world # Existing comment explaining transformation step
-        try: # Start a try-except block to safely fetch the TF transform
-            tf_cam = self._tf_buf.lookup_transform( # Ask the TF buffer for the transform
-                WORLD_FRAME, CAM_FRAME, # Request the transform from the camera frame to the world frame
-                rclpy.time.Time(), # Request the most recent available transform
-                timeout=rclpy.duration.Duration(seconds=2.0), # Wait up to 2 seconds for the transform to become available
-            ) # Close lookup_transform call
-        except (LookupException, ExtrapolationException) as e: # Catch standard TF exceptions
-            err = f'TF {CAM_FRAME}→{WORLD_FRAME} failed: {e}' # Format an error string with the exception details
-            self.get_logger().error(err) # Log the TF error to the ROS console
-            return False, err # Return a failure status and the error string
-
-        mouth_w = do_transform_point(snap, tf_cam) # Transform the mouth snapshot from the camera frame into the world frame
-        mx, my, mz = mouth_w.point.x, mouth_w.point.y, mouth_w.point.z # Extract the transformed X, Y, Z coordinates into local variables
-        self.get_logger().info(f'Mouth  (world): ({mx:+.3f}, {my:+.3f}, {mz:+.3f}) m') # Log the calculated mouth world coordinates
-
-        # Pink sphere = mouth position # Existing comment explaining the visual marker
-        self._publish_sphere(mx, my, mz, mid=0, rgba=(1.0, 0.4, 0.7, 0.9), diameter=0.05) # Call the helper to publish a pink sphere at the mouth location
-
-        # 3. Current EE pose in world # Existing comment explaining the fetch of the end-effector pose
-        try: # Start try block to safely fetch the end-effector transform
-            tf_ee = self._tf_buf.lookup_transform( # Ask the TF buffer for the transform
-                WORLD_FRAME, EE_LINK, # Request the transform from the end-effector frame to the world frame
-                rclpy.time.Time(), # Request the most recent available transform
-                timeout=rclpy.duration.Duration(seconds=2.0), # Wait up to 2 seconds for the transform to become available
-            ) # Close lookup_transform call
-        except (LookupException, ExtrapolationException) as e: # Catch standard TF exceptions
-            err = f'TF {EE_LINK}→{WORLD_FRAME} failed: {e}' # Format an error string with the exception details
-            self.get_logger().error(err) # Log the TF error to the console
-            return False, err # Return a failure status and the error string
-
-        ex = tf_ee.transform.translation.x # Extract the end-effector current X position from the transform
-        ey = tf_ee.transform.translation.y # Extract the end-effector current Y position from the transform
-        ez = tf_ee.transform.translation.z # Extract the end-effector current Z position from the transform
-        cur_ori = tf_ee.transform.rotation # Extract the end-effector current orientation (quaternion) from the transform
-        self.get_logger().info(f'EE     (world): ({ex:+.3f}, {ey:+.3f}, {ez:+.3f}) m') # Log the current end-effector position
-
-        # 4. EE → mouth direction + distance # Existing comment explaining distance and vector calculation
-        dx, dy, dz = mx - ex, my - ey, mz - ez # Calculate the delta vector components from the end-effector to the mouth
-        dist = math.sqrt(dx * dx + dy * dy + dz * dz) # Calculate the straight-line Euclidean distance between EE and mouth
-        if dist < 1e-3: # Check if the distance is extremely small (less than 1 mm), avoiding division by zero later
-            return False, f'Mouth and EE coincide (dist={dist:.4f} m).' # Abort if the end-effector is exactly at the mouth
-        if dist <= TOTAL_OFFSET_M: # Check if the arm is already within the designated standoff distance
-            return False, (f'Already within {TOTAL_OFFSET_M*100:.0f} cm of mouth ' # Format the abort message (part 1)
-                           f'(dist={dist*100:.1f} cm) — nothing to do.') # Format the abort message (part 2) and return failure
-
-        ux, uy, uz = dx / dist, dy / dist, dz / dist # Calculate the unit vector (direction) from the end-effector to the mouth
-        self.get_logger().info(f'EE→mouth dist: {dist*100:.1f} cm   dir: ' # Log the calculated distance and direction vector (part 1)
-                               f'({ux:+.2f}, {uy:+.2f}, {uz:+.2f})') # Log the calculated distance and direction vector (part 2)
-
-        # 5. Target = mouth − 10 cm along direction  (spoon tip 5 cm from mouth) # Existing comment explaining target calculation
-        tx = mx - TOTAL_OFFSET_M * ux # Calculate target X: start at mouth X and pull back by TOTAL_OFFSET_M along the direction vector
-        ty = my - TOTAL_OFFSET_M * uy # Calculate target Y: start at mouth Y and pull back by TOTAL_OFFSET_M along the direction vector
-        tz = mz - TOTAL_OFFSET_M * uz # Calculate target Z: start at mouth Z and pull back by TOTAL_OFFSET_M along the direction vector
-
-        # Clamp to workspace: the j2s6s200 can only reach ~0.85 m from its # Existing comment explaining workspace limitations
-        # base.  If the target is farther, cap it along EE→mouth so the arm # Existing comment explaining clamping behavior
-        # at least moves in the right direction (and stops short). # Existing comment explaining clamping behavior
-        t_norm = math.sqrt(tx * tx + ty * ty + tz * tz) # Calculate the distance from the robot base (world origin) to the target
-        if t_norm > MAX_REACH: # Check if the calculated target is outside the robot's physical reach sphere
-            scale = MAX_REACH / t_norm # Calculate a scaling factor to bring the target back onto the edge of the reach sphere
-            tx, ty, tz = tx * scale, ty * scale, tz * scale # Apply the scaling factor to the target coordinates
-            self.get_logger().warn( # Output a warning log that clamping occurred
-                f'Target {t_norm:.2f} m from base > MAX_REACH {MAX_REACH:.2f} m — ' # Log original distance vs limit
-                f'clamped to ({tx:+.3f}, {ty:+.3f}, {tz:+.3f}).' # Log the new clamped coordinates
-            ) # Close warning log call
-
-        self.get_logger().info(f'Target (world): ({tx:+.3f}, {ty:+.3f}, {tz:+.3f}) m ' # Log the final computed target position
-                               f'(travel {dist - TOTAL_OFFSET_M:.3f} m)') # Log the expected travel distance
-
-        # Green sphere = commanded target (spoon tip location approx) # Existing comment explaining the target visualization
-        self._publish_sphere(tx, ty, tz, mid=1, rgba=(0.2, 1.0, 0.2, 0.9), diameter=0.04) # Publish a green sphere marker at the target position
-
-        # 6. Preserve current orientation — no rotation, pure translation # Existing comment explaining the orientation strategy
-        target = Pose( # Create a geometry_msgs/Pose object for the target waypoint
-            position=Point(x=float(tx), y=float(ty), z=float(tz)), # Populate the translation part with the computed target coordinates
-            orientation=Quaternion( # Populate the rotation part with the exact current orientation of the end-effector
-                x=cur_ori.x, y=cur_ori.y, z=cur_ori.z, w=cur_ori.w, # Copy the quaternion components
-            ), # Close Quaternion initialization
-        ) # Close Pose initialization
-
-        # 7. Plan & execute a straight-line Cartesian move # Existing comment explaining the path planning step
-        traj = self._cartesian_path([target]) # Call the helper function to compute a straight Cartesian path to the target pose
-        if traj is None or not traj.joint_trajectory.points: # Check if the path planning failed or returned an empty trajectory
-            return False, 'Cartesian planning returned no trajectory.' # Return failure and an error message
-
-        ok = self._exec_trajectory(traj) # Call the helper function to send the trajectory to the robot controller and wait for execution
-        return ok, ('Feed complete.' if ok else 'Trajectory execution failed.') # Return the execution status and appropriate message
-
-    # ── Cartesian planning ─────────────────────────────────────────────── # Comment denoting the section for path planning
-    def _cartesian_path(self, waypoints): # Define a method to call the MoveIt ComputeCartesianPath service
-        req = GetCartesianPath.Request() # Create a new request object for the service
-        req.header.frame_id  = WORLD_FRAME # Set the reference frame for the waypoints in the request
-        req.group_name       = ARM_GROUP # Specify which MoveIt planning group to use (the arm)
-        req.link_name        = EE_LINK # Specify which robot link should follow the path (end effector)
-        req.waypoints        = waypoints # Attach the list of target poses (waypoints) to the request
-        req.max_step         = CART_STEP # Set the maximum distance between interpolation points on the path
-        req.jump_threshold   = 0.0 # Set the jump threshold to 0.0 to disable configuration jump detection (can be risky, but default here)
-        req.avoid_collisions = False   # Set to false to ignore collision objects in the environment (simplifies planning for testing)
-
-        if self._latest_js is not None: # Check if we have received a joint state to use as the starting point
-            rs = RobotState() # Create a new RobotState message object
-            rs.joint_state = self._latest_js # Populate it with the latest known joint states
-            req.start_state = rs # Set this as the explicit start state for the motion plan
-
-        future = self._cart_client.call_async(req) # Send the Cartesian path planning request asynchronously
-        rclpy.spin_until_future_complete(self, future) # Block the current thread until the service responds
-        res = future.result() # Extract the result object from the completed future
-        self.get_logger().info(f'Cartesian coverage: {res.fraction * 100:.1f} %') # Log the percentage of the requested path that was successfully planned
-        return res.solution # Return the resulting RobotTrajectory message
-
-    # ── Trajectory execution ───────────────────────────────────────────── # Comment denoting the section for trajectory execution
-    def _add_timestamps(self, robot_traj, speed=FEED_SPEED): # Define a method to calculate and add time-from-start values to trajectory points
-        pts = robot_traj.joint_trajectory.points # Extract the list of trajectory points
-        if not pts: # Check if the list of points is empty
-            return robot_traj # Return the empty trajectory unmodified
-        pts[0].time_from_start = Duration(sec=0, nanosec=0) # Set the time for the very first point to zero
-        total, prev = 0.0, pts[0] # Initialize a running time total and a reference to the previous point
-        for pt in pts[1:]: # Iterate through all trajectory points starting from the second one
-            delta = ( # Start calculation of maximum joint angle change
-                max(abs(a - b) for a, b in zip(pt.positions, prev.positions)) # Find the largest angular difference across all joints between prev and current point
-                if prev.positions and pt.positions else 0.01 # Fallback to a small delta if position arrays are empty
-            ) # Close delta calculation
-            total += max(delta / speed, MIN_DT) # Calculate time needed for this step based on speed, bounded by MIN_DT, and add to total
-            s  = int(total) # Extract the whole seconds part of the total time
-            ns = int((total - s) * 1e9) # Calculate the remaining fractional seconds and convert to nanoseconds
-            pt.time_from_start = Duration(sec=s, nanosec=ns) # Assign the calculated duration object to the current point
-            prev = pt # Update the previous point reference to the current one for the next iteration
-        robot_traj.joint_trajectory.points = pts # Reassign the updated points list back to the trajectory object
-        return robot_traj # Return the fully timed trajectory
-
-    def _exec_trajectory(self, robot_traj) -> bool: # Define a method to send a trajectory to the action server and wait for completion
-        robot_traj = self._add_timestamps(robot_traj) # Call the helper to apply timing information to the raw trajectory
-        goal = FollowJointTrajectory.Goal() # Create a new goal object for the FollowJointTrajectory action
-        goal.trajectory = robot_traj.joint_trajectory # Assign the timed joint trajectory to the goal
-
-        future = self._traj_client.send_goal_async(goal) # Send the goal asynchronously to the action server
-        rclpy.spin_until_future_complete(self, future) # Block the current thread until the action server accepts or rejects the goal
-        gh = future.result() # Extract the goal handle from the completed future
-        if not gh.accepted: # Check if the action server rejected the trajectory goal
-            self.get_logger().error('Trajectory rejected by controller.') # Log an error if rejected
-            return False # Return failure
-
-        res_f = gh.get_result_async() # Request the final execution result asynchronously from the goal handle
-        rclpy.spin_until_future_complete(self, res_f) # Block the thread until the arm finishes moving and the result is returned
-        code = res_f.result().result.error_code # Extract the specific integer error code from the action result
-        self.get_logger().info(f'Controller error_code: {code}') # Log the numerical error code (0 means SUCCESS)
-        return code == 0 # Return True if the error code is 0 (success), otherwise False
+MAX_REACH           = 0.85
+MIN_MOVE_EPS_M      = 1e-3
+MAX_JOINT_VEL_RAD_S = 0.25
+MIN_PHASE_DUR_S     = 2.0
+RETURN_DUR_S        = 5.0
 
 
-def main(args=None): # Define the main entry point function for the script
-    rclpy.init(args=args) # Initialize the ROS 2 Python client library infrastructure
-    node = MouthFeedingPlanner() # Instantiate the MouthFeedingPlanner ROS node
-    executor = MultiThreadedExecutor() # Instantiate a MultiThreadedExecutor to allow callbacks to run concurrently
-    executor.add_node(node) # Attach our custom node to the executor
-    try: # Start a try block to handle graceful shutdown
-        executor.spin() # Start the executor loop, which blocks and processes incoming ROS messages/service calls
-    finally: # Execute this cleanup block when spin() exits (e.g., via Ctrl+C)
-        node.destroy_node() # Cleanly destroy the node and its associated ROS entities
-        rclpy.shutdown() # Shutdown the ROS 2 Python client library context
+class MouthFeedingPlanner(Node):
+    def __init__(self):
+        super().__init__('mouth_feeding_planner')
+        self._cb = ReentrantCallbackGroup()
+
+        self._tf_buf      = Buffer()
+        self._tf_listener = TransformListener(self._tf_buf, self)
+
+        self._latest_mouth: Optional[PointStamped] = None
+        self._latest_js:    Optional[JointState]   = None
+        self._busy = False
+
+        # ── Subscribers ──────────────────────────────────────────────
+        self.create_subscription(
+            PointStamped, '/mouth_3d_point', self._mouth_cb, 10,
+            callback_group=self._cb)
+        self.create_subscription(
+            JointState, '/joint_states', self._js_cb, 10,
+            callback_group=self._cb)
+
+        # ── Publishers ───────────────────────────────────────────────
+        self._marker_pub = self.create_publisher(Marker, '/feeding_marker', 10)
+
+        # ── IK service ───────────────────────────────────────────────
+        self._ik_client = self.create_client(
+            GetPositionIK, '/compute_ik',
+            callback_group=self._cb)
+
+        # ── Trajectory action ────────────────────────────────────────
+        self._traj_client = ActionClient(
+            self, FollowJointTrajectory,
+            '/arm_controller/follow_joint_trajectory',
+            callback_group=self._cb)
+
+        # ── Trigger service ──────────────────────────────────────────
+        self.create_service(
+            Trigger, '/feed_trigger', self._trigger_cb,
+            callback_group=self._cb)
+
+        self.get_logger().info('Waiting for IK and trajectory services …')
+        if not self._ik_client.wait_for_service(timeout_sec=30.0):
+            raise RuntimeError('Timed out waiting for /compute_ik')
+        if not self._traj_client.wait_for_server(timeout_sec=30.0):
+            raise RuntimeError('Timed out waiting for /arm_controller/follow_joint_trajectory')
+
+        self.get_logger().info(
+            'MouthFeedingPlanner ready.\n'
+            '  Waiting for /mouth_3d_point from mouth_tracker_node …\n'
+            '  Trigger with: ros2 service call /feed_trigger std_srvs/srv/Trigger {}')
+
+    # ── Callbacks ────────────────────────────────────────────────────
+
+    def _mouth_cb(self, msg: PointStamped):
+        self._latest_mouth = msg
+        self._publish_marker_cam(msg)   # diagnostic sphere in RViz
+
+    def _js_cb(self, msg: JointState):
+        self._latest_js = msg
+
+    def _trigger_cb(self, _req, response):
+        if self._busy:
+            response.success = False
+            response.message = 'Feed already in progress — please wait.'
+            return response
+        if self._latest_mouth is None:
+            response.success = False
+            response.message = (
+                'No mouth point yet. '
+                'Is mouth_tracker_node running and detecting a face? '
+                'Check: ros2 topic echo /mouth_3d_point')
+            return response
+
+        self._busy = True
+        try:
+            ok, msg = self._execute_feed()
+            response.success = ok
+            response.message = msg
+        except Exception as exc:
+            response.success = False
+            response.message = f'Exception: {exc}'
+            self.get_logger().error(response.message)
+        finally:
+            self._busy = False
+        return response
+
+    # ── Core feeding sequence ─────────────────────────────────────────
+
+    def _execute_feed(self):
+        snap      = self._latest_mouth
+        src_frame = snap.header.frame_id or CAM_FRAME
+        stamp     = rclpy.time.Time.from_msg(snap.header.stamp)
+
+        # Transform mouth point → base frame
+        try:
+            tf_cam = self._lookup_tf(BASE_FRAME, src_frame, stamp=stamp)
+        except RuntimeError:
+            self.get_logger().warn('Timestamped TF failed — using latest.')
+            try:
+                tf_cam = self._lookup_tf(BASE_FRAME, src_frame)
+            except RuntimeError as e:
+                return False, str(e)
+
+        mp_pt  = do_transform_point(snap, tf_cam).point
+        mx, my, mz = mp_pt.x, mp_pt.y, mp_pt.z
+        self.get_logger().info(
+            f'Mouth in [{BASE_FRAME}]: ({mx:+.3f}, {my:+.3f}, {mz:+.3f}) m')
+        self._pub_sphere(BASE_FRAME, mx, my, mz,
+                         mid=0, rgba=(1.0, 0.4, 0.7, 0.9), d=0.05)
+
+        # Current EE pose
+        try:
+            tf_ee = self._lookup_tf(BASE_FRAME, EE_LINK)
+        except RuntimeError as e:
+            return False, str(e)
+
+        ex = tf_ee.transform.translation.x
+        ey = tf_ee.transform.translation.y
+        ez = tf_ee.transform.translation.z
+        cur_ori = tf_ee.transform.rotation
+        self.get_logger().info(
+            f'EE start in [{BASE_FRAME}]: ({ex:+.3f}, {ey:+.3f}, {ez:+.3f}) m')
+
+        # Save start joints for return
+        start_js = copy.deepcopy(self._latest_js)
+
+        # Horizontal approach direction (base x-y plane, pointing toward mouth)
+        horiz = math.sqrt(mx*mx + my*my)
+        if horiz < MIN_MOVE_EPS_M:
+            return False, 'Mouth directly above base origin — cannot compute approach.'
+        uax, uay = mx / horiz, my / horiz
+
+        # ── Waypoints ────────────────────────────────────────────────
+        # Phase 1: height — keep EE x,y, move to mouth z
+        p1x, p1y, p1z = self._clamp(ex, ey, mz)
+
+        # Phase 2: approach — 10 cm in front of mouth, same height
+        p2x, p2y, p2z = self._clamp(
+            mx - uax * STOP_BEFORE_MOUTH_M,
+            my - uay * STOP_BEFORE_MOUTH_M,
+            mz)
+
+        # Phase 3: feed — spoon tip 5 cm from mouth
+        p3x, p3y, p3z = self._clamp(
+            mx - uax * FEED_GAP_M,
+            my - uay * FEED_GAP_M,
+            mz)
+
+        self.get_logger().info(
+            f'WP1 height  ({p1x:+.3f},{p1y:+.3f},{p1z:+.3f})\n'
+            f'WP2 approach({p2x:+.3f},{p2y:+.3f},{p2z:+.3f})\n'
+            f'WP3 feed    ({p3x:+.3f},{p3y:+.3f},{p3z:+.3f})')
+
+        self._pub_sphere(BASE_FRAME, p1x,p1y,p1z, mid=3, rgba=(1.0,1.0,0.0,0.9), d=0.03)
+        self._pub_sphere(BASE_FRAME, p2x,p2y,p2z, mid=1, rgba=(0.2,1.0,0.2,0.9), d=0.04)
+        self._pub_sphere(BASE_FRAME, p3x,p3y,p3z, mid=4, rgba=(1.0,0.5,0.0,0.9), d=0.03)
+
+        # ── Phase 1: Height ───────────────────────────────────────────
+        if abs(p1z - ez) > MIN_MOVE_EPS_M:
+            self._phase(self._pose(p1x, p1y, p1z, cur_ori),
+                        'height-alignment', required=False)
+        else:
+            self.get_logger().info('Phase 1 skipped — already at mouth height.')
+
+        # ── Phase 2: Lateral approach ─────────────────────────────────
+        lat = math.sqrt((p2x-p1x)**2 + (p2y-p1y)**2)
+        if lat > MIN_MOVE_EPS_M:
+            if not self._phase(self._pose(p2x, p2y, p2z, cur_ori),
+                               'lateral-approach', required=True):
+                self._safe_return(start_js)
+                return False, 'Phase 2 (lateral approach) failed — returned to start.'
+        else:
+            self.get_logger().info('Phase 2 skipped — already at approach position.')
+
+        # ── Phase 3: Forward feed ─────────────────────────────────────
+        fwd = math.sqrt((p3x-p2x)**2 + (p3y-p2y)**2)
+        if fwd > MIN_MOVE_EPS_M:
+            if not self._phase(self._pose(p3x, p3y, p3z, cur_ori),
+                               'forward-feed', required=True):
+                self._safe_return(start_js)
+                return False, 'Phase 3 (forward feed) failed — returned to start.'
+        else:
+            self.get_logger().info('Phase 3 skipped — already at feed position.')
+
+        # ── Hold ──────────────────────────────────────────────────────
+        self.get_logger().info(f'Holding at feed position for {HOLD_SECONDS:.0f} s …')
+        time.sleep(HOLD_SECONDS)
+
+        # ── Return ────────────────────────────────────────────────────
+        self.get_logger().info('Returning to start configuration …')
+        ok = self._safe_return(start_js)
+        return True, ('Feed complete.' if ok
+                      else 'Feed complete — WARNING: return failed.')
+
+    # ── Phase: IK → joint trajectory ─────────────────────────────────
+
+    def _phase(self, target_pose: Pose, name: str, required: bool = True) -> bool:
+        self.get_logger().info(f'[{name}] Solving IK …')
+
+        js = self._compute_ik(target_pose, avoid_collisions=True)
+        if js is None:
+            self.get_logger().warn(
+                f'[{name}] IK with collision check failed — retrying without.')
+            js = self._compute_ik(target_pose, avoid_collisions=False)
+
+        if js is None:
+            if not required:
+                self.get_logger().warn(
+                    f'[{name}] IK failed — skipping optional phase.')
+                return True
+            self.get_logger().error(f'[{name}] IK failed — no solution.')
+            return False
+
+        ok = self._move_to_joints(js, min_dur=MIN_PHASE_DUR_S)
+        if ok:
+            self.get_logger().info(f'[{name}] ✓')
+        else:
+            self.get_logger().error(f'[{name}] Joint move failed.')
+        return ok
+
+    # ── IK call ───────────────────────────────────────────────────────
+
+    def _compute_ik(self, target_pose: Pose,
+                    avoid_collisions: bool = True) -> Optional[JointState]:
+        req = GetPositionIK.Request()
+        req.ik_request.group_name       = ARM_GROUP
+        req.ik_request.ik_link_name     = EE_LINK
+        req.ik_request.avoid_collisions = avoid_collisions
+        req.ik_request.timeout.sec      = 3
+
+        if self._latest_js is not None:
+            req.ik_request.robot_state.joint_state = self._latest_js
+
+        ps = PoseStamped()
+        ps.header.frame_id = BASE_FRAME
+        ps.header.stamp    = self.get_clock().now().to_msg()
+        ps.pose            = target_pose
+        req.ik_request.pose_stamped = ps
+
+        future = self._ik_client.call_async(req)
+        if not self._wait(future, 6.0):
+            self.get_logger().error('IK timed out.')
+            return None
+
+        res = future.result()
+        if res is None or res.error_code.val != 1:
+            code = res.error_code.val if res else 'None'
+            self.get_logger().error(
+                f'IK error {code} | avoid_col={avoid_collisions} | '
+                f'target=({target_pose.position.x:+.3f},'
+                f'{target_pose.position.y:+.3f},'
+                f'{target_pose.position.z:+.3f})')
+            return None
+
+        return res.solution.joint_state
+
+    # ── Send joint trajectory ─────────────────────────────────────────
+
+    def _move_to_joints(self, target_js: JointState,
+                        min_dur: float = MIN_PHASE_DUR_S) -> bool:
+        names: List[str]   = []
+        positions: List[float] = []
+        for n, p in zip(target_js.name, target_js.position):
+            if n in ARM_JOINT_NAMES:
+                names.append(n)
+                positions.append(float(p))
+
+        if not names:
+            self.get_logger().error('No arm joints in IK solution.')
+            return False
+
+        duration = min_dur
+        cur_positions: List[float] = []
+        if self._latest_js is not None:
+            js_names = list(self._latest_js.name)
+            for n, tgt in zip(names, positions):
+                if n in js_names:
+                    delta    = abs(tgt - float(
+                        self._latest_js.position[js_names.index(n)]))
+                    duration = max(duration, delta / MAX_JOINT_VEL_RAD_S)
+            cur_positions = [
+                float(self._latest_js.position[js_names.index(n)])
+                if n in js_names else p
+                for n, p in zip(names, positions)
+            ]
+        else:
+            cur_positions = list(positions)
+
+        self.get_logger().info(
+            f'Sending {len(names)} joints, duration={duration:.2f} s')
+
+        sec  = int(duration)
+        nsec = int((duration - sec) * 1e9)
+
+        pt_start = JointTrajectoryPoint()
+        pt_start.positions      = cur_positions
+        pt_start.time_from_start = DurationMsg(sec=0, nanosec=0)
+
+        pt_end = JointTrajectoryPoint()
+        pt_end.positions      = positions
+        pt_end.time_from_start = DurationMsg(sec=sec, nanosec=nsec)
+
+        traj = JointTrajectory()
+        traj.header.stamp = self.get_clock().now().to_msg()
+        traj.joint_names  = names
+        traj.points       = [pt_start, pt_end]
+
+        goal = FollowJointTrajectory.Goal()
+        goal.trajectory = traj
+
+        future = self._traj_client.send_goal_async(goal)
+        if not self._wait(future, 5.0):
+            self.get_logger().error('Trajectory goal send timed out.')
+            return False
+
+        gh = future.result()
+        if gh is None or not gh.accepted:
+            self.get_logger().error('Trajectory rejected.')
+            return False
+
+        res_f = gh.get_result_async()
+        if not self._wait(res_f, duration + 10.0):
+            self.get_logger().error('Trajectory execution timed out.')
+            return False
+
+        rw = res_f.result()
+        return rw is not None and rw.result.error_code == 0
+
+    def _safe_return(self, start_js: Optional[JointState]) -> bool:
+        if start_js is None:
+            self.get_logger().warn('No start JS saved — cannot return.')
+            return False
+        return self._move_to_joints(start_js, min_dur=RETURN_DUR_S)
+
+    # ── Helpers ───────────────────────────────────────────────────────
+
+    def _wait(self, future, timeout_sec: float) -> bool:
+        deadline = time.time() + timeout_sec
+        while not future.done():
+            if time.time() > deadline:
+                return False
+            time.sleep(0.01)
+        return True
+
+    def _lookup_tf(self, target, source, timeout=2.0, stamp=None):
+        if stamp is None:
+            stamp = Time()
+        try:
+            return self._tf_buf.lookup_transform(
+                target, source, stamp, timeout=Duration(seconds=timeout))
+        except ConnectivityException as e:
+            frames = self._tf_buf.all_frames_as_string()
+            self.get_logger().error(
+                f'TF broken {source}→{target}.\n'
+                f'Active frames:\n{frames}\n'
+                'Check arm driver: ros2 topic hz /joint_states')
+            raise RuntimeError(str(e)) from e
+        except (LookupException, ExtrapolationException) as e:
+            raise RuntimeError(f'TF {source}→{target}: {e}') from e
+
+    def _clamp(self, x, y, z):
+        norm = math.sqrt(x*x + y*y + z*z)
+        if norm > MAX_REACH:
+            s = MAX_REACH / norm
+            x, y, z = x*s, y*s, z*s
+            self.get_logger().warn(
+                f'Clamped to reach limit: ({x:+.3f},{y:+.3f},{z:+.3f})')
+        return x, y, z
+
+    def _pose(self, x, y, z, ori) -> Pose:
+        return Pose(
+            position=Point(x=float(x), y=float(y), z=float(z)),
+            orientation=Quaternion(
+                x=ori.x, y=ori.y, z=ori.z, w=ori.w))
+
+    def _pub_sphere(self, frame, x, y, z, mid, rgba, d=0.04):
+        m = Marker()
+        m.header.frame_id = frame
+        m.header.stamp    = self.get_clock().now().to_msg()
+        m.ns, m.id        = 'feeding', mid
+        m.type            = Marker.SPHERE
+        m.action          = Marker.ADD
+        m.pose.position.x = float(x)
+        m.pose.position.y = float(y)
+        m.pose.position.z = float(z)
+        m.pose.orientation.w = 1.0
+        m.scale.x = m.scale.y = m.scale.z = d
+        m.color.r, m.color.g, m.color.b, m.color.a = rgba
+        m.lifetime.sec = 0
+        self._marker_pub.publish(m)
+
+    def _publish_marker_cam(self, mouth_cam: PointStamped):
+        try:
+            tf_wc = self._lookup_tf('world', CAM_FRAME, timeout=0.2)
+        except RuntimeError:
+            return
+        mw = do_transform_point(mouth_cam, tf_wc)
+        self._pub_sphere('world', mw.point.x, mw.point.y, mw.point.z,
+                         mid=10, rgba=(1.0, 0.4, 0.7, 0.9), d=0.05)
 
 
-if __name__ == '__main__': # Standard Python idiom to check if the script is being executed directly (not imported)
-    main() # Call the main function to start the program
+def main(args=None):
+    rclpy.init(args=args)
+    node = MouthFeedingPlanner()
+    executor = MultiThreadedExecutor()
+    executor.add_node(node)
+    try:
+        executor.spin()
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()

@@ -47,18 +47,21 @@ def _load_yaml(package_name: str, relative_path: str):
     return yaml.safe_load(_load_text(package_name, relative_path))
 
 
-def _moveit_node_params() -> List[Dict]:
-    """Build MoveIt-related parameter dictionaries."""
-    package_dir = get_package_share_directory(PACKAGE_NAME)
-
+def _robot_urdf_xml() -> str:
+    """Process the j2s6s200 standalone xacro and return the URDF XML string."""
     xacro_file = os.path.join(
         get_package_share_directory(KINOVA_DESC_PKG),
         "urdf",
         "j2s6s200_standalone.xacro",
     )
-    robot_doc = xacro.process_file(xacro_file)
+    return xacro.process_file(xacro_file).toprettyxml(indent="  ")
 
-    robot_description = {"robot_description": robot_doc.toprettyxml(indent="  ")}
+
+def _moveit_node_params() -> List[Dict]:
+    """Build MoveIt-related parameter dictionaries."""
+    package_dir = get_package_share_directory(PACKAGE_NAME)
+
+    robot_description = {"robot_description": _robot_urdf_xml()}
     robot_semantic = {"robot_description_semantic": _load_text(PACKAGE_NAME, "config/j2s6s200.srdf")}
     robot_kinematics = {"robot_description_kinematics": _load_yaml(PACKAGE_NAME, "config/kinematics.yaml")}
     robot_joint_limits = {"robot_description_planning": _load_yaml(PACKAGE_NAME, "config/joint_limits.yaml")}
@@ -137,6 +140,23 @@ def _launch_setup(context, *args, **kwargs):
                 parameters=_moveit_node_params(),
             )
         )
+
+    # robot_state_publisher: reads /joint_states and publishes the full j2s6s200
+    # TF chain (root → j2s6s200_link_base → … → j2s6s200_end_effector).
+    # Required so that the static EE→camera TF below connects into one tree.
+    # /joint_states is published by kinova_sdk_node (run separately).
+    nodes.append(
+        Node(
+            package="robot_state_publisher",
+            executable="robot_state_publisher",
+            name="robot_state_publisher",
+            output="screen",
+            parameters=[
+                {"robot_description": _robot_urdf_xml()},
+                {"use_sim_time": False},
+            ],
+        )
+    )
 
     # MoveIt2 move_group is required because the feeding planner calls /compute_ik.
     nodes.append(

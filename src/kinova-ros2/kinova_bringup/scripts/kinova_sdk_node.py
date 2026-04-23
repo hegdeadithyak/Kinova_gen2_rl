@@ -37,7 +37,7 @@ from moveit_msgs.srv import ApplyPlanningScene
 
 # ── SDK shared library ────────────────────────────────────────────────
 SDK_PATH = os.path.expanduser(
-    '~/Downloads/rl_v2-master-master/src/kinova-ros2/'
+    '/home/amma/kinova_ws/rl_v2-master/src/kinova-ros2/'
     'kinova_driver/lib/x86_64-linux-gnu/USBCommandLayerUbuntu.so'
 )
 

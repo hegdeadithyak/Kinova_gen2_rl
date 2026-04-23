@@ -30,7 +30,7 @@ import time
 from typing import List, Optional
 
 import rclpy
-from rclpy.action import ActionServer
+from rclpy.action import ActionServer, CancelResponse, GoalResponse
 from rclpy.action.server import ServerGoalHandle
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
@@ -60,7 +60,7 @@ INTEGRAL_LIMIT      = math.radians(8.0)    # anti-windup clamp on accumulator
 MAX_JOINT_VEL       = math.radians(60.0)   # rad/s safety clamp
 GOAL_TOLERANCE      = math.radians(2.0)    # final position tolerance per joint
 PATH_TOLERANCE      = math.radians(20.0)   # in-flight tracking error per joint
-SETTLE_TIME         = 2.0                  # s convergence time after t_end
+SETTLE_TIME         = 0.5                  # s convergence time after t_end
 
 # Runaway watchdog
 RUNAWAY_VEL         = math.radians(50.0)   # rad/s; sustained commands above this
@@ -100,6 +100,13 @@ class KinovaTrajectoryBridge(Node):
         self._latest_q: Optional[List[float]] = None
         self._latest_q_stamp: float = 0.0
 
+        # Preemption: one execution at a time.
+        # When a new goal arrives, _stop_event is set so the running
+        # _execute_cb exits within one CTRL_DT (~20 ms), then _exec_lock
+        # is acquired exclusively by the new goal's thread.
+        self._exec_lock  = threading.Lock()
+        self._stop_event = threading.Event()
+
         # I/O
         self._vel_pub = self.create_publisher(JointVelocity, VEL_CMD_TOPIC, 10)
 
@@ -116,6 +123,8 @@ class KinovaTrajectoryBridge(Node):
             self, FollowJointTrajectory,
             '/arm_controller/follow_joint_trajectory',
             execute_callback=self._execute_cb,
+            goal_callback=self._goal_cb,
+            cancel_callback=self._cancel_cb,
             callback_group=self._cb_group,
         )
 
@@ -171,9 +180,28 @@ class KinovaTrajectoryBridge(Node):
             self._current_cmd_deg = [0.0] * NJ
 
     # ------------------------------------------------------------------
-    # Action callback
+    # Goal / cancel callbacks
+    # ------------------------------------------------------------------
+    def _goal_cb(self, goal_request):
+        # Accept every incoming goal; the execute wrapper below will
+        # preempt whatever is currently running.
+        self._stop_event.set()
+        return GoalResponse.ACCEPT
+
+    def _cancel_cb(self, goal_handle):
+        return CancelResponse.ACCEPT
+
+    # ------------------------------------------------------------------
+    # Action callback — thin wrapper that enforces exclusive execution
     # ------------------------------------------------------------------
     def _execute_cb(self, goal_handle: ServerGoalHandle):
+        # _goal_cb already set _stop_event; wait for the previous
+        # execution to exit and release _exec_lock (~one CTRL_DT delay).
+        with self._exec_lock:
+            self._stop_event.clear()      # we own the lock; reset for our run
+            return self._run_trajectory(goal_handle)
+
+    def _run_trajectory(self, goal_handle: ServerGoalHandle):
         result = FollowJointTrajectory.Result()
         traj = goal_handle.request.trajectory
         points = traj.points
@@ -250,6 +278,22 @@ class KinovaTrajectoryBridge(Node):
 
         try:
             while True:
+                # Preempted by a newer goal arriving
+                if self._stop_event.is_set():
+                    self.get_logger().info('Preempted by new goal — aborting.')
+                    self._zero_cmd()
+                    goal_handle.abort()
+                    result.error_code = FollowJointTrajectory.Result.PATH_TOLERANCE_VIOLATED
+                    return result
+
+                # Client-side cancel request
+                if goal_handle.is_cancel_requested:
+                    self.get_logger().info('Cancel requested — stopping.')
+                    self._zero_cmd()
+                    goal_handle.canceled()
+                    result.error_code = FollowJointTrajectory.Result.SUCCESSFUL
+                    return result
+
                 t_now = time.monotonic() - start_time
                 if t_now >= t_end + SETTLE_TIME:
                     break

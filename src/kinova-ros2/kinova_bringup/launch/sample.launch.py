@@ -67,20 +67,32 @@ def _moveit_node_params() -> List[Dict]:
     robot_joint_limits = {"robot_description_planning": _load_yaml(PACKAGE_NAME, "config/joint_limits.yaml")}
     sim_time = {"use_sim_time": False}
 
-    ompl_planning = {
-        "move_group": {
-            "planning_plugin": "ompl_interface/OMPLPlanner",
-            "request_adapters": (
-                "default_planner_request_adapters/AddTimeOptimalParameterization "
-                "default_planner_request_adapters/FixWorkspaceBounds "
-                "default_planner_request_adapters/FixStartStateBounds "
-                "default_planner_request_adapters/FixStartStateCollision "
-                "default_planner_request_adapters/FixStartStatePathConstraints"
-            ),
-            "start_state_max_bounds_error": 0.1,
-        }
+    _ompl_yaml = _load_yaml(PACKAGE_NAME, "config/ompl_planning.yaml")
+    # Flatten: the YAML has a nested "move_group:" section for request_adapters;
+    # bring those keys up to the same level as planner_configs / arm / gripper.
+    _ompl_flat = {"planning_plugin": _ompl_yaml.get("planning_plugin",
+                                                      "ompl_interface/OMPLPlanner")}
+    _ompl_flat.update(_ompl_yaml.get("move_group", {}))   # request_adapters, start_state_max_bounds_error
+    for _k in ("planner_configs", "arm", "gripper"):
+        if _k in _ompl_yaml:
+            _ompl_flat[_k] = _ompl_yaml[_k]
+
+    # Add BFMT (Bidirectional Fast Marching Tree) — shortest/near-optimal paths.
+    # Not in ompl_planning.yaml so we can keep that file clean.
+    _ompl_flat.setdefault("planner_configs", {})["BFMTkConfigDefault"] = {
+        "type": "geometric::BFMT",
+        "num_samples": 1000,
+        "radius_multiplier": 1.1,
+        "balanced": 1,
+        "optimality": 1,
+        "heuristics": 1,
+        "nearest_k": 1,
     }
-    ompl_planning["move_group"].update(_load_yaml(PACKAGE_NAME, "config/ompl_planning.yaml"))
+    _ompl_flat.setdefault("arm", {}).setdefault("planner_configs", []).append(
+        "BFMTkConfigDefault"
+    )
+
+    ompl_planning = {"move_group": _ompl_flat}
 
     moveit_controllers = {
         "moveit_controller_manager": "moveit_simple_controller_manager/MoveItSimpleControllerManager",

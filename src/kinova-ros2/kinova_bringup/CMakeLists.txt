@@ -143,56 +143,15 @@ install(PROGRAMS scripts/kinova_sdk_node.py
   DESTINATION lib/${PROJECT_NAME}
   RENAME kinova_sdk_node
 )
-install(PROGRAMS scripts/trajectory_executor.py
-  DESTINATION lib/${PROJECT_NAME}
-  RENAME trajectory_executor
-)
 
 install(PROGRAMS scripts/kinova_trajectory_bridge.py
   DESTINATION lib/${PROJECT_NAME}
   RENAME kinova_trajectory_bridge
 )
 
-install(PROGRAMS scripts/kinova_trajectory_bridge.py
-  DESTINATION lib/${PROJECT_NAME}
-  RENAME kinova_trajectory_bridge
-)
-
-install(PROGRAMS scripts/go_to_prescoop.py
-  DESTINATION lib/${PROJECT_NAME}
-  RENAME go_to_prescoop
-)
-
-install(PROGRAMS scripts/go_feed.py
-  DESTINATION lib/${PROJECT_NAME}
-  RENAME go_feed
-)
-
-install(PROGRAMS scripts/mouth_feeding_planner.py
-  DESTINATION lib/${PROJECT_NAME}
-  RENAME mouth_feeding_planner
-)
-install(PROGRAMS scripts/pointer_feed_planner.py
-  DESTINATION lib/${PROJECT_NAME}
-  RENAME pointer_feed_planner
-)
 install(PROGRAMS scripts/demo_feed_planner.py
   DESTINATION lib/${PROJECT_NAME}
   RENAME demo_feed_planner
-)
-install(PROGRAMS scripts/feed_recorder.py
-  DESTINATION lib/${PROJECT_NAME}
-  RENAME feed_recorder
-)
-
-install(PROGRAMS scripts/mouth_tracker_node.py
-  DESTINATION lib/${PROJECT_NAME}
-  RENAME mouth_tracker_node
-)
-
-install(PROGRAMS scripts/feeding_executor_node.py
-  DESTINATION lib/${PROJECT_NAME}
-  RENAME feeding_executor_node
 )
 
 install(DIRECTORY moveit_resource

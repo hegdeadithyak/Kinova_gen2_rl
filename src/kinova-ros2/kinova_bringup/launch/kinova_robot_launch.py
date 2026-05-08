@@ -72,9 +72,8 @@ def launch_setup(context, *args, **kwargs):
         condition=IfCondition(LaunchConfiguration("use_urdf")),
     )
 
-    # ── Trajectory bridge — converts action goals → joint velocity commands ──
     trajectory_bridge = Node(
-        package='kinova_bringup',          # change to wherever you install the script
+        package='kinova_bringup',
         executable='kinova_trajectory_bridge',
         name='kinova_trajectory_bridge',
         output='screen',

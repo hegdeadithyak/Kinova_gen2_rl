@@ -7,18 +7,18 @@ Orchestrates a 3-cycle feeding sequence on the Kinova j2s6s200:
   for cycle in 1..3:
       MOVE  → SCOOP_START          (joint-space, direct to bridge)
       SCOOP → joint-5 ramp          (joint-space, direct to bridge)
-      MOVE  → SCOOP_START          (joint-space, return after scoop)
       MOVE  → TRANSIT               (joint-space, direct to bridge)
       MOVE  → FEEDING               (Cartesian + orientation-locked via MoveIt;
                                      falls back to joint-space if planner fails)
-      DWELL
+      DWELL 5 s
       MOVE  → TRANSIT               (Cartesian + orientation-locked; same fallback)
 
 Joint-space moves bypass MoveIt entirely and go straight to the bridge's
 FollowJointTrajectory action. Cartesian moves use MoveIt's
 compute_cartesian_path service to GENERATE the trajectory, then dispatch the
-resulting joint trajectory directly to the bridge — bypassing move_group's
-controller manager.
+resulting joint trajectory directly to the bridge — bypassing
+move_group's controller manager (which is the source of every -4 error
+we've been chasing).
 """
 
 import math
@@ -37,212 +37,136 @@ from builtin_interfaces.msg import Duration
 
 from moveit_msgs.srv import GetCartesianPath, GetPositionFK
 from moveit_msgs.msg import RobotState, Constraints, OrientationConstraint
-from geometry_msgs.msg import Pose
+from geometry_msgs.msg import PoseStamped, Pose
 
 
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-
 JOINT_NAMES = [
-    'j2s6s200_joint_1',
-    'j2s6s200_joint_2',
-    'j2s6s200_joint_3',
-    'j2s6s200_joint_4',
-    'j2s6s200_joint_5',
-    'j2s6s200_joint_6',
+    'j2s6s200_joint_1', 'j2s6s200_joint_2', 'j2s6s200_joint_3',
+    'j2s6s200_joint_4', 'j2s6s200_joint_5', 'j2s6s200_joint_6',
 ]
-
 NJ = len(JOINT_NAMES)
 
 # Captured live from /j2s6s200_driver/out/joint_state — DO NOT convert from deg
 SCOOP_START_RAD: List[float] = [
-    2.905325523793451,
-    3.943063526798088,
-    2.134145711139827,
-    0.4043288065734776,
-    4.5630889738815394,
-    1.4033809659248093,
+    2.875825422082535,
+    3.804621760691408,
+    1.893278370034537,
+    2.9098382502605906,
+    2.296347401543866,
+    0.26384221544756514
+
 ]
 
 TRANSIT_RAD: List[float] = [
-    2.6178218377850753,
-    4.10288062276207,
-    1.2267091228958793,
-    7.314518407762582,
-    5.08876767829119,
-    6.604563869621552,
+    6.318555814881365,
+    3.919515323807389,
+    1.032239574039031,
+    4.559317937777987,
+    4.822317345964326,
+    6.220804487070007,
 ]
 
 FEEDING_RAD: List[float] = [
-    3.210582640576623,
-    4.127362796347059,
-    1.0460198347835374,
-    7.942973292328352,
-    5.007654183073993,
-    6.418817438336232,
+    3.072234617740315,   # j2s6s200_joint_1
+    3.889442376145996,   # j2s6s200_joint_2
+    0.9398291492147997,  # j2s6s200_joint_3
+    1.4061254865861905,  # j2s6s200_joint_4
+    4.960991872350278,   # j2s6s200_joint_5
+    6.566627672525591,   # j2s6s200_joint_6
 ]
-
-# Joint indices
-J5 = 1
 
 # Joint-5 scoop ramp: (time_s, j5_deg). All other joints pinned.
-# Joint-2 scoop trajectory: (time_s, j2_deg)
-# Extracted from full 6-joint scooping trajectory.
-# All other joints remain pinned at the current robot state.
 SCOOP_J5_RAMP_DEG = [
-    (0.05, 232.97),
-    (0.15, 232.97),
-    (0.25, 232.97),
-    (0.35, 232.97),
-    (0.45, 232.97),
-    (0.55, 232.97),
-    (0.65, 232.97),
-    (0.75, 232.97),
-    (0.85, 232.97),
-    (0.95, 232.97),
-    (1.05, 232.97),
-    (1.15, 232.97),
-    (1.25, 232.97),
-    (1.35, 232.97),
-    (1.45, 232.97),
-    (1.55, 232.97),
-    (1.65, 232.97),
-    (1.75, 232.97),
-    (1.85, 232.97),
-    (1.95, 233.01),
-    (2.05, 233.01),
-    (2.15, 233.75),
-    (2.25, 234.14),
-    (2.35, 234.55),
-    (2.45, 234.55),
-    (2.55, 234.93),
-    (2.65, 235.22),
-    (2.75, 235.53),
-    (2.85, 235.90),
-    (2.95, 236.17),
-    (3.05, 236.50),
-    (3.15, 236.86),
-    (3.25, 237.51),
-    (3.35, 237.51),
-    (3.45, 237.88),
-    (3.55, 238.25),
-    (3.65, 238.60),
-    (3.75, 239.43),
-    (3.85, 239.43),
-    (3.95, 239.89),
-    
-    
+    (0.00, 192.63),
+    (1.00, 192.63),
+    (1.20, 192.75),
+    (1.40, 196.30),
+    (1.60, 201.85),
+    (1.80, 207.78),
+    (2.00, 213.93),
+    (2.20, 220.18),
+    (2.40, 226.58),
+    (2.60, 232.97),
+    (2.80, 239.39),
+    (3.00, 245.75),
+    (3.20, 250.82),
+    (3.40, 251.15),
+    (5.40, 251.18),
 ]
-
 DEG2RAD = math.pi / 180.0
+J5 = 4
 
-# Move durations
-DUR_TO_SCOOP_START = 5.0
-DUR_RETURN_TO_SCOOP_START = 2.5
-DUR_TO_TRANSIT = 2.5
-DUR_TO_FEEDING = 5.0
-DWELL_AT_FEEDING = 3.0
-NUM_CYCLES = 3
+# Move durations (seconds). Sized for the deltas; conservative.
+DUR_TO_SCOOP_START = 8.0
+DUR_TO_TRANSIT     = 4.0
+DUR_TO_FEEDING     = 10.0     # ~125 deg sweep on j1 — needs time
+DWELL_AT_FEEDING   = 5.0
+NUM_CYCLES         = 3
 
 # Cartesian planning parameters
-CARTESIAN_EEF_STEP = 0.01
-CARTESIAN_JUMP_THR = 0.0
-CARTESIAN_MIN_FRAC = 0.90
-ORIENTATION_TOL_RAD = 0.35
+CARTESIAN_EEF_STEP   = 0.01      # 1 cm interpolation step
+CARTESIAN_JUMP_THR   = 0.0       # disabled (only meaningful in MoveIt 1)
+CARTESIAN_MIN_FRAC   = 0.90      # require at least 90% of path to be valid
+ORIENTATION_TOL_RAD  = 0.35      # ~20 deg per axis — generous; tighten later
+EEF_LINK             = 'j2s6s200_link_6'
+PLANNING_FRAME       = 'root'    # confirm with `ros2 run tf2_ros tf2_echo root j2s6s200_link_6`
+PLANNING_GROUP       = 'arm'     # must match SRDF
 
-EEF_LINK = 'j2s6s200_link_6'
-PLANNING_FRAME = 'root'
-PLANNING_GROUP = 'arm'
-
-ACTION_TOPIC = '/arm_controller/follow_joint_trajectory'
+ACTION_TOPIC      = '/arm_controller/follow_joint_trajectory'
 JOINT_STATE_TOPIC = '/j2s6s200_driver/out/joint_state'
 
 
 # ---------------------------------------------------------------------------
-# Feeding Orchestrator
-# ---------------------------------------------------------------------------
-
 class FeedingOrchestrator(Node):
     def __init__(self):
         super().__init__('feeding_orchestrator')
 
-        self._traj_client = ActionClient(
-            self,
-            FollowJointTrajectory,
-            ACTION_TOPIC,
-        )
+        self._traj_client = ActionClient(self, FollowJointTrajectory, ACTION_TOPIC)
 
         self._latest_q: Optional[List[float]] = None
-
         self.create_subscription(
-            JointState,
-            JOINT_STATE_TOPIC,
-            self._js_cb,
-            10,
+            JointState, JOINT_STATE_TOPIC, self._js_cb, 10
         )
 
-        self._cart_cli = self.create_client(
-            GetCartesianPath,
-            'compute_cartesian_path',
-        )
-
-        self._fk_cli = self.create_client(
-            GetPositionFK,
-            'compute_fk',
-        )
+        self._cart_cli = self.create_client(GetCartesianPath, 'compute_cartesian_path')
+        self._fk_cli   = self.create_client(GetPositionFK,    'compute_fk')
 
     # ------------------------------------------------------------------
-    # Joint state callback
-    # ------------------------------------------------------------------
-
     def _js_cb(self, msg: JointState):
         try:
-            idx = [msg.name.index(joint_name) for joint_name in JOINT_NAMES]
+            idx = [msg.name.index(j) for j in JOINT_NAMES]
         except ValueError:
             return
-
         self._latest_q = [msg.position[i] for i in idx]
 
-    def _wait_for_state(self, timeout: float = 3.0) -> bool:
+    def _wait_for_state(self, timeout=3.0) -> bool:
         t0 = time.monotonic()
-
         while self._latest_q is None and (time.monotonic() - t0) < timeout:
             rclpy.spin_once(self, timeout_sec=0.05)
-
         return self._latest_q is not None
 
     # ------------------------------------------------------------------
-    # Joint-space single-waypoint move
+    # Joint-space single-waypoint move (direct to bridge)
     # ------------------------------------------------------------------
-
-    def move_joint_space(
-        self,
-        target_rad: List[float],
-        duration_s: float,
-        label: str,
-    ) -> bool:
+    def move_joint_space(self, target_rad: List[float], duration_s: float,
+                         label: str) -> bool:
         self.get_logger().info(
             f'[{label}] joint-space move over {duration_s:.1f}s'
         )
-
         if not self._traj_client.wait_for_server(timeout_sec=10.0):
             self.get_logger().error('Trajectory action server not available')
             return False
 
         goal = FollowJointTrajectory.Goal()
         goal.trajectory.joint_names = JOINT_NAMES
-
         pt = JointTrajectoryPoint()
-        pt.positions = list(target_rad)
+        pt.positions  = list(target_rad)
         pt.velocities = [0.0] * NJ
-
         sec = int(duration_s)
-        pt.time_from_start = Duration(
-            sec=sec,
-            nanosec=int((duration_s - sec) * 1e9),
-        )
-
+        pt.time_from_start = Duration(sec=sec, nanosec=int((duration_s - sec) * 1e9))
         goal.trajectory.points.append(pt)
 
         return self._send_and_wait(goal, label)
@@ -250,17 +174,12 @@ class FeedingOrchestrator(Node):
     # ------------------------------------------------------------------
     # Joint-5-only scoop sweep
     # ------------------------------------------------------------------
-
     def execute_scoop(self) -> bool:
         if not self._wait_for_state():
             self.get_logger().error('No joint state for scoop build')
             return False
-
         q_now = list(self._latest_q)
-
         ramp = list(SCOOP_J5_RAMP_DEG)
-
-        # Start the ramp from the robot's current joint-5 position.
         ramp[0] = (ramp[0][0], q_now[J5] / DEG2RAD)
 
         self.get_logger().info(
@@ -272,31 +191,22 @@ class FeedingOrchestrator(Node):
 
         for i, (t_sec, j5_deg) in enumerate(ramp):
             pt = JointTrajectoryPoint()
-
             positions = list(q_now)
             positions[J5] = j5_deg * DEG2RAD
             pt.positions = positions
 
             velocities = [0.0] * NJ
-
             if i + 1 < len(ramp):
                 t_next, j5_next = ramp[i + 1]
                 dt = t_next - t_sec
-
                 if dt > 1e-6:
-                    velocities[J5] = min(
-                        (j5_next - j5_deg) * DEG2RAD / dt,
-                        55.0,
-                    )
-
+                    velocities[J5] = (j5_next - j5_deg) * DEG2RAD / dt
             pt.velocities = velocities
 
             sec = int(t_sec)
             pt.time_from_start = Duration(
-                sec=sec,
-                nanosec=int((t_sec - sec) * 1e9),
+                sec=sec, nanosec=int((t_sec - sec) * 1e9)
             )
-
             goal.trajectory.points.append(pt)
 
         return self._send_and_wait(goal, 'SCOOP')
@@ -304,65 +214,51 @@ class FeedingOrchestrator(Node):
     # ------------------------------------------------------------------
     # Cartesian + orientation-locked move via compute_cartesian_path
     # ------------------------------------------------------------------
-
-    def move_cartesian_orientation_locked(
-        self,
-        target_joint_rad: List[float],
-        duration_s: float,
-        label: str,
-    ) -> bool:
+    def move_cartesian_orientation_locked(self,
+                                          target_joint_rad: List[float],
+                                          duration_s: float,
+                                          label: str) -> bool:
         """
-        Plan a Cartesian path from the current end-effector pose to the
-        end-effector position implied by target_joint_rad, while locking the
-        end-effector orientation to the current orientation.
-
-        If planning succeeds with sufficient fraction coverage, dispatch the
-        generated joint trajectory directly to the trajectory bridge.
-
-        Otherwise return False so caller can fall back to joint-space motion.
+        Plan a Cartesian path from the CURRENT eef pose to the eef pose
+        implied by target_joint_rad, with the eef ORIENTATION held fixed
+        at the current orientation. If planning succeeds with >= MIN_FRAC
+        coverage, dispatch the joint trajectory directly to the bridge.
+        Otherwise return False so caller can fall back.
         """
-
         if not self._cart_cli.wait_for_service(timeout_sec=3.0):
             self.get_logger().warn(
-                f'[{label}] compute_cartesian_path service unavailable; '
-                f'falling back to joint-space'
-            )
+                '[%s] compute_cartesian_path service unavailable; '
+                'falling back to joint-space' % label)
             return False
-
         if not self._fk_cli.wait_for_service(timeout_sec=3.0):
             self.get_logger().warn(
-                f'[{label}] compute_fk service unavailable; falling back'
-            )
+                '[%s] compute_fk service unavailable; falling back' % label)
             return False
-
         if not self._wait_for_state():
-            self.get_logger().error(f'[{label}] no joint state')
+            self.get_logger().error('[%s] no joint state' % label)
             return False
 
-        # FK on current state.
+        # 1. FK on current pose -> get start eef pose (we'll lock orientation here)
         start_pose = self._fk(self._latest_q)
-
         if start_pose is None:
             self.get_logger().warn(
-                f'[{label}] FK on current state failed; fallback'
-            )
+                '[%s] FK on current state failed; fallback' % label)
             return False
 
-        # FK on target joint config.
+        # 2. FK on target joint config -> get target eef position
         target_pose = self._fk(target_joint_rad)
-
         if target_pose is None:
             self.get_logger().warn(
-                f'[{label}] FK on target failed; fallback'
-            )
+                '[%s] FK on target failed; fallback' % label)
             return False
 
-        # Use target position but lock orientation to current orientation.
+        # 3. Build the waypoint list: just the target position, with the
+        #    orientation overridden to the START orientation (lock).
         locked_target = Pose()
         locked_target.position = target_pose.position
         locked_target.orientation = start_pose.orientation
 
-        # Orientation constraint along the path.
+        # 4. Orientation constraint applied along the path
         oc = OrientationConstraint()
         oc.header.frame_id = PLANNING_FRAME
         oc.link_name = EEF_LINK
@@ -377,14 +273,11 @@ class FeedingOrchestrator(Node):
 
         req = GetCartesianPath.Request()
         req.header.frame_id = PLANNING_FRAME
-
         req.start_state.joint_state.name = JOINT_NAMES
         req.start_state.joint_state.position = list(self._latest_q)
-
         req.group_name = PLANNING_GROUP
         req.link_name = EEF_LINK
         req.waypoints = [locked_target]
-
         req.max_step = CARTESIAN_EEF_STEP
         req.jump_threshold = CARTESIAN_JUMP_THR
         req.avoid_collisions = False
@@ -392,263 +285,154 @@ class FeedingOrchestrator(Node):
 
         future = self._cart_cli.call_async(req)
         rclpy.spin_until_future_complete(self, future, timeout_sec=15.0)
-
         if not future.done():
-            self.get_logger().warn(f'[{label}] cartesian planner timed out')
+            self.get_logger().warn('[%s] cartesian planner timed out' % label)
             return False
 
         resp = future.result()
         frac = resp.fraction
         n_pts = len(resp.solution.joint_trajectory.points)
-
         self.get_logger().info(
-            f'[{label}] cartesian plan: fraction={frac:.2f}, {n_pts} points'
-        )
+            '[%s] cartesian plan: fraction=%.2f, %d points'
+            % (label, frac, n_pts))
 
         if frac < CARTESIAN_MIN_FRAC or n_pts < 2:
             self.get_logger().warn(
-                f'[{label}] cartesian plan insufficient '
-                f'(frac={frac:.2f}); fallback'
-            )
+                '[%s] cartesian plan insufficient (frac=%.2f); fallback'
+                % (label, frac))
             return False
 
+        # 5. Retime: rescale time_from_start so total duration = duration_s
         traj = resp.solution.joint_trajectory
-
-        # Retime trajectory so total duration matches duration_s.
         last = traj.points[-1].time_from_start
         last_t = last.sec + last.nanosec * 1e-9
-
         if last_t < 1e-3:
             self.get_logger().warn(
-                f'[{label}] degenerate trajectory time; fallback'
-            )
+                '[%s] degenerate trajectory time; fallback' % label)
             return False
-
         scale = duration_s / last_t
+        for p in traj.points:
+            t = (p.time_from_start.sec + p.time_from_start.nanosec * 1e-9) * scale
+            p.time_from_start.sec = int(t)
+            p.time_from_start.nanosec = int((t - int(t)) * 1e9)
+            # Clear velocities; bridge will recompute via finite diff
+            p.velocities = []
+            p.accelerations = []
 
-        for point in traj.points:
-            old_t = (
-                point.time_from_start.sec
-                + point.time_from_start.nanosec * 1e-9
-            )
-
-            new_t = old_t * scale
-
-            point.time_from_start.sec = int(new_t)
-            point.time_from_start.nanosec = int(
-                (new_t - int(new_t)) * 1e9
-            )
-
-            # Let the bridge/controller handle interpolation.
-            point.velocities = []
-            point.accelerations = []
-
-        # Reorder joint names to canonical order if MoveIt returns differently.
+        # Reorder joint_names to canonical and rebuild positions
         if list(traj.joint_names) != JOINT_NAMES:
             try:
                 idx_map = [traj.joint_names.index(j) for j in JOINT_NAMES]
             except ValueError as e:
                 self.get_logger().warn(
-                    f'[{label}] joint name mismatch in plan: {e}'
-                )
+                    '[%s] joint name mismatch in plan: %s' % (label, e))
                 return False
-
-            for point in traj.points:
-                point.positions = [point.positions[k] for k in idx_map]
-
+            for p in traj.points:
+                p.positions = [p.positions[k] for k in idx_map]
             traj.joint_names = list(JOINT_NAMES)
 
         goal = FollowJointTrajectory.Goal()
         goal.trajectory = traj
-
         return self._send_and_wait(goal, label + ' (cartesian)')
 
     # ------------------------------------------------------------------
-    # Forward kinematics helper
-    # ------------------------------------------------------------------
-
     def _fk(self, joint_positions: List[float]) -> Optional[Pose]:
         req = GetPositionFK.Request()
         req.header.frame_id = PLANNING_FRAME
         req.fk_link_names = [EEF_LINK]
-
-        robot_state = RobotState()
-        robot_state.joint_state.name = JOINT_NAMES
-        robot_state.joint_state.position = list(joint_positions)
-
-        req.robot_state = robot_state
-
-        future = self._fk_cli.call_async(req)
-        rclpy.spin_until_future_complete(self, future, timeout_sec=3.0)
-
-        if not future.done():
+        rs = RobotState()
+        rs.joint_state.name = JOINT_NAMES
+        rs.joint_state.position = list(joint_positions)
+        req.robot_state = rs
+        fut = self._fk_cli.call_async(req)
+        rclpy.spin_until_future_complete(self, fut, timeout_sec=3.0)
+        if not fut.done():
             return None
-
-        resp = future.result()
-
+        resp = fut.result()
         if not resp.pose_stamped:
             return None
-
         return resp.pose_stamped[0].pose
 
     # ------------------------------------------------------------------
-    # Send trajectory goal and wait for result
-    # ------------------------------------------------------------------
-
     def _send_and_wait(self, goal, label: str) -> bool:
-        send_future = self._traj_client.send_goal_async(goal)
-        rclpy.spin_until_future_complete(self, send_future)
-
-        goal_handle = send_future.result()
-
-        if goal_handle is None or not goal_handle.accepted:
-            self.get_logger().error(f'[{label}] goal rejected')
+        send_fut = self._traj_client.send_goal_async(goal)
+        rclpy.spin_until_future_complete(self, send_fut)
+        gh = send_fut.result()
+        if gh is None or not gh.accepted:
+            self.get_logger().error('[%s] goal rejected' % label)
             return False
-
-        result_future = goal_handle.get_result_async()
-        rclpy.spin_until_future_complete(self, result_future)
-
-        result = result_future.result().result
-
-        ok = result.error_code == FollowJointTrajectory.Result.SUCCESSFUL
-
+        result_fut = gh.get_result_async()
+        rclpy.spin_until_future_complete(self, result_fut)
+        result = result_fut.result().result
+        ok = (result.error_code == FollowJointTrajectory.Result.SUCCESSFUL)
         if ok:
-            self.get_logger().info(f'[{label}] complete')
+            self.get_logger().info('[%s] complete' % label)
         else:
             self.get_logger().error(
-                f'[{label}] failed, error_code={result.error_code}'
-            )
-
+                '[%s] failed, error_code=%d' % (label, result.error_code))
         return ok
 
     # ------------------------------------------------------------------
     # Cartesian-with-fallback wrapper
     # ------------------------------------------------------------------
-
-    def move_with_orientation_lock(
-        self,
-        target_rad: List[float],
-        duration_s: float,
-        label: str,
-    ) -> bool:
+    def move_with_orientation_lock(self, target_rad: List[float],
+                                   duration_s: float, label: str) -> bool:
         ok = self.move_cartesian_orientation_locked(
-            target_rad,
-            duration_s,
-            label,
-        )
-
+            target_rad, duration_s, label)
         if ok:
             return True
-
         self.get_logger().warn(
-            f'[{label}] falling back to joint-space; spoon may tip'
-        )
-
-        return self.move_joint_space(
-            target_rad,
-            duration_s,
-            label,
-        )
+            '[%s] falling back to joint-space (spoon may tip)' % label)
+        return self.move_joint_space(target_rad, duration_s, label)
 
     # ------------------------------------------------------------------
-    # Top-level feeding cycle
+    # Top-level cycle
     # ------------------------------------------------------------------
-
     def run_cycles(self, n: int) -> int:
         successes = 0
-
         for cycle in range(1, n + 1):
-            self.get_logger().info(
-                f'====== CYCLE {cycle} / {n} ======'
-            )
+            self.get_logger().info('====== CYCLE %d / %d ======' % (cycle, n))
 
-            # 1. Move to scoop start.
             if not self.move_joint_space(
-                SCOOP_START_RAD,
-                DUR_TO_SCOOP_START,
-                'TO_SCOOP_START',
-            ):
+                    SCOOP_START_RAD, DUR_TO_SCOOP_START, 'TO_SCOOP_START'):
                 break
-
-            # 2. Execute scoop motion.
             if not self.execute_scoop():
                 break
-
-            # 3. Return back to SCOOP_START after scooping.
             if not self.move_joint_space(
-                SCOOP_START_RAD,
-                DUR_RETURN_TO_SCOOP_START,
-                'RETURN_TO_SCOOP_START',
-            ):
+                    TRANSIT_RAD, DUR_TO_TRANSIT, 'TO_TRANSIT'):
                 break
-
-            # 4. Continue to transit.
-            if not self.move_joint_space(
-                TRANSIT_RAD,
-                DUR_TO_TRANSIT,
-                'TO_TRANSIT',
-            ):
-                break
-
-            # 5. Move to feeding pose with orientation lock.
             if not self.move_with_orientation_lock(
-                FEEDING_RAD,
-                DUR_TO_FEEDING,
-                'TO_FEEDING',
-            ):
+                    FEEDING_RAD, DUR_TO_FEEDING, 'TO_FEEDING'):
                 break
 
-            # 6. Hold feeding pose.
             self.get_logger().info(
-                f'[DWELL] holding feeding pose for {DWELL_AT_FEEDING:.1f}s'
-            )
-
+                '[DWELL] holding feeding pose for %.1fs' % DWELL_AT_FEEDING)
             t0 = time.monotonic()
-
-            while (
-                time.monotonic() - t0
-            ) < DWELL_AT_FEEDING and rclpy.ok():
+            while (time.monotonic() - t0) < DWELL_AT_FEEDING and rclpy.ok():
                 rclpy.spin_once(self, timeout_sec=0.1)
 
-            # 7. Return to transit after feeding.
             if not self.move_with_orientation_lock(
-                TRANSIT_RAD,
-                DUR_TO_TRANSIT,
-                'TO_TRANSIT_RETURN',
-            ):
+                    TRANSIT_RAD, DUR_TO_TRANSIT, 'TO_TRANSIT_RETURN'):
                 break
 
             successes += 1
-
-            self.get_logger().info(
-                f'====== CYCLE {cycle} done ======'
-            )
+            self.get_logger().info('====== CYCLE %d done ======' % cycle)
 
         return successes
 
 
 # ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
-
 def main():
     rclpy.init()
-
     node = FeedingOrchestrator()
-
     try:
         n_ok = node.run_cycles(NUM_CYCLES)
-
         node.get_logger().info(
-            f'Completed {n_ok}/{NUM_CYCLES} cycles'
-        )
-
+            'Completed %d/%d cycles' % (n_ok, NUM_CYCLES))
         sys.exit(0 if n_ok == NUM_CYCLES else 1)
-
     except KeyboardInterrupt:
         node.get_logger().info('Interrupted.')
         sys.exit(130)
-
     finally:
         node.destroy_node()
         rclpy.shutdown()

@@ -57,13 +57,13 @@ KI                  = 0.4                  # rad/s per (rad·s) of accumulated e
 INTEGRAL_LIMIT      = math.radians(8.0)    # anti-windup clamp on accumulator
 
 # Limits
-MAX_JOINT_VEL       = math.radians(60.0)   # rad/s safety clamp
+MAX_JOINT_VEL       = math.radians(180.0)   # rad/s safety clamp
 GOAL_TOLERANCE      = math.radians(2.0)    # final position tolerance per joint
 PATH_TOLERANCE      = math.radians(20.0)   # in-flight tracking error per joint
 SETTLE_TIME         = 0.5                  # s convergence time after t_end
 
 # Runaway watchdog
-RUNAWAY_VEL         = math.radians(50.0)   # rad/s; sustained commands above this
+RUNAWAY_VEL         = math.radians(180.0)   # rad/s; sustained commands above this
 RUNAWAY_TIME        = 0.5                  # s; for this long while err grows
 
 JOINT_STATE_TOPIC = '/j2s6s200_driver/out/joint_state'

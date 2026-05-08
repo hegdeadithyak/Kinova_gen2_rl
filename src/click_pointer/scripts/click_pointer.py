@@ -1,839 +1,1090 @@
 #!/usr/bin/env python3
 """
-click_pointer.py  —  Auto-mouth detection + Click-to-Feed
-==========================================================
+Click-to-Feed for Kinova Jaco2  —  Phased Joint Stepping (no IK / MoveIt)
+==========================================================================
 
-Flow:
-  1. MediaPipe FaceLandmarker runs at 15 Hz on the colour stream.
-     When a mouth is found its pixel (u,v) is highlighted in the
-     live window.  Press  [SPACE]  to auto-use that pixel, or just
-     left-click any pixel as before.
+ALGORITHM — FULL EXPLANATION
+─────────────────────────────────────────────────────────────────────────────
 
-  2. Pixel (u,v) + aligned depth  →  3D point in camera frame.
-     target_y  -=  CAM_Y_OFFSET  (camera sits above EE in cam-Y).
+STEP 1 · Pixel → Camera-frame 3-D target
+  Standard pinhole back-projection converts a clicked pixel (u, v) plus its
+  aligned-depth value Z_mm into a metric 3-D point in the camera optical frame:
 
-  3. Confirm target, then choose motion mode:
-       [1] Custom Algorithm  — phased proportional joint stepping
-       [2] BFMT Planner      — MoveIt2 ABITstar optimal path planning
+      X_cam = (u − cx) · Z / fx      ← camera-right
+      Y_cam = (v − cy) · Z / fy      ← camera-down
+      Z_cam = Z_mm · 0.001           ← depth (towards scene)
 
-Jaco2 joint convention (j2s6s200):
-  J1  base yaw          J2  shoulder pitch   J3  elbow pitch
-  J4  wrist pitch       J5  wrist roll       J6  finger roll
+  cx, cy, fx, fy are the RealSense D435 colour-camera intrinsics.
+  The depth image is already aligned to the colour frame by the ROS driver, so
+  depth[v, u] is the exact depth at the clicked colour pixel — no rectification
+  needed.
 
-Phase-3 note  (reach toward mouth):
-  The arm first fully pre-tilts J4 (wrist pitch) to level the spoon,
-  then sweeps J1 (base yaw) to translate the spoon toward the mouth.
-  J5 is held at its locked value to prevent roll drift.
+  A fixed vertical correction (CAM_Y_OFFSET = 9 cm) is subtracted from Y_cam.
+  The camera is mounted ~9 cm above the EE tip, so without the offset the arm
+  would stop 9 cm too high.  We subtract in the Y direction because camera Y
+  points downward: making it smaller moves the aim-point downward (toward the
+  EE).
+
+STEP 2 · Confirmation gate
+  The 3-D target is stored but NOT executed immediately.  The operator presses
+  Y to go or N to abort.  This single gate prevents accidental limb motion if
+  the click was mis-aimed at background clutter.
+
+STEP 3 · Phased proportional joint stepping
+  Instead of solving IK (which needs a complete kinematic model and can fail
+  near singularities), the error is decomposed into three camera-frame axes and
+  each axis is corrected by the one or two joints whose primary coupling is to
+  that axis at the arm's nominal pose:
+
+    Phase 1 — Y-axis (vertical)     → J2 (elbow pitch)
+      Pitching the elbow up/down changes EE height almost linearly.
+      Handled first because vertical error is largest at meal-time (bowl on
+      table ↔ mouth height) and must be cleared before X to avoid shoulder
+      singularities that arise when the arm is outstretched and twisted.
+
+    Phase 2 — X-axis (horizontal)   → J3 (forearm rotation)
+      Rotating the forearm sweeps the EE left/right.
+      Y is already settled, so J3 changes only X cleanly.
+
+    Phase 3 — Z-axis (depth)        → J1 (base rotation) + J4 (wrist pitch)
+      J1 extends the arm forward (primary Z effect).
+      J4 compensates for the wrist-angle change that J1 introduces, keeping
+      the spoon/fork level.
+      Only forward approach (dz > 0) is automated; retract is done by reset.
+
+  Control law — proportional clamped step (same in every phase):
+      frac  = clamp(|error| / CART_DELTA,  0, 1.0)
+      step  = frac × STEP_RADS               ← joint increment sent to arm
+      track = frac × CART_DELTA              ← added to open-loop EE estimate
+
+  When |error| ≫ CART_DELTA  →  frac = 1  (maximum-speed step, fast approach)
+  When |error| < CART_DELTA  →  frac < 1  (scaled-down step, prevents overshoot)
+
+  WHY OPEN-LOOP POSITION TRACKING?
+    Live TF queries inside the control loop add ≥100 ms latency per step.  At
+    TICK_DUR_S = 0.6 s that dominates the settling time and halves throughput.
+    Instead, the code accumulates (frac × CART_DELTA) after each joint command.
+    The CART_DELTA constants are tuned empirically on the real arm so one unit
+    of frac × STEP_RADS at J2/J3/J1 moves the EE by CART_DELTA metres in the
+    corresponding camera axis.  This approximation is valid because:
+      • The arm operates in a narrow workspace envelope (meal-time reach).
+      • We only need ~5 cm accuracy (ERR_TOL_M); exact IK is overkill.
 """
+from __future__ import annotations
 
+import math
 import os
 import threading
 import time
-import urllib.request
+import warnings
+import sys
 
 import cv2
 import numpy as np
 import rclpy
-from rclpy.action import ActionClient
-from rclpy.callback_groups import ReentrantCallbackGroup
-from rclpy.duration import Duration
-from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
 from rclpy.time import Time
-from scipy.spatial.transform import Rotation
+from rclpy.duration import Duration
+from rclpy.action import ActionClient
+from rclpy.executors import MultiThreadedExecutor
+from rclpy.callback_groups import ReentrantCallbackGroup
 
-import mediapipe as mp
-from mediapipe.tasks import python as mp_python
-from mediapipe.tasks.python import vision as mp_vision
-from mediapipe.tasks.python.vision import FaceLandmarker, FaceLandmarkerOptions
-
+from sensor_msgs.msg import Image, JointState
+from visualization_msgs.msg import Marker
+from cv_bridge import CvBridge
+from tf2_ros import Buffer, TransformListener
 from builtin_interfaces.msg import Duration as DurationMsg
 from control_msgs.action import FollowJointTrajectory
-from cv_bridge import CvBridge
-from geometry_msgs.msg import Point, Pose, PoseStamped
-from moveit_msgs.msg import (
-    BoundingVolume, Constraints, MotionPlanRequest,
-    MoveItErrorCodes, PositionConstraint, RobotState,
-)
-from moveit_msgs.srv import GetMotionPlan
-from sensor_msgs.msg import Image, JointState
-from shape_msgs.msg import SolidPrimitive
-from tf2_ros import Buffer, TransformListener
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  Terminal colour palette (ANSI)
-# ══════════════════════════════════════════════════════════════════════════════
-class C:
-    RESET   = '\033[0m';  BOLD    = '\033[1m';  DIM     = '\033[2m'
-    RED     = '\033[91m'; GREEN   = '\033[92m'; YELLOW  = '\033[93m'
-    BLUE    = '\033[94m'; MAGENTA = '\033[95m'; CYAN    = '\033[96m'
-    WHITE   = '\033[97m'; ORANGE  = '\033[38;5;208m'
+# ── suppress Qt / OpenCV noise that pollutes the terminal dashboard ────────────
+os.environ["QT_LOGGING_RULES"] = "qt.*=false"
+os.environ["OPENCV_LOG_LEVEL"] = "ERROR"
+# Point Qt to a real system font dir so it stops complaining about the missing
+# cv2 pip-package fonts directory (the warning appears on every Qt draw call).
+for _d in ("/usr/share/fonts", "/usr/share/fonts/truetype", "/usr/local/share/fonts"):
+    if os.path.isdir(_d):
+        os.environ.setdefault("QT_QPA_FONTDIR", _d)
+        break
+warnings.filterwarnings("ignore")
 
-W = 62
+# ── Camera intrinsics (RealSense D435 factory defaults – tune if needed) ──────
+FX = 603.6312;  FY = 603.0632
+CX = 319.0870;  CY = 236.3678
 
-def banner(title):
-    pad = W - len(title) - 4; l, r = pad // 2, pad - pad // 2
-    print(f"\n{C.CYAN}{C.BOLD}╔{'═'*(W-2)}╗\n║  {' '*l}{title}{' '*r}  ║\n╚{'═'*(W-2)}╝{C.RESET}")
-
-def section(title, color=C.YELLOW):
-    print(f"\n{color}{C.BOLD}  ┌─ {title} {'─'*(W-len(title)-6)}┐{C.RESET}")
-
-def row(label, value, color=C.WHITE):
-    print(f"{C.DIM}  │{C.RESET}  {C.CYAN}{label:<18}{C.RESET}{color}{value}{C.RESET}")
-
-def done_row(label, value): row(label, f"✓  {value}", C.GREEN)
-def warn_row(label, value): row(label, f"⚠  {value}", C.YELLOW)
-def err_row(label, value):  row(label, f"✗  {value}", C.RED)
-
-def sep(): print(f"{C.DIM}  └{'─'*(W-4)}┘{C.RESET}")
-
-def cprint(msg, color=C.WHITE, bold=False):
-    b = C.BOLD if bold else ''
-    print(f"  {b}{color}{msg}{C.RESET}")
-
-def spinner_msg(msg, color=C.MAGENTA):
-    print(f"\n  {color}{C.BOLD}⟳  {msg}{C.RESET}")
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  MediaPipe model
-# ══════════════════════════════════════════════════════════════════════════════
-_MODEL_URL  = ("https://storage.googleapis.com/mediapipe-models/"
-               "face_landmarker/face_landmarker/float16/1/face_landmarker.task")
-_MODEL_PATH = os.path.expanduser("~/.cache/mediapipe/face_landmarker.task")
-
-# Mouth landmark indices (MediaPipe 478-point topology)
-_MOUTH_IDX = [13, 14, 61, 291, 78, 308]
-
-# Lip outline connections for debug overlay
-_LIP_CONN = [
-    (61,146),(146,91),(91,181),(181,84),(84,17),(17,314),(314,405),
-    (405,321),(321,375),(375,291),(61,185),(185,40),(40,39),(39,37),
-    (37,0),(0,267),(267,269),(269,270),(270,409),(409,291),
-    (78,95),(95,88),(88,178),(178,87),(87,14),(14,317),(317,402),
-    (402,318),(318,324),(324,308),(78,191),(191,80),(80,81),(81,82),
-    (82,13),(13,312),(312,311),(311,310),(310,415),(415,308),
-]
-
-def _ensure_model():
-    os.makedirs(os.path.dirname(_MODEL_PATH), exist_ok=True)
-    if not os.path.exists(_MODEL_PATH):
-        cprint(f'Downloading FaceLandmarker model → {_MODEL_PATH} …', C.CYAN)
-        urllib.request.urlretrieve(_MODEL_URL, _MODEL_PATH)
-        cprint('Model download complete.', C.GREEN)
-    return _MODEL_PATH
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  Constants
-# ══════════════════════════════════════════════════════════════════════════════
-FX_REF, FY_REF = 603.6312, 603.0632
-REF_W,  REF_H  = 640, 480
-
-BASE_FRAME = 'j2s6s200_link_base'
-EE_LINK    = 'j2s6s200_end_effector'
-CAM_FRAME  = 'camera_color_optical_frame'
+# ── Robot frames & joint names ────────────────────────────────────────────────
+EE_LINK    = "j2s6s200_end_effector"
+CAM_FRAME  = "camera_color_optical_frame"
+BASE_FRAME = "j2s6s200_link_base"
 
 ARM_JOINT_NAMES = [
-    'j2s6s200_joint_1', 'j2s6s200_joint_2', 'j2s6s200_joint_3',
-    'j2s6s200_joint_4', 'j2s6s200_joint_5', 'j2s6s200_joint_6',
+    "j2s6s200_joint_1", "j2s6s200_joint_2", "j2s6s200_joint_3",
+    "j2s6s200_joint_4", "j2s6s200_joint_5", "j2s6s200_joint_6",
 ]
 
-CAM_Y_OFFSET = 0.09   # camera 9 cm above EE in camera-Y
+# ── Camera-to-EE vertical offset: camera is 9 cm above EE in camera-Y ────────
+CAM_Y_OFFSET = 0.09
 
-# ── Phase 1 (Y / J2) ─────────────────────────────────────────────────────────
-STEP_RADS_Y  = 0.04       # smaller → smoother
-CART_DELTA_Y = 0.16       # metres of Cartesian travel per unit step
-TICK_Y_S     = 0.35       # seconds per step
+# ── Stepping parameters (empirically tuned on the real arm) ──────────────────
+STEP_RADS    = 0.05   # max joint radians per command
+CART_DELTA_X = 0.15   # metres EE moves in camera-X per STEP_RADS on J3
+CART_DELTA_Y = 0.12   # metres EE moves in camera-Y per STEP_RADS on J2
+CART_DELTA_Z = 0.06   # metres EE moves in camera-Z per STEP_RADS on J1/J4
+TICK_DUR_S   = 0.6    # trajectory settling time (s) between joint commands
+ERR_TOL_M    = 0.05   # convergence threshold: 5 cm
 
-# ── Phase 2 (X / J3) ─────────────────────────────────────────────────────────
-STEP_RADS_X  = 0.08
-CART_DELTA_X = 0.06
-TICK_X_S     = 0.30
+# ── MediaPipe face-mesh landmark connection tables ────────────────────────────
+MOUTH_CENTER_IDS = [13, 14, 0, 17]
 
-# ── Phase 3 (Z reach — J1 + J4 coupled + J5 locked) ─────────────────────────
-J4_PER_J1    = 0.55       # J4 correction per radian of J1 motion (flipped to reverse)
-STEP_J1_RAD  = 0.035      # base yaw step per tick  (gentle!)
-CART_DELTA_Z = 0.018      # metres of Z advance per J1 step
-TICK_Z_S     = 0.28       # seconds per step  (smooth, no jerk)
-ERR_TOL_M    = 0.04       # convergence threshold for all axes
+LIP_CONN = [
+    (61,146),(146,91),(91,181),(181,84),(84,17),(17,314),
+    (314,405),(405,321),(321,375),(375,291),(61,185),(185,40),
+    (40,39),(39,37),(37,0),(0,267),(267,269),(269,270),
+    (270,409),(409,291),(78,95),(95,88),(88,178),(178,87),
+    (87,14),(14,317),(317,402),(402,318),(318,324),(324,308),
+    (78,191),(191,80),(80,81),(81,82),(82,13),(13,312),
+    (312,311),(311,310),(310,415),(415,308),
+]
 
-# ── BFMT / MoveIt2 ───────────────────────────────────────────────────────────
-MOVEIT_GROUP     = 'arm'
-MOVEIT_PLANNER   = 'BFMTkConfigDefault'
-MOVEIT_PLAN_TIME = 15.0
-MOVEIT_ATTEMPTS  = 3
-MOVEIT_VEL_SCALE = 0.3
-MOVEIT_ACC_SCALE = 0.3
-MOVEIT_TOL_M     = 0.05
+FACE_OVAL_CONN = [
+    (10,338),(338,297),(297,332),(332,284),(284,251),(251,389),
+    (389,356),(356,454),(454,323),(323,361),(361,288),(288,397),
+    (397,365),(365,379),(379,378),(378,400),(400,377),(377,152),
+    (152,148),(148,176),(176,149),(149,150),(150,136),(136,172),
+    (172,58),(58,132),(132,93),(93,234),(234,127),(127,162),
+    (162,21),(21,54),(54,103),(103,67),(67,109),(109,10),
+]
 
-# ── Depth median patch ────────────────────────────────────────────────────────
-DEPTH_PATCH_R = 7          # sample radius in pixels (larger → more robust)
+# Both eyes combined (person's right eye + person's left eye)
+EYE_CONN = [
+    (33,7),(7,163),(163,144),(144,145),(145,153),(153,154),
+    (154,155),(155,133),(133,173),(173,157),(157,158),(158,159),
+    (159,160),(160,161),(161,246),(246,33),
+    (263,249),(249,390),(390,373),(373,374),(374,380),(380,381),
+    (381,382),(382,362),(362,398),(398,384),(384,385),(385,386),
+    (386,387),(387,388),(388,466),(466,263),
+]
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  Node
-# ══════════════════════════════════════════════════════════════════════════════
-class ClickPointerNode(Node):
+# Both eyebrows combined
+EYEBROW_CONN = [
+    (46,53),(53,52),(52,65),(65,55),(55,70),(70,63),(63,105),(105,66),(66,107),
+    (276,283),(283,282),(282,295),(295,285),(285,300),(300,293),(293,334),(334,296),(296,336),
+]
+
+# Nose bridge + tip
+NOSE_CONN = [
+    (168,6),(6,197),(197,195),(195,5),(5,4),(4,1),(1,19),(19,94),(94,2),
+]
+
+
+class TUI:
+    """ANSI-powered terminal dashboard for Click-to-Feed."""
+
+    # ── ANSI escape codes ─────────────────────────────────────────────────────
+    # Using 8-bit "bright" codes (9x) rather than 3x: more vivid on dark
+    # terminals, still degrade gracefully to the 3x equivalent on light ones.
+    RST = "\033[0m";  BLD = "\033[1m";  DIM = "\033[2m"
+
+    RED = "\033[91m"; GRN = "\033[92m"; YLW = "\033[93m"
+    BLU = "\033[94m"; MAG = "\033[95m"; CYN = "\033[96m"
+    WHT = "\033[97m"; GRY = "\033[90m"
+
+    W = 70  # total border width (characters)
 
     def __init__(self):
-        super().__init__('click_pointer')
-        self._cb = ReentrantCallbackGroup()
+        self._lock = threading.Lock()
 
-        self._bridge    = CvBridge()
-        self._lock      = threading.Lock()
-        self._color_img = None
-        self._depth_img = None
-        self._busy      = False
-        self._current_positions = {n: 0.0 for n in ARM_JOINT_NAMES}
+    @staticmethod
+    def _ts() -> str:
+        return time.strftime("%H:%M:%S")
 
-        # MediaPipe mouth detection state
-        self._mouth_pixel  = None   # (u, v) in colour image coords
-        self._mouth_locked = False  # True while "use mouth" was pressed
-        self._mp_ts_ms     = 0      # monotonic timestamp for VIDEO mode
+    # ── box primitives ────────────────────────────────────────────────────────
+    def _top(self) -> str:
+        return f"{self.BLD}{self.CYN}╔{'═' * (self.W - 2)}╗{self.RST}"
 
-        self._tf_buf = Buffer()
-        TransformListener(self._tf_buf, self)
+    def _bot(self) -> str:
+        return f"{self.BLD}{self.CYN}╚{'═' * (self.W - 2)}╝{self.RST}"
 
-        self.create_subscription(Image, '/camera/camera/color/image_raw',
-                                 self._color_cb, 10, callback_group=self._cb)
-        self.create_subscription(Image, '/camera/camera/aligned_depth_to_color/image_raw',
-                                 self._depth_cb, 10, callback_group=self._cb)
-        self.create_subscription(JointState, '/joint_states',
-                                 self._js_cb, 10, callback_group=self._cb)
+    def _sep(self) -> str:
+        return f"{self.BLD}{self.CYN}╠{'═' * (self.W - 2)}╣{self.RST}"
+
+    def _row(self, text: str, color: str = "") -> str:
+        inner = self.W - 2
+        return (f"{self.BLD}{self.CYN}║{self.RST}"
+                f"{color}{text:^{inner}}{self.RST}"
+                f"{self.BLD}{self.CYN}║{self.RST}")
+
+    # ── public: layout ────────────────────────────────────────────────────────
+    def banner(self):
+        """Print the startup header box — call once at launch."""
+        print(f"\n{self._top()}")
+        print(self._row(
+            "  CLICK-TO-FEED  ·  Kinova Jaco2  ·  Phased Joint Stepping  ",
+            f"{self.BLD}{self.WHT}"))
+        print(self._sep())
+        print(self._row(
+            "  SPACE = mouth   CLICK = target   Y = confirm   N = cancel   Q = quit  ",
+            self.GRY))
+        print(self._bot())
+        print()
+
+    def separator(self):
+        """Thin horizontal rule between logical sections."""
+        with self._lock:
+            print(f"  {self.GRY}{'─' * (self.W - 4)}{self.RST}")
+
+    # ── public: log messages ──────────────────────────────────────────────────
+    def _emit(self, symbol: str, color: str, msg: str):
+        # Format: "  HH:MM:SS  ● message"
+        # Timestamp in dim grey → easy to scan, not distracting.
+        # Symbol in colour conveys severity at a glance before reading text.
+        with self._lock:
+            print(f"  {self.GRY}{self._ts()}{self.RST}  "
+                  f"{color}{symbol}{self.RST}  {msg}")
+
+    def info(self, msg: str):
+        self._emit("●", self.CYN, msg)
+
+    def warn(self, msg: str):
+        self._emit("▲", self.YLW, f"{self.YLW}{msg}{self.RST}")
+
+    def error(self, msg: str):
+        self._emit("✖", self.RED, f"{self.RED}{msg}{self.RST}")
+
+    def success(self, msg: str):
+        self._emit("✔", self.GRN, f"{self.BLD}{self.GRN}{msg}{self.RST}")
+
+    def prompt(self, msg: str):
+        """Bold yellow prompt for operator decisions."""
+        with self._lock:
+            print(f"\n  {self.BLD}{self.YLW}▶  {msg}{self.RST}\n")
+
+    # ── public: phased algorithm progress ────────────────────────────────────
+    def phase_header(self, phase_num: int, name: str, detail: str = ""):
+        """
+        Print a visually distinct section break for each phase.
+        Circled numbers ①②③ let the operator instantly know which phase is
+        running without reading the full label.
+        """
+        icons = {1: "①", 2: "②", 3: "③"}
+        icon  = icons.get(phase_num, f"[{phase_num}]")
+        label = f" {icon}  Phase {phase_num}  ·  {name} "
+        pad   = max(2, (self.W - 4 - len(label)) // 2)
+        with self._lock:
+            print(f"\n  {self.BLD}{self.MAG}"
+                  f"{'─' * pad}{label}{'─' * pad}{self.RST}")
+            if detail:
+                print(f"  {self.DIM}{self.GRY}  {detail}{self.RST}")
+
+    def moving(self, label: str, elapsed: float, total: float):
+        """
+        Live \\r progress bar for a single smooth trajectory.
+
+        Safe to use \\r here because during a phase sleep the motion thread is
+        the ONLY thing writing to stdout — ROS callbacks update internal state
+        only, and the TUI lock blocks any other concurrent print.  The bar
+        shows elapsed / total time so the operator sees exactly how far the
+        arm is through its trajectory.
+        """
+        BAR = 26
+        frac   = min(elapsed / max(total, 0.001), 1.0)
+        filled = int(BAR * frac)
+        bar    = (f"{self.GRN}{'█' * filled}"
+                  f"{self.GRY}{'░' * (BAR - filled)}{self.RST}")
+        remain = max(0.0, total - elapsed)
+        with self._lock:
+            print(f"\r    {self.CYN}{label:<10}{self.RST}"
+                  f"[{bar}]  "
+                  f"{self.GRY}{elapsed:.1f}s / {total:.1f}s  "
+                  f"({self.WHT}{remain:.1f}s{self.GRY} left){self.RST}   ",
+                  end="", flush=True)
+
+    def phase_done(self, label: str):
+        """Overwrite the \\r line with a full green bar and move to next line."""
+        BAR = 26
+        bar = f"{self.GRN}{'█' * BAR}{self.RST}"
+        with self._lock:
+            print(f"\r    {self.BLD}{self.GRN}{label:<10}{self.RST}"
+                  f"[{bar}]  {self.BLD}{self.GRN}✔  complete{self.RST}"
+                  + " " * 20)   # trailing spaces clear any leftover chars
+
+    def coord_block(self, label: str, x: float, y: float, z: float, color: str = ""):
+        """Single-line coordinate triplet display."""
+        c = color or self.GRY
+        with self._lock:
+            print(f"  {c}{label:<18}{self.RST}"
+                  f"{self.WHT}x={x:+.3f}  y={y:+.3f}  z={z:+.3f}{self.RST}  m")
+
+    def ready_prompt(self):
+        """Displayed once after initialisation."""
+        self.separator()
+        self.prompt("Ready — click the image or press SPACE to target the mouth")
+        self.separator()
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  MediaPipe loader
+#  Handles both old (mp.solutions) and new (FaceLandmarker) MediaPipe APIs.
+# ══════════════════════════════════════════════════════════════════════════════
+def _build_face_mesh():
+    import mediapipe as mp
+
+    if hasattr(mp, "solutions"):
+        return mp.solutions.face_mesh.FaceMesh(
+            static_image_mode=False, max_num_faces=1,
+            refine_landmarks=True,
+            min_detection_confidence=0.5, min_tracking_confidence=0.5)
+
+    import pathlib, tempfile, urllib.request
+    model_url = (
+        "https://storage.googleapis.com/mediapipe-models/face_landmarker/"
+        "face_landmarker/float16/1/face_landmarker.task")
+    model_path = pathlib.Path(tempfile.gettempdir()) / "face_landmarker.task"
+    if not model_path.exists():
+        urllib.request.urlretrieve(model_url, model_path)
+
+    from mediapipe.tasks.python import BaseOptions
+    from mediapipe.tasks.python.vision import (
+        FaceLandmarker, FaceLandmarkerOptions, RunningMode)
+
+    options = FaceLandmarkerOptions(
+        base_options=BaseOptions(model_asset_path=str(model_path)),
+        num_faces=1,
+        min_face_detection_confidence=0.5,
+        min_face_presence_confidence=0.5,
+        running_mode=RunningMode.IMAGE)
+    landmarker = FaceLandmarker.create_from_options(options)
+
+    class Wrapper:
+        def process(self, rgb):
+            h, w = rgb.shape[:2]
+            try:
+                mp_img = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb)
+            except AttributeError:
+                from mediapipe.tasks.python.components.containers.image import Image as MPImage
+                mp_img = MPImage(image_format=mp.ImageFormat.SRGB, data=rgb)
+            result = landmarker.detect(mp_img)
+            if not result.face_landmarks:
+                return type("R", (), {"multi_face_landmarks": None})()
+            class Landmark:
+                def __init__(self, x, y, z=0.0): self.x=x; self.y=y; self.z=z
+            class LandmarkList:
+                def __init__(self, lms): self.landmark = lms
+            all_faces = []
+            for face in result.face_landmarks:
+                all_faces.append(LandmarkList([Landmark(lm.x, lm.y, lm.z) for lm in face]))
+            return type("R", (), {"multi_face_landmarks": all_faces})()
+
+    return Wrapper()
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  Neon face overlay
+#  ──────────────────────────────────────────────────────────────────────────
+#  Technique: draw coloured strokes on a black canvas, blur the canvas with
+#  GaussianBlur to simulate light spreading from each line (glow), then blend
+#  that glow layer over the camera image.  Finally, draw sharp crisp lines on
+#  top so the contours read clearly against the soft glow.
+#
+#  Why GaussianBlur for glow and not real alpha-blending per line?
+#    OpenCV has no per-line transparency.  Blurring a black canvas with bright
+#    strokes produces exactly the same visual as a glowing neon tube — the blur
+#    spreads the brightness outward while the intensity falls off with distance,
+#    matching how real light diffuses.
+# ══════════════════════════════════════════════════════════════════════════════
+def _draw_face_cool(disp: np.ndarray, lms, hw, frame_count: int) -> np.ndarray:
+    """Render neon-wireframe face landmarks over the camera image."""
+    if not lms or not hw:
+        return disp
+    mh, mw = hw
+    n = len(lms)
+
+    def px(i):
+        return (int(lms[i].x * mw), int(lms[i].y * mh))
+
+    def seg(canvas, conn_list, colour, thick):
+        for a, b in conn_list:
+            if a < n and b < n:
+                cv2.line(canvas, px(a), px(b), colour, thick, cv2.LINE_AA)
+
+    # ── BGR colour palette ────────────────────────────────────────────────────
+    # Each region gets its own hue so the operator can distinguish features
+    # at a glance even when the arm is moving.
+    OVAL_C  = (30,  210, 255)   # gold / amber  — face boundary
+    EYE_C   = (50,  255, 160)   # spring green  — eye contours
+    BROW_C  = (255, 60,  220)   # magenta        — eyebrows
+    NOSE_C  = (50,  190, 255)   # orange         — nose
+    LIP_C   = (0,   120, 255)   # deep amber     — lips
+
+    # ── Glow pass — thick strokes on black, then blurred ─────────────────────
+    glow = np.zeros_like(disp)
+    seg(glow, FACE_OVAL_CONN, OVAL_C, 4)
+    seg(glow, EYE_CONN,       EYE_C,  3)
+    seg(glow, EYEBROW_CONN,   BROW_C, 3)
+    seg(glow, NOSE_CONN,      NOSE_C, 2)
+    seg(glow, LIP_CONN,       LIP_C,  3)
+
+    # Kernel (17,17) spreads ~8 px — gives visible halo without being muddy.
+    glow = cv2.GaussianBlur(glow, (17, 17), 0)
+    cv2.addWeighted(disp, 1.0, glow, 0.70, 0, disp)
+
+    # ── Sharp lines on top (crisp core) ──────────────────────────────────────
+    seg(disp, FACE_OVAL_CONN, (60,  235, 255), 1)
+    seg(disp, EYE_CONN,       (80,  255, 180), 1)
+    seg(disp, EYEBROW_CONN,   (255, 80,  240), 1)
+    seg(disp, NOSE_CONN,      (80,  210, 255), 1)
+    seg(disp, LIP_CONN,       (0,   180, 255), 1)
+
+    # ── Landmark dots on contour vertices ────────────────────────────────────
+    # 1-px dots mark every contour vertex so the mesh looks like a point cloud
+    # at the facial boundaries.  Only contour points (not all 468) so it stays
+    # readable rather than a solid cluster.
+    for conn in (FACE_OVAL_CONN, EYE_CONN, EYEBROW_CONN):
+        seen = set()
+        for a, b in conn:
+            for i in (a, b):
+                if i < n and i not in seen:
+                    cv2.circle(disp, px(i), 1, (220, 255, 255), -1, cv2.LINE_AA)
+                    seen.add(i)
+
+    # ── Iris circles (landmarks 468-477, only when refine_landmarks=True) ────
+    # Radius = distance from iris centre landmark to one edge landmark, which
+    # directly encodes the visible iris diameter in the image.
+    def draw_iris(center_i, edge_i, max_i):
+        if max_i >= n:
+            return
+        c, e = px(center_i), px(edge_i)
+        r = max(3, int(math.hypot(c[0] - e[0], c[1] - e[1])))
+        # outer dim halo
+        cv2.circle(disp, c, r + 5, (20, 50, 50), 1, cv2.LINE_AA)
+        # iris ring — bright cyan
+        cv2.circle(disp, c, r, (220, 255, 255), 1, cv2.LINE_AA)
+        # pupil — solid black with white specular dot
+        cv2.circle(disp, c, max(2, r // 3), (0, 0, 0), -1, cv2.LINE_AA)
+        cv2.circle(disp, (c[0] - r//5, c[1] - r//5), max(1, r//6),
+                   (255, 255, 255), -1, cv2.LINE_AA)
+
+    draw_iris(468, 469, 472)   # left iris
+    draw_iris(473, 474, 477)   # right iris
+
+    # ── Animated scan line across the face ───────────────────────────────────
+    # A horizontal line sweeps top-to-bottom across the face bounding box every
+    # 80 frames (~2.6 s at 30 fps).  The fade at the edges (alpha∝sin) prevents
+    # the hard appearance of a line suddenly appearing/disappearing.
+    oval_px = [px(a) for a, _ in FACE_OVAL_CONN if a < n]
+    if oval_px:
+        fy0 = min(p[1] for p in oval_px)
+        fy1 = max(p[1] for p in oval_px)
+        fx0 = min(p[0] for p in oval_px)
+        fx1 = max(p[0] for p in oval_px)
+        period = 80
+        t = (frame_count % period) / period          # 0 → 1
+        sy = int(fy0 + (fy1 - fy0) * t)
+        alpha = max(0.0, math.sin(t * math.pi))      # 0→1→0 fade
+        if alpha > 0.05:
+            scan_col = (int(60 * alpha), int(220 * alpha), int(60 * alpha))
+            cv2.line(disp, (fx0, sy), (fx1, sy), scan_col, 1, cv2.LINE_AA)
+
+    # ── Mouth centre pulse ────────────────────────────────────────────────────
+    # Mouth landmarks 13,14,0,17 average to the centre of the lips.
+    # Two concentric pulsing rings show the target point that SPACE will use.
+    mc_xs = [lms[i].x * mw for i in MOUTH_CENTER_IDS if i < n]
+    mc_ys = [lms[i].y * mh for i in MOUTH_CENTER_IDS if i < n]
+    if mc_xs:
+        mx, my = int(np.mean(mc_xs)), int(np.mean(mc_ys))
+        # outer static halo
+        for r, b in [(28, 20), (21, 50), (15, 90)]:
+            cv2.circle(disp, (mx, my), r, (0, b, b // 2), 1, cv2.LINE_AA)
+        # pulsing ring — period ~2 s
+        pr = int(11 + 4 * math.sin(frame_count * 0.10))
+        cv2.circle(disp, (mx, my), pr, (0, 255, 180), 2, cv2.LINE_AA)
+        # solid centre dot
+        cv2.circle(disp, (mx, my), 5, (50, 255, 120), -1, cv2.LINE_AA)
+        cv2.putText(disp, "MOUTH", (mx - 22, my - 33),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.34, (0, 230, 180), 1, cv2.LINE_AA)
+
+    return disp
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  OpenCV HUD
+#  ──────────────────────────────────────────────────────────────────────────
+#  Design choices:
+#   • cv2.addWeighted alpha-blend: gives dark semi-transparent panels without
+#     needing actual OpenGL transparency — pure CPU, no extra deps.
+#   • Pulsing mouth ring: sin(frame_count) radius oscillation signals "live
+#     face tracking" vs a frozen dot, at zero computation cost.
+#   • Colour semantics:
+#       Cyan / teal  = informational / idle
+#       Green        = good / confirmed
+#       Amber/yellow = warning / awaiting decision
+#       Red-ish blue = active motion (FEEDING)
+#   • No text inside the camera image unless strictly necessary — the terminal
+#     provides all the verbose data; the image shows spatial context only.
+# ══════════════════════════════════════════════════════════════════════════════
+def _draw_hud(disp: np.ndarray, node, frame_count: int) -> np.ndarray:
+    h, w = disp.shape[:2]
+
+    # ── 1. Semi-transparent top status bar ────────────────────────────────────
+    # We blend a solid dark rectangle (alpha=0.72) over the image top.
+    # This keeps the bar legible against any background without a hard border.
+    overlay = disp.copy()
+    cv2.rectangle(overlay, (0, 0), (w, 44), (10, 10, 20), -1)
+    cv2.addWeighted(overlay, 0.72, disp, 0.28, 0, disp)
+
+    # ── 2. Status pill ────────────────────────────────────────────────────────
+    # A filled rounded-rect (approximated with two rectangles) acts as a
+    # coloured "badge" — colour encodes state at a glance before reading text.
+    if node.busy:
+        pill_bgr  = (160, 30,  0)      # deep blue (BGR)
+        pill_txt  = " ● FEEDING... "
+        txt_bgr   = (255, 255, 200)
+    elif node.pending_target_cam is not None:
+        pill_bgr  = (0, 100, 180)      # amber
+        pill_txt  = " ▶ CONFIRM? "
+        txt_bgr   = (80, 220, 255)
+    else:
+        pill_bgr  = (0, 60, 0)         # dark green
+        pill_txt  = " ● READY "
+        txt_bgr   = (80, 255, 140)
+
+    font   = cv2.FONT_HERSHEY_DUPLEX
+    fscale = 0.52
+    thick  = 1
+    (tw, th), _ = cv2.getTextSize(pill_txt, font, fscale, thick)
+    px, py = 8, 6
+    # pill background
+    cv2.rectangle(disp, (px - 2, py - 2), (px + tw + 10, py + th + 10), pill_bgr, -1)
+    # subtle bright border
+    cv2.rectangle(disp, (px - 2, py - 2), (px + tw + 10, py + th + 10), (100, 120, 120), 1)
+    cv2.putText(disp, pill_txt, (px + 4, py + th + 3), font, fscale, txt_bgr, thick,
+                cv2.LINE_AA)
+
+    # ── 3. Hint text (right of pill) ──────────────────────────────────────────
+    if not node.busy:
+        if node.pending_target_cam is not None:
+            hint = "Y = feed   N = cancel"
+        else:
+            hint = "SPACE = mouth    CLICK = target    Q = quit"
+        cv2.putText(disp, hint,
+                    (px + tw + 22, py + th + 3), font, 0.38, (140, 145, 145), 1, cv2.LINE_AA)
+
+    # ── 4. Full neon face overlay ─────────────────────────────────────────────
+    mouth_lms, mouth_hw = node.get_landmark_data()
+    disp = _draw_face_cool(disp, mouth_lms, mouth_hw, frame_count)
+
+    # ── 5. Target coordinates overlay ────────────────────────────────────────
+    # When a target is pending, show its camera-frame coordinates at the
+    # bottom of the image so the operator can sanity-check depth vs. distance.
+    if node.pending_target_cam is not None:
+        tc = node.pending_target_cam
+        coord_str = f"target  x={tc[0]:+.2f}  y={tc[1]:+.2f}  z={tc[2]:+.2f} m"
+        # semi-transparent bottom strip
+        ov2 = disp.copy()
+        cv2.rectangle(ov2, (0, h - 28), (w, h), (10, 10, 20), -1)
+        cv2.addWeighted(ov2, 0.68, disp, 0.32, 0, disp)
+        cv2.putText(disp, coord_str, (10, h - 9),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.40, (100, 220, 255), 1, cv2.LINE_AA)
+
+    # ── 7. Phase indicator (bottom-right during FEEDING) ──────────────────────
+    if node.busy:
+        phase_name = getattr(node, "_current_phase", "moving...")
+        phase_str  = f"Phase: {phase_name}"
+        (ptw, pth), _ = cv2.getTextSize(phase_str, cv2.FONT_HERSHEY_SIMPLEX, 0.40, 1)
+        ov3 = disp.copy()
+        cv2.rectangle(ov3, (w - ptw - 18, h - 28), (w, h), (10, 10, 20), -1)
+        cv2.addWeighted(ov3, 0.68, disp, 0.32, 0, disp)
+        cv2.putText(disp, phase_str, (w - ptw - 10, h - 9),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.40, (255, 180, 50), 1, cv2.LINE_AA)
+
+    # ── 8. Crosshair (centre of frame) ───────────────────────────────────────
+    # Shown only when idle — hidden during feeding to reduce visual noise.
+    if not node.busy:
+        cx2, cy2 = w // 2, h // 2
+        gap = 6   # gap in the centre keeps the crosshair airy
+        arm = 18  # arm length
+        clr = (0, 200, 160)
+        cv2.line(disp, (cx2 - arm - gap, cy2), (cx2 - gap, cy2), clr, 1, cv2.LINE_AA)
+        cv2.line(disp, (cx2 + gap, cy2), (cx2 + arm + gap, cy2), clr, 1, cv2.LINE_AA)
+        cv2.line(disp, (cx2, cy2 - arm - gap), (cx2, cy2 - gap), clr, 1, cv2.LINE_AA)
+        cv2.line(disp, (cx2, cy2 + gap), (cx2, cy2 + arm + gap), clr, 1, cv2.LINE_AA)
+        # tiny centre dot
+        cv2.circle(disp, (cx2, cy2), 2, clr, -1, cv2.LINE_AA)
+
+    return disp
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  ROS2 Node
+# ══════════════════════════════════════════════════════════════════════════════
+class ClickPointer(Node):
+    def __init__(self, tui: TUI):
+        super().__init__("click_pointer")
+        self.tui      = tui
+        self.cb_group = ReentrantCallbackGroup()
+
+        self.bridge    = CvBridge()
+        self.lock      = threading.Lock()
+        self.color_img = None
+        self.depth_img = None
+        self.joints    = {n: 0.0 for n in ARM_JOINT_NAMES}
+        self.busy      = False
+
+        self.mouth_px  = None
+        self.mouth_lms = None
+        self.mouth_hw  = None
+        self.mp_face   = _build_face_mesh()
+
+        self.pending_target_cam = None
+
+        # Phase label read by the HUD to show which phase is running
+        self._current_phase = ""
+
+        self.tf_buffer = Buffer()
+        TransformListener(self.tf_buffer, self)
+
+        self.create_subscription(Image, "/camera/camera/color/image_raw",
+                                 self.color_cb, 10, callback_group=self.cb_group)
+        self.create_subscription(Image, "/camera/camera/aligned_depth_to_color/image_raw",
+                                 self.depth_cb, 10, callback_group=self.cb_group)
+        self.create_subscription(JointState, "/joint_states",
+                                 self.js_cb, 10, callback_group=self.cb_group)
+
+        self.marker_pub = self.create_publisher(Marker, "/target_marker", 10)
 
         self._traj_client = ActionClient(
             self, FollowJointTrajectory,
-            '/arm_controller/follow_joint_trajectory',
-            callback_group=self._cb,
-        )
+            "/arm_controller/follow_joint_trajectory",
+            callback_group=self.cb_group)
 
-        # Build MediaPipe FaceLandmarker
-        cprint('Loading MediaPipe FaceLandmarker …', C.CYAN)
-        _path = _ensure_model()
-        _opts = FaceLandmarkerOptions(
-            base_options=mp_python.BaseOptions(model_asset_path=_path),
-            output_face_blendshapes=False,
-            output_facial_transformation_matrixes=False,
-            num_faces=1,
-            min_face_detection_confidence=0.55,
-            min_face_presence_confidence=0.55,
-            min_tracking_confidence=0.45,
-            running_mode=mp_vision.RunningMode.VIDEO,
-        )
-        self._face_det = FaceLandmarker.create_from_options(_opts)
-
-        # 15 Hz mouth-detection timer
-        self.create_timer(1.0 / 15.0, self._detect_mouth, callback_group=self._cb)
-
-        banner('Kinova Click-to-Feed  v3  (MediaPipe + J4 Pre-Tilt)')
-        spinner_msg('Waiting for trajectory controller …', C.CYAN)
+        self.tui.info("Waiting for trajectory controller ...")
         if not self._traj_client.wait_for_server(timeout_sec=30.0):
-            raise RuntimeError('Timed out waiting for trajectory controller')
-        cprint('Trajectory controller  ✓', C.GREEN, bold=True)
-        cprint('\nSPACE = use detected mouth   Click = manual pixel   Q = quit', C.CYAN, bold=True)
+            raise RuntimeError("Timed out waiting for trajectory action server")
 
-    # ── Callbacks ────────────────────────────────────────────────────────────
-    def _color_cb(self, msg):
-        with self._lock:
-            self._color_img = self._bridge.imgmsg_to_cv2(msg, 'bgr8')
+        self.tui.ready_prompt()
 
-    def _depth_cb(self, msg):
-        with self._lock:
-            self._depth_img = self._bridge.imgmsg_to_cv2(msg, desired_encoding='passthrough')
+    # ── Subscribers ───────────────────────────────────────────────────────────
+    def color_cb(self, msg):
+        frame = self.bridge.imgmsg_to_cv2(msg, "bgr8")
+        mp_, ml_, mh_ = self._detect_mouth(frame)
+        with self.lock:
+            self.color_img = frame
+            self.mouth_px  = mp_
+            self.mouth_lms = ml_
+            self.mouth_hw  = mh_
 
-    def _js_cb(self, msg: JointState):
-        with self._lock:
-            for name, pos in zip(msg.name, msg.position):
-                if name in self._current_positions:
-                    self._current_positions[name] = pos
+    def depth_cb(self, msg):
+        with self.lock:
+            self.depth_img = self.bridge.imgmsg_to_cv2(msg, "passthrough")
 
-    # ── MediaPipe mouth detection (15 Hz) ────────────────────────────────────
-    def _detect_mouth(self):
-        with self._lock:
-            frame = self._color_img
-        if frame is None:
-            return
+    def js_cb(self, msg):
+        with self.lock:
+            for n, p in zip(msg.name, msg.position):
+                if n in self.joints:
+                    self.joints[n] = p
 
+    # ── Face / mouth detection ─────────────────────────────────────────────────
+    def _detect_mouth(self, frame):
         h, w = frame.shape[:2]
-        rgb_np = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        mp_img = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_np)
+        res  = self.mp_face.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        if not res.multi_face_landmarks:
+            return None, None, None
+        lms = res.multi_face_landmarks[0].landmark
+        return (
+            int(np.mean([lms[i].x * w for i in MOUTH_CENTER_IDS])),
+            int(np.mean([lms[i].y * h for i in MOUTH_CENTER_IDS]))
+        ), lms, (h, w)
 
-        self._mp_ts_ms += 67   # ~15 Hz
-        result = self._face_det.detect_for_video(mp_img, self._mp_ts_ms)
+    # ── Thread-safe getters for the HUD ───────────────────────────────────────
+    def get_frame_data(self):
+        with self.lock:
+            return self.color_img
 
-        if result.face_landmarks:
-            lms = result.face_landmarks[0]
-            valid = [i for i in _MOUTH_IDX if i < len(lms)]
-            mx = np.mean([lms[i].x for i in valid])
-            my = np.mean([lms[i].y for i in valid])
-            with self._lock:
-                self._mouth_pixel = (int(mx * w), int(my * h))
-                self._mouth_lms   = lms
-                self._mouth_hw    = (h, w)
-        else:
-            with self._lock:
-                self._mouth_pixel = None
-                self._mouth_lms   = None
-                self._mouth_hw    = None
+    def get_mouth_px(self):
+        with self.lock:
+            return self.mouth_px
 
-    # ── Click / space handling ────────────────────────────────────────────────
-    def on_click(self, u: int, v: int):
-        if self._busy:
-            cprint('Arm busy — input ignored.', C.RED)
-            return
-        self._start_pipeline(u, v, source='click')
+    def get_landmark_data(self):
+        with self.lock:
+            return self.mouth_lms, self.mouth_hw
+
+    # ── Input events ──────────────────────────────────────────────────────────
+    def on_click(self, u, v):
+        if not self.busy:
+            self.process_click(u, v)
 
     def on_space(self):
-        """Use the currently detected mouth centre."""
-        if self._busy:
-            cprint('Arm busy — input ignored.', C.RED)
+        with self.lock:
+            mpix = self.mouth_px
+        if mpix is None:
+            self.tui.warn("No mouth detected — look at the camera")
             return
-        with self._lock:
-            mp = self._mouth_pixel
-        if mp is None:
-            cprint('No mouth detected yet — position the patient in frame.', C.YELLOW)
+        self.process_click(*mpix)
+
+    def confirm_feed(self):
+        if self.pending_target_cam is None or self.busy:
             return
-        self._start_pipeline(mp[0], mp[1], source='mouth')
+        tgt = self.pending_target_cam
+        self.pending_target_cam = None
+        threading.Thread(target=self.move_to_point_cam, args=(tgt,), daemon=True).start()
 
-    def _start_pipeline(self, u: int, v: int, source: str):
-        with self._lock:
-            depth_img = self._depth_img
-        if depth_img is None:
-            cprint('No depth frame yet.', C.YELLOW)
+    def cancel_feed(self):
+        if self.pending_target_cam is not None:
+            self.pending_target_cam = None
+            self.delete_marker()
+            self.tui.info("Feed cancelled.")
+
+    # ── Click → 3-D target in camera frame ────────────────────────────────────
+    def process_click(self, u, v):
+        if self.busy:
+            return
+        with self.lock:
+            depth = self.depth_img
+        if depth is None:
+            self.tui.warn("No depth image yet — waiting for camera")
+            return
+        z_raw = float(depth[v, u]) * 0.001
+        if z_raw <= 0.01:
+            self.tui.warn(f"Bad depth at ({u},{v}): {z_raw*1000:.0f} mm — click on the subject")
             return
 
-        # ── Robust depth via median patch ────────────────────────────────────
-        dh, dw = depth_img.shape[:2]
-        r = DEPTH_PATCH_R
-        patch = depth_img[max(0, v-r):min(dh, v+r+1),
-                          max(0, u-r):min(dw, u+r+1)].astype(np.float32)
-        valid = patch[patch > 0]
-        if valid.size == 0:
-            cprint('No depth at selected pixel (patch all zeros).', C.YELLOW)
-            return
-        raw = float(np.median(valid))
-        if raw == 0:
-            cprint('Zero depth — try clicking a closer region.', C.YELLOW)
-            return
+        # Back-project pixel to camera-frame 3-D point
+        x_cam = (u - CX) * z_raw / FX
+        y_cam = (v - CY) * z_raw / FY
+        # Apply camera-to-EE vertical offset (camera sits above EE)
+        target_cam = np.array([x_cam, y_cam - CAM_Y_OFFSET, z_raw])
 
-        h, w = depth_img.shape[:2]
-        fx = FX_REF * (w / REF_W)
-        fy = FY_REF * (h / REF_H)
-        cx, cy = w / 2.0, h / 2.0
+        self.tui.separator()
+        self.tui.info(f"Click at pixel ({u}, {v}),  depth = {z_raw*100:.1f} cm")
+        self.tui.coord_block("Target (cam-frame):", *target_cam, color=TUI.CYN)
 
-        z = raw * 0.001
-
-        # Symmetric X re-mapping (handles non-square fields of view)
-        x_left  = (0       - cx) * z / fx
-        x_right = (w - 1   - cx) * z / fx
-        half    = min(abs(x_left), x_right)
-        x_raw   = (u - cx) * z / fx
-        x = x_raw * half / (abs(x_left) if x_raw < 0 else x_right)
-        y = (v - cy) * z / fy
-
-        endpoint_cam = np.array([x, y - CAM_Y_OFFSET, z])
-
-        # ── EE start in camera frame ─────────────────────────────────────────
+        # Publish RViz marker in base frame for spatial reference
         try:
-            tf_ee_cam = self._tf_buf.lookup_transform(
-                CAM_FRAME, EE_LINK, Time(), timeout=Duration(seconds=1.0))
+            tf = self.tf_buffer.lookup_transform(
+                BASE_FRAME, CAM_FRAME, Time(), Duration(seconds=1.0))
+            R = self._quat_to_matrix(tf.transform.rotation)
+            t = np.array([tf.transform.translation.x,
+                          tf.transform.translation.y,
+                          tf.transform.translation.z])
+            target_base = R @ target_cam + t
         except Exception as e:
-            err_row('TF lookup', str(e)); return
+            self.tui.warn(f"TF camera→base failed ({e}), skipping RViz marker")
+            target_base = target_cam
 
-        startpoint = np.array([
-            tf_ee_cam.transform.translation.x,
-            tf_ee_cam.transform.translation.y,
-            tf_ee_cam.transform.translation.z,
+        self.publish_marker(target_base, BASE_FRAME)
+        self.tui.coord_block("Target (base-frame):", *target_base, color=TUI.BLU)
+
+        self.pending_target_cam = target_cam
+        self.tui.prompt("Press  Y  to feed   ·   N  to cancel")
+
+    # ── RViz marker helpers ────────────────────────────────────────────────────
+    def publish_marker(self, pt, fid):
+        m = Marker()
+        m.header.frame_id = fid
+        m.header.stamp = self.get_clock().now().to_msg()
+        m.ns = "target"; m.id = 0
+        m.type = Marker.SPHERE; m.action = Marker.ADD
+        m.pose.position.x = float(pt[0])
+        m.pose.position.y = float(pt[1])
+        m.pose.position.z = float(pt[2])
+        m.pose.orientation.w = 1.0
+        m.scale.x = m.scale.y = m.scale.z = 0.05
+        m.color.r = 1.0; m.color.a = 1.0
+        m.lifetime.sec = 0
+        self.marker_pub.publish(m)
+
+    def delete_marker(self):
+        m = Marker()
+        m.header.frame_id = BASE_FRAME
+        m.header.stamp = self.get_clock().now().to_msg()
+        m.ns = "target"; m.id = 0; m.action = Marker.DELETE
+        self.marker_pub.publish(m)
+
+    @staticmethod
+    def _quat_to_matrix(q):
+        x, y, z, w = q.x, q.y, q.z, q.w
+        return np.array([
+            [1-2*y*y-2*z*z,   2*x*y-2*z*w,   2*x*z+2*y*w],
+            [  2*x*y+2*z*w, 1-2*x*x-2*z*z,   2*y*z-2*x*w],
+            [  2*x*z-2*y*w,   2*y*z+2*x*w, 1-2*x*x-2*y*y]
         ])
 
-        dx = endpoint_cam[0] - startpoint[0]
-        dy = endpoint_cam[1] - startpoint[1]
-        dz = endpoint_cam[2] - startpoint[2]
-
-        section('Target Summary', C.CYAN)
-        row('Source',     source.upper())
-        row('Pixel',      f'u={u}  v={v}')
-        row('Depth',      f'{z:.3f} m')
-        row('Target cam', f'X={endpoint_cam[0]:+.3f}  Y={endpoint_cam[1]:+.3f}  Z={endpoint_cam[2]:+.3f}', C.GREEN)
-        row('EE start',   f'X={startpoint[0]:+.3f}  Y={startpoint[1]:+.3f}  Z={startpoint[2]:+.3f}')
-        row('Δ error',    f'dx={dx:+.3f}  dy={dy:+.3f}  dz={dz:+.3f}',
-            C.RED if max(abs(dx), abs(dy), abs(dz)) > 0.3 else C.YELLOW)
-        sep()
-
-        ans = input(f'\n  {C.BOLD}{C.WHITE}Proceed to this target? {C.DIM}[y/N]{C.RESET}: ').strip().lower()
-        if ans != 'y':
-            cprint('Skipped.', C.DIM)
+    # ── Phased joint stepping ─────────────────────────────────────────────────
+    def move_to_point_cam(self, target_cam):
+        if self.busy:
             return
-
-        print(f"""
-  {C.CYAN}{C.BOLD}╔{'═'*44}╗
-  ║   Select Motion Planning Mode             ║
-  ╠{'═'*44}╣
-  ║   {C.GREEN}[1]{C.CYAN}  Custom Algorithm  {C.DIM}(Phased IK)      {C.CYAN} ║
-  ║   {C.MAGENTA}[2]{C.CYAN}  BFMT Planner      {C.DIM}(MoveIt2)        {C.CYAN} ║
-  ╚{'═'*44}╝{C.RESET}""")
-
-        mode = input(f'  {C.BOLD}Choice [1/2]{C.RESET}: ').strip()
-
-        if mode == '2':
-            spinner_msg('Launching BFMT planner …', C.MAGENTA)
-            threading.Thread(target=self._perform_moveit,
-                             args=(endpoint_cam,), daemon=True).start()
-        else:
-            spinner_msg('Launching custom phased algorithm …', C.GREEN)
-            threading.Thread(target=self._perform_custom,
-                             args=(startpoint, endpoint_cam), daemon=True).start()
-
-    # ══════════════════════════════════════════════════════════════════════════
-    #  MODE 1 — Custom phased algorithm
-    # ══════════════════════════════════════════════════════════════════════════
-    def _perform_custom(self, startpoint: np.ndarray, endpoint: np.ndarray):
-        self._busy = True
+        self.busy = True
         try:
-            banner('Custom Algorithm — Phased IK  (Feeding Mode)')
-            currpoint = startpoint.copy()
-            dx = endpoint[0] - currpoint[0]
-            dy = endpoint[1] - currpoint[1]
-            dz = endpoint[2] - currpoint[2]
-            row('Start',  f'({startpoint[0]:+.3f}, {startpoint[1]:+.3f}, {startpoint[2]:+.3f})')
-            row('Target', f'({endpoint[0]:+.3f}, {endpoint[1]:+.3f}, {endpoint[2]:+.3f})', C.GREEN)
-
-            # ── Phase 1 · Y axis → J2 ────────────────────────────────────────
-            section('Phase 1 · Y  (J2 shoulder pitch)', C.YELLOW)
-            n = 0
-            while abs(dy) > ERR_TOL_M:
-                frac = min(abs(dy) / CART_DELTA_Y, 1.0)
-                step = frac * STEP_RADS_Y
-                if dy > 0:
-                    self.decrease_j2(step); currpoint[1] += frac * CART_DELTA_Y
-                    row(f'  step {n:02d}', f'dy={dy:+.3f}  → J2 ▼  ({step:.4f} rad)', C.CYAN)
-                else:
-                    self.increase_j2(step); currpoint[1] -= frac * CART_DELTA_Y
-                    row(f'  step {n:02d}', f'dy={dy:+.3f}  → J2 ▲  ({step:.4f} rad)', C.CYAN)
-                time.sleep(TICK_Y_S)
-                dy = endpoint[1] - currpoint[1]
-                n += 1
-            done_row('Phase 1', f'{n} steps  residual dy={dy:+.4f}')
-            sep()
-
-            # ── Phase 2 · X axis → J3 ────────────────────────────────────────
-            section('Phase 2 · X  (J3 elbow pitch)', C.YELLOW)
-            n = 0
-            while abs(dx) > ERR_TOL_M:
-                frac = min(abs(dx) / CART_DELTA_X, 1.0)
-                step = frac * STEP_RADS_X
-                if dx < 0:
-                    self.decrease_j3(step * 0.8); currpoint[0] -= frac * CART_DELTA_X
-                    row(f'  step {n:02d}', f'dx={dx:+.3f}  → J3 ◄  ({step*0.8:.4f} rad)', C.CYAN)
-                else:
-                    self.increase_j3(step * 0.8); currpoint[0] += frac * CART_DELTA_X
-                    row(f'  step {n:02d}', f'dx={dx:+.3f}  → J3 ►  ({step*0.8:.4f} rad)', C.CYAN)
-                time.sleep(TICK_X_S)
-                dx = endpoint[0] - currpoint[0]
-                n += 1
-            done_row('Phase 2', f'{n} steps  residual dx={dx:+.4f}')
-            sep()
-
-            # ── Phase 3 · Z reach — J4 pre-tilt, then J1 sweep ───────────────
-            section('Phase 3 · Z reach  (J4 pre-tilt, then J1 sweep, J5 locked)', C.YELLOW)
-            with self._lock:
-                j5_hold = self._current_positions['j2s6s200_joint_5']
-
-            # Calculate total expected movements based on remaining Z distance
-            total_j1_expected = (dz / CART_DELTA_Z) * STEP_J1_RAD
-            total_j4_expected = total_j1_expected * J4_PER_J1
-
-            row('J5 lock', f'{j5_hold:.4f} rad  (spoon roll locked)', C.MAGENTA)
-            row('J4 pre-tilt target', f'{total_j4_expected:+.4f} rad', C.MAGENTA)
-
-            # --- STEP 1: Move J4 entirely first ---
-            n_j4 = 0
-            j4_remaining = total_j4_expected
-            # Keep J4 motion smooth by limiting its step size per tick
-            max_j4_step = STEP_J1_RAD * abs(J4_PER_J1)
-
-            while abs(j4_remaining) > 0.001:
-                # Determine direction and magnitude for this tick
-                step_sign = 1.0 if j4_remaining > 0 else -1.0
-                j4_step = step_sign * min(abs(j4_remaining), max_j4_step)
-
-                row(f'  pre-tilt {n_j4:02d}', 
-                    f'J4Δ={j4_step:+.4f}  (remaining: {j4_remaining-j4_step:+.4f})', 
-                    C.CYAN)
-
-                # Dispatch only J4; J1 is 0.0, J5 is held
-                self._dispatch_phase3_step(0.0, j4_step*5.2, j5_hold)
-                
-                j4_remaining -= j4_step
-                time.sleep(TICK_Z_S)
-                
-                # Refresh J5 lock against gravity
-                with self._lock:
-                    j5_hold = self._current_positions['j2s6s200_joint_5']
-                n_j4 += 1
-
-            done_row('J4 Pre-tilt', f'complete in {n_j4} steps')
-            sep()
-
-            # --- STEP 2: Sweep J1 to reach Z target ---
-            n_j1 = 0
-            total_j1 = 0.0
-
-            while dz > ERR_TOL_M:
-                # Fractional step — slow down as we approach the mouth
-                frac = min(dz / (CART_DELTA_Z * 3.0), 1.0)
-                j1_step = frac * STEP_J1_RAD
-
-                row(f'  reach {n_j1:02d}',
-                    f'dz={dz:+.3f}  J1Δ={j1_step:+.4f}  J4Δ=0.0000  J5={j5_hold:.3f}',
-                    C.CYAN)
-
-                # Dispatch only J1; J4 is already positioned, J5 is held
-                self._dispatch_phase3_step(j1_step*3.8, 0.0, j5_hold)
-                
-                currpoint[2] += frac * CART_DELTA_Z
-                total_j1 += j1_step
-                time.sleep(TICK_Z_S)
-
-                dz = endpoint[2] - currpoint[2]
-                with self._lock:
-                    j5_hold = self._current_positions['j2s6s200_joint_5']
-                n_j1 += 1
-
-            done_row('Phase 3', f'{n_j1} steps  total J1={total_j1:+.4f} rad  residual dz={dz:+.4f}')
-            sep()
-
-            print(f'\n  {C.GREEN}{C.BOLD}🍴  Fed the patient!{C.RESET}\n')
-            # section('Phase 3 · Step 3 (J4 Return / Tip Bowl)', C.YELLOW)
-            
-            # # The exact inverse of the pre-tilt
-            # j4_return_delta = -total_j4_expected
-            
-            # if abs(j4_return_delta) <= 0.05:
-            #     done_row('J4 Return', f'Delta {j4_return_delta:+.4f} rad is <= 0.05. Skipping.')
-            # else:
-            #     row('J4 Return Target', f'{j4_return_delta:+.4f} rad (undoing pre-tilt)', C.MAGENTA)
-                
-            #     n_j4_ret = 0
-            #     j4_rem = j4_return_delta
-                
-            #     while abs(j4_rem) > 0.001:
-            #         step_sign =-1.0 if j4_rem > 0 else -1.0
-            #         j4_step = step_sign * min(abs(j4_rem), max_j4_step)
-                    
-            #         row(f'  return {n_j4_ret:02d}', 
-            #             f'J4Δ={j4_step:+.4f}  (remaining: {j4_rem-j4_step:+.4f})', 
-            #             C.CYAN)
-
-            #         self._dispatch_phase3_step(0.0, j4_step * 5.2, j5_hold)
-                    
-            #         j4_rem -= j4_step
-            #         time.sleep(TICK_Z_S)
-                    
-            #         with self._lock:
-            #             j5_hold = self._current_positions['j2s6s200_joint_5']
-            #         n_j4_ret += 1
-
-            #     done_row('J4 Return', f'complete in {n_j4_ret} steps')
-            # sep()
-
-            # print(f'\n  {C.GREEN}{C.BOLD}🍴  Fed the patient!{C.RESET}\n')
-            self.decrease_j5(0.2)  # open fingers to tip bowl
-        except Exception as e:
-            err_row('Custom algorithm error', str(e))
-            import traceback; traceback.print_exc()
-        finally:
-            self._busy = False
-
-    # ══════════════════════════════════════════════════════════════════════════
-    #  MODE 2 — BFMT via MoveIt2
-    # ══════════════════════════════════════════════════════════════════════════
-    def _perform_moveit(self, endpoint_cam: np.ndarray):
-        self._busy = True
-        joint_traj = None
-        try:
-            banner('BFMT Planner  (MoveIt2 — shortest path)')
-
-            spinner_msg('TF: camera → base …', C.CYAN)
             try:
-                tf_cb = self._tf_buf.lookup_transform(
-                    BASE_FRAME, CAM_FRAME, Time(), timeout=Duration(seconds=2.0))
+                tf_ee_cam = self.tf_buffer.lookup_transform(
+                    CAM_FRAME, EE_LINK, Time(), timeout=Duration(seconds=1.0))
             except Exception as e:
-                err_row('TF lookup failed', str(e)); return
+                self.tui.error(f"TF EE→cam failed: {e}")
+                return
 
-            R = Rotation.from_quat([
-                tf_cb.transform.rotation.x, tf_cb.transform.rotation.y,
-                tf_cb.transform.rotation.z, tf_cb.transform.rotation.w,
-            ]).as_matrix()
-            t_vec = np.array([tf_cb.transform.translation.x,
-                              tf_cb.transform.translation.y,
-                              tf_cb.transform.translation.z])
-            target_base = R @ endpoint_cam + t_vec
-            done_row('Target (base)',
-                     f'X={target_base[0]:+.3f}  Y={target_base[1]:+.3f}  Z={target_base[2]:+.3f}')
+            start = np.array([
+                tf_ee_cam.transform.translation.x,
+                tf_ee_cam.transform.translation.y,
+                tf_ee_cam.transform.translation.z,
+            ])
+            self.tui.separator()
+            self.tui.coord_block("EE start (cam):", *start, color=TUI.GRY)
+            self.tui.coord_block("Target   (cam):", *target_cam, color=TUI.CYN)
 
-            prim = SolidPrimitive(type=SolidPrimitive.SPHERE, dimensions=[MOVEIT_TOL_M])
-            bv   = BoundingVolume(
-                primitives=[prim],
-                primitive_poses=[Pose(position=Point(
-                    x=target_base[0], y=target_base[1], z=target_base[2]))])
-            pos_c = PositionConstraint(
-                header=self._tf_buf.lookup_transform(BASE_FRAME, CAM_FRAME, Time()).header,
-                link_name=EE_LINK, constraint_region=bv, weight=1.0)
-            pos_c.header.frame_id = BASE_FRAME
-            goal_c = Constraints(position_constraints=[pos_c])
+            self._perform_phased(start, target_cam)
 
-            req = MotionPlanRequest()
-            req.group_name                      = MOVEIT_GROUP
-            req.planner_id                      = MOVEIT_PLANNER
-            req.allowed_planning_time           = MOVEIT_PLAN_TIME
-            req.num_planning_attempts           = MOVEIT_ATTEMPTS
-            req.max_velocity_scaling_factor     = MOVEIT_VEL_SCALE
-            req.max_acceleration_scaling_factor = MOVEIT_ACC_SCALE
-            req.goal_constraints                = [goal_c]
-
-            start_state = RobotState()
-            start_state.joint_state.header.stamp = self.get_clock().now().to_msg()
-            start_state.joint_state.name = list(ARM_JOINT_NAMES)
-            with self._lock:
-                start_state.joint_state.position = [
-                    float(self._current_positions[n]) for n in ARM_JOINT_NAMES]
-            req.start_state = start_state
-
-            row('Planner',   MOVEIT_PLANNER, C.MAGENTA)
-            row('Plan time', f'{MOVEIT_PLAN_TIME:.0f} s')
-            row('Velocity',  f'{MOVEIT_VEL_SCALE*100:.0f}%')
-            row('Tolerance', f'{MOVEIT_TOL_M*100:.0f} mm sphere')
-
-            spinner_msg('Waiting for /plan_kinematic_path …', C.MAGENTA)
-            mini = rclpy.create_node('cp_bfmt_mini')
-            try:
-                plan_cli = mini.create_client(GetMotionPlan, '/plan_kinematic_path')
-                from rclpy.executors import SingleThreadedExecutor as _STE
-                mini_exec = _STE()
-                mini_exec.add_node(mini)
-
-                deadline = time.time() + 30.0
-                while not plan_cli.service_is_ready():
-                    if time.time() > deadline:
-                        err_row('MoveIt', '/plan_kinematic_path not available'); return
-                    mini_exec.spin_once(timeout_sec=0.5)
-
-                done_row('Planning service', 'connected')
-                spinner_msg('BFMT planning …', C.MAGENTA)
-
-                plan_req = GetMotionPlan.Request()
-                plan_req.motion_plan_request = req
-                future = plan_cli.call_async(plan_req)
-                mini_exec.spin_until_future_complete(future, timeout_sec=MOVEIT_PLAN_TIME + 5.0)
-
-                if not future.done():
-                    err_row('Planning', 'timed out'); return
-
-                plan_resp = future.result().motion_plan_response
-                if plan_resp.error_code.val != MoveItErrorCodes.SUCCESS:
-                    err_row('Planning failed', f'MoveIt code {plan_resp.error_code.val}'); return
-
-                joint_traj = plan_resp.trajectory.joint_trajectory
-                done_row('Path found', f'{len(joint_traj.points)} waypoints')
-            finally:
-                mini_exec.shutdown(timeout_sec=1.0)
-                mini.destroy_node()
-
-            if not joint_traj or not joint_traj.points:
-                err_row('Planning', 'empty trajectory'); return
-
-            spinner_msg('Executing trajectory …', C.MAGENTA)
-            fj_goal = FollowJointTrajectory.Goal()
-            fj_goal.trajectory = joint_traj
-            exec_future = self._traj_client.send_goal_async(fj_goal)
-            while not exec_future.done():
-                time.sleep(0.05)
-
-            gh = exec_future.result()
-            if not gh.accepted:
-                err_row('Execution', 'trajectory goal rejected'); return
-
-            result_future = gh.get_result_async()
-            while not result_future.done():
-                time.sleep(0.1)
-
-            if result_future.result().result.error_code == 0:
-                print(f'\n  {C.GREEN}{C.BOLD}🍴  BFMT execution complete — fed the patient!{C.RESET}\n')
-            else:
-                err_row('Execution failed', f'code {result_future.result().result.error_code}')
+            self.tui.separator()
+            self.tui.success("Feeding sequence complete.")
+            self.tui.separator()
+            time.sleep(0.5)
 
         except Exception as e:
-            err_row('MoveIt error', str(e))
-            import traceback; traceback.print_exc()
+            self.tui.error(f"move_to_point_cam: {e}")
         finally:
-            self._busy = False
+            self.busy = False
+            self._current_phase = ""
 
-    # ══════════════════════════════════════════════════════════════════════════
-    #  Joint helpers
-    # ══════════════════════════════════════════════════════════════════════════
-    def _dispatch_phase3_step(self, j1_delta: float, j4_delta: float, j5_lock: float):
+    def _perform_phased(self, startpoint, endpoint):
         """
-        Send ONE smooth trajectory segment:
-          • J1 += j1_delta    (base yaw, advances Z)
-          • J4 += j4_delta    (wrist pitch correction, keeps spoon level)
-          • J5  = j5_lock     (absolute — fights roll drift)
-          All other joints held at current position.
+        Smooth phased approach — same Y→X→Z logic as the module docstring but
+        each phase is ONE trajectory command instead of N jerky steps.
 
-        Two waypoints (current → target) with TICK_Z_S duration give the
-        trajectory controller enough information to interpolate smoothly.
-        A third mid-point could be added here for even finer blending if
-        the arm still feels jerky on your hardware.
+        The total joint delta is computed analytically:
+            delta_rad = (error_m / CART_DELTA_m) * STEP_RADS
+
+        This is exactly the sum of all the incremental steps the old loop would
+        have taken: the proportional controller (frac = clamp(|err|/CART_DELTA,1))
+        converges in ceil(|err|/CART_DELTA) full steps plus one partial step.
+        Summing those gives (|err| / CART_DELTA) * STEP_RADS in total, which is
+        what we compute directly here.
+
+        Duration is matched to the old total time:
+            dur = max(MIN_DUR, |err| / CART_DELTA * TICK_DUR_S)
+        so the arm moves at the same average speed but without interruptions.
         """
-        with self._lock:
-            cur = [self._current_positions[n] for n in ARM_JOINT_NAMES]
+        MIN_DUR = 1.5   # floor (s) — gives the controller enough ramp time
 
-        tgt = list(cur)
-        tgt[0] += j1_delta     # J1  base yaw
-        tgt[3] += j4_delta     # J4  wrist pitch counter-rotation
-        tgt[4]  = j5_lock      # J5  absolute roll lock
+        dy = endpoint[1] - startpoint[1]
+        dz = endpoint[2] - startpoint[2]
 
-        dur_ns = int(TICK_Z_S * 1e9)
+        # Phase 2 uses camera-origin X, not EE-relative X (see below).
+        # endpoint[0] = (u_click - CX) * Z / FX  — already measured from the
+        # camera optical centre, which sits at X=0 in the camera frame.
+        dx_cam = endpoint[0]
 
-        pt0 = JointTrajectoryPoint(
-            positions=cur,
-            time_from_start=DurationMsg(sec=0, nanosec=0))
+        # ── Phase 1: Y-axis → J2 ─────────────────────────────────────────────
+        # Sign: dy>0 means EE is above target → decrease J2 → negative delta.
+        self.tui.phase_header(1, "Y-axis  →  J2 (elbow pitch)",
+                              f"error = {dy:+.3f} m")
+        self._current_phase = "Y → J2"
+        if abs(dy) > ERR_TOL_M:
+            delta_J2 = -(dy / CART_DELTA_Y) * STEP_RADS
+            dur_Y    = max(MIN_DUR, abs(dy) / CART_DELTA_Y * TICK_DUR_S)
+            self._dispatch_smooth({1: delta_J2}, dur_Y, "Y-axis")
+        self.tui.phase_done("Y-axis")
 
-        # Optional: add a mid-point at half duration for smoother interpolation
-        mid = [(a + b) / 2 for a, b in zip(cur, tgt)]
-        pt_mid = JointTrajectoryPoint(
-            positions=mid,
-            time_from_start=DurationMsg(sec=0, nanosec=dur_ns // 2))
+        # ── Phase 2: X-axis → J3  (camera as X origin) ───────────────────────
+        # Instead of measuring how far the EE is from the target in 3D X, we
+        # ask: "where is the target relative to the camera centre-line?"
+        #   • endpoint[0] = (u_click − CX) × Z / FX
+        #   • This is positive when the target is right of image centre,
+        #     negative when left — direction is unambiguous from one number.
+        #   • The camera centre (u = CX, pixel X = 0 in camera frame) is the
+        #     natural "zero": if the target is centred, no X correction needed.
+        # This avoids needing the EE's current camera-frame X from TF.
+        px_offset = endpoint[0] * FX / endpoint[2]   # pixels from centre (for log)
+        self.tui.phase_header(2, "X-axis  →  J3 (forearm rotation)",
+                              f"target = {dx_cam:+.3f} m from cam-centre  "
+                              f"({px_offset:+.0f} px)")
+        self._current_phase = "X → J3"
+        if abs(dx_cam) > ERR_TOL_M:
+            delta_J3 = -(dx_cam / CART_DELTA_X) * STEP_RADS
+            dur_X    = max(MIN_DUR, abs(dx_cam) / CART_DELTA_X * TICK_DUR_S)
+            self._dispatch_smooth({2: delta_J3}, dur_X, "X-axis")
+        self.tui.phase_done("X-axis")
 
-        pt1 = JointTrajectoryPoint(
-            positions=tgt,
-            time_from_start=DurationMsg(sec=0, nanosec=dur_ns))
+        # ── Phase 3: Z-axis → J1 + J4 ────────────────────────────────────────
+        # J1 and J4 move simultaneously in the same trajectory so the wrist
+        # compensation happens continuously, keeping the fork level throughout.
+        self.tui.phase_header(3, "Z-axis  →  J1 + J4 (depth approach)",
+                              f"error = {dz:+.3f} m")
+        self._current_phase = "Z → J1+J4"
+        if dz > ERR_TOL_M:
+            delta_J1 = (dz / CART_DELTA_Z) * STEP_RADS * 2.0
+            delta_J4 = (dz / CART_DELTA_Z) * STEP_RADS * 2.0
+            dur_Z    = max(MIN_DUR, dz / CART_DELTA_Z * TICK_DUR_S)
+            self._dispatch_smooth({0: delta_J1, 3: delta_J4}, dur_Z, "Z-axis")
+        self.tui.phase_done("Z-axis")
 
-        traj = JointTrajectory()
-        traj.header.stamp = self.get_clock().now().to_msg()
-        traj.joint_names  = ARM_JOINT_NAMES
-        traj.points       = [pt0, pt_mid, pt1]   # 3-point for smooth interpolation
+        self.tui.info("All three phases converged.")
 
-        goal = FollowJointTrajectory.Goal()
+    def _wait_with_bar(self, label: str, duration: float):
+        """Sleep for duration while updating a live \\r progress bar every 80 ms."""
+        t0 = time.time()
+        while True:
+            elapsed = time.time() - t0
+            self.tui.moving(label, elapsed, duration)
+            if elapsed >= duration + 0.15:
+                break
+            time.sleep(0.08)
+
+    # ── Trajectory dispatch ───────────────────────────────────────────────────
+    def _dispatch_step(self, joint_idx: int, delta_rad: float):
+        """
+        Send a two-point JointTrajectory: current → current+delta in TICK_DUR_S.
+        Two points are required (not one) so the controller generates a
+        velocity-limited trapezoid profile instead of a step command.
+        """
+        with self.lock:
+            current_pos = [self.joints[n] for n in ARM_JOINT_NAMES]
+        target_pos          = list(current_pos)
+        target_pos[joint_idx] += delta_rad
+
+        pt0 = JointTrajectoryPoint()
+        pt0.positions       = current_pos
+        pt0.time_from_start = DurationMsg(sec=0, nanosec=0)
+
+        pt1 = JointTrajectoryPoint()
+        pt1.positions       = target_pos
+        pt1.time_from_start = DurationMsg(sec=0, nanosec=int(TICK_DUR_S * 1e9))
+
+        traj               = JointTrajectory()
+        traj.header.stamp  = self.get_clock().now().to_msg()
+        traj.joint_names   = ARM_JOINT_NAMES
+        traj.points        = [pt0, pt1]
+
+        goal          = FollowJointTrajectory.Goal()
         goal.trajectory = traj
         self._traj_client.send_goal_async(goal)
 
-    def _dispatch_step(self, joint_idx: int, delta_rad: float):
-        with self._lock:
-            cur = [self._current_positions[n] for n in ARM_JOINT_NAMES]
-        tgt = list(cur)
-        tgt[joint_idx] += delta_rad
-        dur_ns = int(0.30 * 1e9)
+    def _dispatch_smooth(self, deltas: dict, duration_s: float, label: str = "moving"):
+        """
+        Send ONE trajectory that moves several joints simultaneously, then
+        BLOCK until the bridge action server reports completion (succeed/abort).
+        Shows a live progress bar while waiting.
 
-        pt0 = JointTrajectoryPoint(
-            positions=cur, time_from_start=DurationMsg(sec=0, nanosec=0))
-        pt1 = JointTrajectoryPoint(
-            positions=tgt, time_from_start=DurationMsg(sec=0, nanosec=dur_ns))
+        Blocking is critical: without it, Phase 2 and Phase 3 can execute
+        concurrently (the bridge runs concurrent goals with ReentrantCallbackGroup),
+        causing two control loops to fight over the arm simultaneously.
+        """
+        with self.lock:
+            current_pos = [self.joints[n] for n in ARM_JOINT_NAMES]
+        target_pos = list(current_pos)
+        for idx, delta in deltas.items():
+            target_pos[idx] += delta
 
-        traj = JointTrajectory()
+        pt0 = JointTrajectoryPoint()
+        pt0.positions       = list(current_pos)
+        pt0.time_from_start = DurationMsg(sec=0, nanosec=0)
+
+        pt1 = JointTrajectoryPoint()
+        pt1.positions       = target_pos
+        dur_sec             = int(duration_s)
+        dur_ns              = int((duration_s - dur_sec) * 1e9)
+        pt1.time_from_start = DurationMsg(sec=dur_sec, nanosec=dur_ns)
+
+        traj              = JointTrajectory()
         traj.header.stamp = self.get_clock().now().to_msg()
         traj.joint_names  = ARM_JOINT_NAMES
         traj.points       = [pt0, pt1]
 
-        goal = FollowJointTrajectory.Goal()
+        goal            = FollowJointTrajectory.Goal()
         goal.trajectory = traj
-        self._traj_client.send_goal_async(goal)
 
-    def increase_j1(self, s): self._dispatch_step(0,  abs(s))
-    def decrease_j1(self, s): self._dispatch_step(0, -abs(s))
-    def increase_j2(self, s): self._dispatch_step(1,  abs(s))
-    def decrease_j2(self, s): self._dispatch_step(1, -abs(s))
-    def increase_j3(self, s): self._dispatch_step(2,  abs(s))
-    def decrease_j3(self, s): self._dispatch_step(2, -abs(s))
-    def increase_j4(self, s): self._dispatch_step(3,  abs(s))
-    def decrease_j4(self, s): self._dispatch_step(3, -abs(s))
-    def increase_j5(self, s): self._dispatch_step(4,  abs(s))
-    def decrease_j5(self, s): self._dispatch_step(4, -abs(s))
-    def increase_j6(self, s): self._dispatch_step(5,  abs(s))
-    def decrease_j6(self, s): self._dispatch_step(5, -abs(s))
+        done_event = threading.Event()
 
-    def get_frame(self):
-        with self._lock:
-            return self._color_img, self._mouth_pixel, getattr(self, '_mouth_lms', None), getattr(self, '_mouth_hw', None)
+        def _goal_resp(future):
+            gh = future.result()
+            if not gh.accepted:
+                done_event.set()
+                return
+            gh.get_result_async().add_done_callback(lambda _: done_event.set())
+
+        self._traj_client.send_goal_async(goal).add_done_callback(_goal_resp)
+
+        # Block here, updating the progress bar every 80 ms, until bridge is done
+        t0 = time.time()
+        while not done_event.wait(timeout=0.08):
+            self.tui.moving(label, time.time() - t0, duration_s)
+        print()  # end the \r line
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-#  OpenCV UI
+#  OpenCV UI loop
 # ══════════════════════════════════════════════════════════════════════════════
-def run_ui(node: ClickPointerNode):
-    WIN = 'Click-to-Feed  |  SPACE=use mouth  Q=quit'
-    cv2.namedWindow(WIN)
-    cv2.setMouseCallback(WIN, lambda e, u, v, *_:
-                         node.on_click(u, v) if e == cv2.EVENT_LBUTTONDOWN else None)
+def run_ui(node: ClickPointer, tui: TUI):
+    # ASCII-only window name: Qt encodes the title as a C-string internally;
+    # non-ASCII characters (e.g. the middle-dot U+00B7) can cause namedWindow
+    # to return a null handler, which makes setMouseCallback crash.
+    winname = "Click-to-Feed | Kinova Jaco2"
 
-    while rclpy.ok():
-        frame, mouth_px, mouth_lms, mouth_hw = node.get_frame()
-        if frame is not None:
-            disp = frame.copy()
-            h, w = disp.shape[:2]
+    # Redirect stderr for the window lifetime so Qt font/platform warnings
+    # don't pollute the terminal dashboard.  Our TUI uses stdout, so nothing
+    # useful is lost.  We restore stderr before printing any error or exiting.
+    _saved_stderr = os.dup(2)
+    _devnull      = os.open(os.devnull, os.O_WRONLY)
+    os.dup2(_devnull, 2)
+    os.close(_devnull)
 
-            # ── Draw lip outline if mouth detected ──────────────────────────
-            if mouth_lms is not None and mouth_hw is not None:
-                mh, mw = mouth_hw
-                for a, b in _LIP_CONN:
-                    if a < len(mouth_lms) and b < len(mouth_lms):
-                        p1 = (int(mouth_lms[a].x * mw), int(mouth_lms[a].y * mh))
-                        p2 = (int(mouth_lms[b].x * mw), int(mouth_lms[b].y * mh))
-                        cv2.line(disp, p1, p2, (0, 220, 255), 1)
+    try:
+        cv2.namedWindow(winname, cv2.WINDOW_NORMAL)
 
-            # ── Mouth target circle ─────────────────────────────────────────
-            if mouth_px is not None:
-                mu, mv = mouth_px
-                cv2.circle(disp, (mu, mv), 10, (0, 255, 80),  -1)
-                cv2.circle(disp, (mu, mv), 16, (0, 220, 255),  2)
-                cv2.putText(disp, 'MOUTH', (mu + 20, mv - 8),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 255, 80), 2)
-                cv2.putText(disp, 'SPACE to feed',
-                            (mu + 20, mv + 14),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 220, 255), 1)
+        def mouse_cb(event, x, y, flags, param):
+            if event == cv2.EVENT_LBUTTONDOWN:
+                node.on_click(x, y)
 
-            # ── Status pill ─────────────────────────────────────────────────
-            if node._busy:
-                label, bg, fg = 'FEEDING…', (0, 0, 180), (255, 255, 255)
-            elif mouth_px is not None:
-                label, bg, fg = 'Mouth detected — SPACE or click', (0, 100, 0), (255, 255, 255)
-            else:
-                label, bg, fg = 'No face — click to aim manually', (60, 40, 0), (220, 200, 100)
+        cv2.setMouseCallback(winname, mouse_cb, node)
 
-            (tw, th), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 2)
-            cv2.rectangle(disp, (6, 6), (tw + 20, th + 20), bg, -1)
-            cv2.putText(disp, label, (12, th + 12),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, fg, 2)
+        frame_count = 0
 
-            # ── Crosshair ───────────────────────────────────────────────────
-            if not node._busy:
-                cv2.line(disp, (w//2 - 14, h//2), (w//2 + 14, h//2), (0, 255, 200), 1)
-                cv2.line(disp, (w//2, h//2 - 14), (w//2, h//2 + 14), (0, 255, 200), 1)
+        while rclpy.ok():
+            frame = node.get_frame_data()
 
-            cv2.imshow(WIN, disp)
+            if frame is not None:
+                disp = frame.copy()
+                disp = _draw_hud(disp, node, frame_count)
+                cv2.imshow(winname, disp)
+                frame_count += 1
 
-        key = cv2.waitKey(33)
-        if key in (ord('q'), 27):
-            break
-        elif key == ord(' '):
-            threading.Thread(target=node.on_space, daemon=True).start()
+            # 30 ms poll → ~30 fps; waitKey drives the OpenCV event loop
+            key = cv2.waitKey(30) & 0xFF
+            if key in (ord("q"), 27):
+                break
+            elif key == ord(" "):
+                threading.Thread(target=node.on_space, daemon=True).start()
+            elif key in (ord("y"), ord("Y")):
+                node.confirm_feed()
+            elif key in (ord("n"), ord("N")):
+                node.cancel_feed()
 
-    cv2.destroyAllWindows()
-    rclpy.shutdown()
+    finally:
+        os.dup2(_saved_stderr, 2)   # restore stderr before any terminal output
+        os.close(_saved_stderr)
+        cv2.destroyAllWindows()
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+#  Entry point
+# ══════════════════════════════════════════════════════════════════════════════
 def main(args=None):
+    tui = TUI()
+    tui.banner()
+
     rclpy.init(args=args)
-    node = ClickPointerNode()
+    node = ClickPointer(tui)
+
     executor = MultiThreadedExecutor()
     executor.add_node(node)
     threading.Thread(target=executor.spin, daemon=True).start()
+
     try:
-        run_ui(node)
+        run_ui(node, tui)
     finally:
+        tui.info("Cleaning up ROS2 node ...")
         node.destroy_node()
-        if rclpy.ok():
-            rclpy.shutdown()
+        rclpy.shutdown()
+        tui.success("Shutdown complete.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

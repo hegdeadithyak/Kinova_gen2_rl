@@ -114,13 +114,27 @@ def _moveit_node_params() -> List[Dict]:
         },
     }
 
+    chomp_config = {
+        "planning_pipelines": ["chomp"],
+        "planning_plugin": "chomp_interface/CHOMPPlanner",
+
+        "chomp": {
+            "planning_time_limit": 5.0,
+            "max_iterations": 200,
+            "smoothness_cost_weight": 0.1,
+            "obstacle_cost_weight": 1.0,
+            "learning_rate": 0.01,
+            "ridge_factor": 0.001,
+        }
+    }
+
     return [
         robot_description,
         robot_semantic,
         robot_kinematics,
         robot_joint_limits,
         moveit_controllers,
-        ompl_planning,
+        chomp_config,   # 🔥 ADD THIS
         sim_time,
     ]
 
@@ -303,32 +317,32 @@ def generate_launch_description():
     declared_arguments = [
         DeclareLaunchArgument(
             "cam_x",
-            default_value="-0.04934",
+            default_value="0.0779",
             description="EE -> camera_color_optical_frame translation X in meters",
         ),
         DeclareLaunchArgument(
             "cam_y",
-            default_value="-0.12927",
+            default_value="0.0660",
             description="EE -> camera_color_optical_frame translation Y in meters",
         ),
         DeclareLaunchArgument(
             "cam_z",
-            default_value="0.14613",
+            default_value="-0.0587",
             description="EE -> camera_color_optical_frame translation Z in meters",
         ),
         DeclareLaunchArgument(
             "cam_roll",
-            default_value="0.13855",
+            default_value="0.2824",
             description="EE -> camera_color_optical_frame roll in radians",
         ),
         DeclareLaunchArgument(
             "cam_pitch",
-            default_value="-0.49254",
+            default_value="0.1040",
             description="EE -> camera_color_optical_frame pitch in radians",
         ),
         DeclareLaunchArgument(
             "cam_yaw",
-            default_value="0.23797",
+            default_value="2.7041",
             description="EE -> camera_color_optical_frame yaw in radians",
         ),
         DeclareLaunchArgument(

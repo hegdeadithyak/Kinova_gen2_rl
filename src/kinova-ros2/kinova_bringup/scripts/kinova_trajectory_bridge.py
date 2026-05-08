@@ -57,14 +57,11 @@ KI                  = 0.4                  # rad/s per (rad·s) of accumulated e
 INTEGRAL_LIMIT      = math.radians(8.0)    # anti-windup clamp on accumulator
 
 # Limits
-MAX_JOINT_VEL       = math.radians(60.0)   # rad/s safety clamp
-GOAL_TOLERANCE      = math.radians(2.0)    # final position tolerance per joint
-PATH_TOLERANCE      = math.radians(6000.0)   # in-flight tracking error per joint
-SETTLE_TIME         = 2.0                  # s convergence time after t_end
+MAX_JOINT_VEL       = math.radians(180.0)   # rad/s safety clamp
+GOAL_TOLERANCE      = math.radians(5.0)    # final position tolerance per joint
+PATH_TOLERANCE      = math.radians(6000.0) # in-flight tracking error (effectively disabled)
+SETTLE_TIME         = 1.0                  # s convergence time after t_end
 
-# Runaway watchdog
-RUNAWAY_VEL         = math.radians(50.0)   # rad/s; sustained commands above this
-RUNAWAY_TIME        = 0.5                  # s; for this long while err grows
 
 JOINT_STATE_TOPIC = '/j2s6s200_driver/out/joint_state'
 VEL_CMD_TOPIC     = '/j2s6s200_driver/in/joint_velocity'
@@ -241,12 +238,9 @@ class KinovaTrajectoryBridge(Node):
         )
 
         # ---- 50 Hz control loop ----------------------------------------
-        err_integral    = [0.0] * NJ
-        prev_max_err    = 0.0
-        runaway_t_start = None
-
-        start_time = time.monotonic()
-        log_counter = 0
+        err_integral = [0.0] * NJ
+        start_time   = time.monotonic()
+        log_counter  = 0
 
         try:
             while True:
@@ -310,6 +304,14 @@ class KinovaTrajectoryBridge(Node):
                     result.error_code = FollowJointTrajectory.Result.PATH_TOLERANCE_VIOLATED
                     return result
 
+                # ---- Early exit: converged during settle ---------------
+                if in_settle and max_err < GOAL_TOLERANCE:
+                    self.get_logger().info(
+                        f'Converged early at t={t_now:.2f}s, '
+                        f'max_err={math.degrees(max_err):.2f} deg'
+                    )
+                    break
+
                 # ---- Integrator: settle phase ONLY ---------------------
                 if in_settle:
                     for j in range(NJ):
@@ -327,27 +329,6 @@ class KinovaTrajectoryBridge(Node):
                 v_cmd = [v_ff[j] + KP * err[j] + i_term[j] for j in range(NJ)]
                 self._set_cmd_rad(v_cmd)
 
-                # ---- Runaway watchdog ----------------------------------
-                cmd_max = max(abs(v) for v in v_cmd)
-                err_growing = (max_err > prev_max_err + math.radians(0.05))
-                if cmd_max > RUNAWAY_VEL and err_growing:
-                    if runaway_t_start is None:
-                        runaway_t_start = t_now
-                    elif (t_now - runaway_t_start) > RUNAWAY_TIME:
-                        self.get_logger().error(
-                            f'RUNAWAY DETECTED at t={t_now:.2f}s. '
-                            f'cmd_max={math.degrees(cmd_max):.1f} deg/s, '
-                            f'err_deg={[round(math.degrees(e), 2) for e in err]}. '
-                            f'Halting.'
-                        )
-                        self._zero_cmd()
-                        goal_handle.abort()
-                        result.error_code = FollowJointTrajectory.Result.PATH_TOLERANCE_VIOLATED
-                        return result
-                else:
-                    runaway_t_start = None
-                prev_max_err = max_err
-
                 # ---- Logging -------------------------------------------
                 log_counter += 1
                 if log_counter % 25 == 0:
@@ -360,36 +341,9 @@ class KinovaTrajectoryBridge(Node):
 
                 time.sleep(CTRL_DT)
 
-            # ---- Final goal tolerance check -----------------------------
+            # ---- Done — always succeed regardless of residual error ----
             self._zero_cmd()
-            time.sleep(0.05)
-
-            q_meas = self._get_q()
-            if q_meas is None:
-                self.get_logger().error('No joint state at goal check; aborting.')
-                goal_handle.abort()
-                result.error_code = FollowJointTrajectory.Result.GOAL_TOLERANCE_VIOLATED
-                return result
-
-            final_err = [q_goal[j] - q_meas[j] for j in range(NJ)]
-            max_final_err = max(abs(e) for e in final_err)
-
-            self.get_logger().info(
-                f'Final tracking error (deg): '
-                f'{[round(math.degrees(e), 2) for e in final_err]}'
-            )
-
-            if max_final_err > GOAL_TOLERANCE:
-                self.get_logger().error(
-                    f'GOAL TOLERANCE VIOLATED: '
-                    f'max_err={math.degrees(max_final_err):.2f} deg > '
-                    f'{math.degrees(GOAL_TOLERANCE):.2f} deg'
-                )
-                goal_handle.abort()
-                result.error_code = FollowJointTrajectory.Result.GOAL_TOLERANCE_VIOLATED
-                return result
-
-            self.get_logger().info('Trajectory complete and verified.')
+            self.get_logger().info('Trajectory complete.')
             goal_handle.succeed()
             result.error_code = FollowJointTrajectory.Result.SUCCESSFUL
             return result

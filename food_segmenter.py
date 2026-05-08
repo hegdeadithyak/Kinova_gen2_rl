@@ -6,14 +6,20 @@ from typing import List, Optional, Tuple
 
 import cv2
 import numpy as np
-import rclpy
-from cv_bridge import CvBridge
-from rclpy.duration import Duration
-from rclpy.node import Node
-from rclpy.time import Time
-from sensor_msgs.msg import Image
-from tf2_ros import Buffer, TransformListener
-from visualization_msgs.msg import Marker, MarkerArray
+
+# ROS imports — only needed in live-camera mode
+try:
+    import rclpy
+    from cv_bridge import CvBridge
+    from rclpy.duration import Duration
+    from rclpy.node import Node
+    from rclpy.time import Time
+    from sensor_msgs.msg import Image
+    from tf2_ros import Buffer, TransformListener
+    from visualization_msgs.msg import Marker, MarkerArray
+    _ROS_AVAILABLE = True
+except ImportError:
+    _ROS_AVAILABLE = False
 
 # Camera intrinsics — calibrated values from click_pointer.py
 FX, FY = 603.6312, 603.0632
@@ -108,15 +114,47 @@ def _nms(candidates: List[Tuple[np.ndarray, float]], iou_thr: float) -> List[int
     return kept
 
 
-def classify_food(bgr_img: np.ndarray, mask: np.ndarray) -> Tuple[str, str]:
+def _is_background(mask: np.ndarray) -> bool:
+    """True if the mask looks like background — large region hugging image borders."""
+    h, w = mask.shape
+    border_pixels = (
+        int(mask[0, :].sum()) + int(mask[-1, :].sum()) +
+        int(mask[:, 0].sum()) + int(mask[:, -1].sum())
+    )
+    border_coverage = border_pixels / (2 * (h + w))
+    area_ratio      = float(mask.sum()) / (h * w)
+    # background covers a big chunk of the border AND a meaningful image area
+    return border_coverage > 0.25 and area_ratio > 0.08
+
+
+def _filter_containers(candidates: List[Tuple[np.ndarray, float, Tuple]]) -> List[Tuple]:
+    """Remove masks that contain other masks — bowls, boxes, plates."""
+    n = len(candidates)
+    is_container = [False] * n
+    for i in range(n):
+        for j in range(n):
+            if i == j:
+                continue
+            overlap = np.logical_and(candidates[i][0], candidates[j][0]).sum()
+            # if >65% of mask-j lives inside mask-i, mask-i is a container
+            if overlap / max(1, candidates[j][0].sum()) > 0.65:
+                is_container[i] = True
+                break
+    return [c for k, c in enumerate(candidates) if not is_container[k]]
+
+
+def pick_utensil(n_items: int) -> str:
+    """Many discrete pieces → fork (fruits, cut idlis, chapati). Single mass → spoon."""
+    return "fork" if n_items >= 2 else "spoon"
+
+
+def classify_food(bgr_img: np.ndarray, mask: np.ndarray) -> str:
     """
-    Classify food region as solid / semi-solid / liquid from texture.
+    Classify food texture as solid / semi-solid / liquid.
 
     Uses Sobel gradient magnitude (edge sharpness) and HSV saturation
     variance. Liquids are smooth and uniform; solids are textured and
     colourful; semi-solids (rice, mash) are in between.
-
-    Returns (food_type, utensil) where utensil is 'fork' or 'spoon'.
     """
     gray = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2GRAY)
 
@@ -131,14 +169,10 @@ def classify_food(bgr_img: np.ndarray, mask: np.ndarray) -> Tuple[str, str]:
     fill_ratio = float(mask.sum()) / max(1, (x2 - x1) * (y2 - y1))
 
     if mean_grad < 12.0 and fill_ratio > 0.68:
-        food_type = "liquid"
-    elif mean_grad > 26.0 and sat_std > 18.0:
-        food_type = "solid"
-    else:
-        food_type = "semi-solid"
-
-    utensil = "fork" if food_type == "solid" else "spoon"
-    return food_type, utensil
+        return "liquid"
+    if mean_grad > 26.0 and sat_std > 18.0:
+        return "solid"
+    return "semi-solid"
 
 
 def _quat_to_matrix(q) -> np.ndarray:
@@ -151,7 +185,7 @@ def _quat_to_matrix(q) -> np.ndarray:
 
 
 def _pixel_to_base(u: int, v: int, depth: np.ndarray,
-                   tf_buffer: Buffer) -> Optional[np.ndarray]:
+                   tf_buffer) -> Optional[np.ndarray]:
     """
     Pixel + aligned-depth → 3-D point in BASE_FRAME.
     Identical projection model to click_pointer.py.
@@ -183,147 +217,197 @@ def _pixel_to_base(u: int, v: int, depth: np.ndarray,
         return None
 
 
-class FoodSegmenterNode(Node):
+def _draw_and_label(bgr, overlay, mask, bbox, food_type, utensil, color):
+    x1, y1, x2, y2 = bbox
+    coloured = np.zeros_like(bgr)
+    coloured[mask] = color
+    overlay[:] = cv2.addWeighted(overlay, 1.0, coloured, 0.38, 0)
+    cv2.rectangle(overlay, (x1, y1), (x2, y2), color, 2)
+    label = f"{food_type}  {utensil}"
+    cv2.putText(overlay, label, (x1, max(16, y1 - 6)),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.48, (20, 20, 20), 3)
+    cv2.putText(overlay, label, (x1, max(16, y1 - 6)),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.48, color, 1)
 
-    def __init__(self, sam, interval: float):
-        super().__init__("food_segmenter")
-        self._sam      = sam
-        self._interval = interval
 
-        self._lock      = threading.Lock()
-        self._color_img: Optional[np.ndarray] = None
-        self._depth_img: Optional[np.ndarray] = None
-        self._busy      = False
+def _segment(sam, bgr: np.ndarray):
+    """Run SAM and return filtered, NMS-deduplicated candidates."""
+    h, w     = bgr.shape[:2]
+    img_area = h * w
+    raw = sam.generate(cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB))
 
-        self._bridge    = CvBridge()
-        self._tf_buffer = Buffer()
-        TransformListener(self._tf_buffer, self)
+    candidates: List[Tuple[np.ndarray, float, Tuple]] = []
+    for item in raw:
+        mask = _ensure_mask(item.get("segmentation"), (h, w))
+        if mask is None:
+            continue
+        ratio = float(mask.sum()) / img_area
+        if not (MIN_AREA_RATIO <= ratio <= MAX_AREA_RATIO):
+            continue
+        if _is_background(mask):
+            continue
+        score = float(item.get("predicted_iou", item.get("pred_iou", 0.0)) or 0.0)
+        bbox  = _mask_bbox(mask)
+        if bbox is None:
+            continue
+        candidates.append((mask, score, bbox))
 
-        self.create_subscription(Image, "/camera/camera/color/image_raw",
-                                 self._color_cb, 2)
-        self.create_subscription(Image, "/camera/camera/aligned_depth_to_color/image_raw",
-                                 self._depth_cb, 2)
+    if not candidates:
+        return []
 
-        self._marker_pub  = self.create_publisher(MarkerArray, "/food_segmenter/markers", 10)
-        self._overlay_pub = self.create_publisher(Image, "/food_segmenter/overlay", 2)
+    kept     = _nms([(m, s) for m, s, _ in candidates], NMS_IOU_THR)
+    accepted = [candidates[i] for i in kept]
+    accepted = _filter_containers(accepted)
+    accepted.sort(key=lambda c: (c[2][1], c[2][0]))
+    return accepted
 
-        self.create_timer(interval, self._tick)
-        self.get_logger().info(f"FoodSegmenter ready — running every {interval:.0f}s")
 
-    def _color_cb(self, msg):
-        with self._lock:
-            self._color_img = self._bridge.imgmsg_to_cv2(msg, "bgr8")
+def _run_on_image(sam, image_path: str):
+    """Standalone mode: segment a single image file, no ROS required."""
+    bgr = cv2.imread(image_path)
+    if bgr is None:
+        raise FileNotFoundError(f"Cannot read image: {image_path}")
 
-    def _depth_cb(self, msg):
-        with self._lock:
-            self._depth_img = self._bridge.imgmsg_to_cv2(msg, "passthrough")
+    h, w = bgr.shape[:2]
+    print(f"[food_segmenter] Running SAM on {image_path} ({w}x{h})...")
+    t0       = time.monotonic()
+    accepted = _segment(sam, bgr)
+    print(f"[food_segmenter] SAM done ({time.monotonic()-t0:.1f}s) — "
+          f"{len(accepted)} item(s) after filtering")
 
-    def _tick(self):
-        if self._busy:
-            return
-        with self._lock:
-            color = self._color_img.copy() if self._color_img is not None else None
-            depth = self._depth_img.copy() if self._depth_img is not None else None
-        if color is None or depth is None:
-            self.get_logger().warn("Waiting for camera frames...")
-            return
-        self._busy = True
-        threading.Thread(target=self._run, args=(color, depth), daemon=True).start()
+    if not accepted:
+        print("[food_segmenter] No food items detected.")
+        return
 
-    def _run(self, bgr: np.ndarray, depth: np.ndarray):
-        try:
-            h, w     = bgr.shape[:2]
-            img_area = h * w
-            t_start  = time.monotonic()
+    utensil = pick_utensil(len(accepted))
+    overlay = bgr.copy()
+    header  = f"  {'#':<3}  {'type':<12}  {'bbox (x1,y1,x2,y2)':<26}"
+    print(f"\n[food_segmenter] {len(accepted)} food item(s) → use {utensil.upper()}")
+    print(header)
+    print("  " + "-" * (len(header) - 2))
 
-            raw = self._sam.generate(cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB))
-            self.get_logger().info(f"SAM produced {len(raw)} raw masks "
-                                   f"({time.monotonic()-t_start:.1f}s)")
+    for i, (mask, score, bbox) in enumerate(accepted):
+        food_type = classify_food(bgr, mask)
+        x1, y1, x2, y2 = bbox
+        color = _PALETTE[i % len(_PALETTE)]
+        _draw_and_label(bgr, overlay, mask, bbox, food_type, utensil, color)
+        print(f"  {i+1:<3}  {food_type:<12}  ({x1:4d},{y1:4d},{x2:4d},{y2:4d})")
 
-            candidates: List[Tuple[np.ndarray, float, Tuple]] = []
-            for item in raw:
-                mask = _ensure_mask(item.get("segmentation"), (h, w))
-                if mask is None:
-                    continue
-                ratio = float(mask.sum()) / img_area
-                if not (MIN_AREA_RATIO <= ratio <= MAX_AREA_RATIO):
-                    continue
-                score = float(item.get("predicted_iou", item.get("pred_iou", 0.0)) or 0.0)
-                bbox  = _mask_bbox(mask)
-                if bbox is None:
-                    continue
-                candidates.append((mask, score, bbox))
+    out_path = image_path.rsplit(".", 1)[0] + "_overlay.jpg"
+    cv2.imwrite(out_path, overlay)
+    print(f"\n[food_segmenter] Overlay saved → {out_path}")
 
-            if not candidates:
-                print("[FoodSegmenter] No food items detected.")
+
+if _ROS_AVAILABLE:
+    class FoodSegmenterNode(Node):
+
+        def __init__(self, sam, interval: float):
+            super().__init__("food_segmenter")
+            self._sam      = sam
+            self._interval = interval
+
+            self._lock      = threading.Lock()
+            self._color_img: Optional[np.ndarray] = None
+            self._depth_img: Optional[np.ndarray] = None
+            self._busy      = False
+
+            self._bridge    = CvBridge()
+            self._tf_buffer = Buffer()
+            TransformListener(self._tf_buffer, self)
+
+            self.create_subscription(Image, "/camera/camera/color/image_raw",
+                                     self._color_cb, 2)
+            self.create_subscription(Image, "/camera/camera/aligned_depth_to_color/image_raw",
+                                     self._depth_cb, 2)
+
+            self._marker_pub  = self.create_publisher(MarkerArray, "/food_segmenter/markers", 10)
+            self._overlay_pub = self.create_publisher(Image, "/food_segmenter/overlay", 2)
+
+            self.create_timer(interval, self._tick)
+            self.get_logger().info(f"FoodSegmenter ready — running every {interval:.0f}s")
+
+        def _color_cb(self, msg):
+            with self._lock:
+                self._color_img = self._bridge.imgmsg_to_cv2(msg, "bgr8")
+
+        def _depth_cb(self, msg):
+            with self._lock:
+                self._depth_img = self._bridge.imgmsg_to_cv2(msg, "passthrough")
+
+        def _tick(self):
+            if self._busy:
                 return
+            with self._lock:
+                color = self._color_img.copy() if self._color_img is not None else None
+                depth = self._depth_img.copy() if self._depth_img is not None else None
+            if color is None or depth is None:
+                self.get_logger().warn("Waiting for camera frames...")
+                return
+            self._busy = True
+            threading.Thread(target=self._run, args=(color, depth), daemon=True).start()
 
-            kept = _nms([(m, s) for m, s, _ in candidates], NMS_IOU_THR)
-            accepted = [candidates[i] for i in kept]
-            # Sort top-left → bottom-right for stable ordering
-            accepted.sort(key=lambda c: (c[2][1], c[2][0]))
+        def _run(self, bgr: np.ndarray, depth: np.ndarray):
+            try:
+                t_start  = time.monotonic()
+                accepted = _segment(self._sam, bgr)
+                self.get_logger().info(f"SAM: {len(accepted)} item(s) "
+                                       f"({time.monotonic()-t_start:.1f}s)")
 
-            overlay  = bgr.copy()
-            markers  = MarkerArray()
+                if not accepted:
+                    print("[FoodSegmenter] No food items detected.")
+                    return
 
-            print(f"\n[FoodSegmenter] {len(accepted)} food item(s) detected:")
-            header = f"  {'#':<3}  {'type':<12}  {'utensil':<7}  "
-            header += f"{'bbox (x1,y1,x2,y2)':<26}  3D centroid (m, base frame)"
-            print(header)
-            print("  " + "-" * (len(header) - 2))
+                utensil = pick_utensil(len(accepted))
+                overlay = bgr.copy()
+                markers = MarkerArray()
 
-            for i, (mask, score, bbox) in enumerate(accepted):
-                food_type, utensil = classify_food(bgr, mask)
-                x1, y1, x2, y2    = bbox
-                cx_px = (x1 + x2) // 2
-                cy_px = (y1 + y2) // 2
-                xyz   = _pixel_to_base(cx_px, cy_px, depth, self._tf_buffer)
-                color = _PALETTE[i % len(_PALETTE)]
+                print(f"\n[FoodSegmenter] {len(accepted)} food item(s) → use {utensil.upper()}")
+                header = (f"  {'#':<3}  {'type':<12}  "
+                          f"{'bbox (x1,y1,x2,y2)':<26}  3D centroid (m, base frame)")
+                print(header)
+                print("  " + "-" * (len(header) - 2))
 
-                # Overlay: translucent mask + solid border + label
-                coloured = np.zeros_like(bgr)
-                coloured[mask] = color
-                overlay = cv2.addWeighted(overlay, 1.0, coloured, 0.38, 0)
-                cv2.rectangle(overlay, (x1, y1), (x2, y2), color, 2)
-                label   = f"{food_type}  {utensil}"
-                cv2.putText(overlay, label, (x1, max(16, y1 - 6)),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.48, (20, 20, 20), 3)
-                cv2.putText(overlay, label, (x1, max(16, y1 - 6)),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.48, color, 1)
+                for i, (mask, score, bbox) in enumerate(accepted):
+                    food_type = classify_food(bgr, mask)
+                    x1, y1, x2, y2 = bbox
+                    cx_px = (x1 + x2) // 2
+                    cy_px = (y1 + y2) // 2
+                    xyz   = _pixel_to_base(cx_px, cy_px, depth, self._tf_buffer)
+                    color = _PALETTE[i % len(_PALETTE)]
 
-                # RViz marker at 3-D centroid
-                if xyz is not None:
-                    m = Marker()
-                    m.header.frame_id    = BASE_FRAME
-                    m.header.stamp       = self.get_clock().now().to_msg()
-                    m.ns, m.id           = "food_items", i
-                    m.type, m.action     = Marker.SPHERE, Marker.ADD
-                    m.pose.position.x    = float(xyz[0])
-                    m.pose.position.y    = float(xyz[1])
-                    m.pose.position.z    = float(xyz[2])
-                    m.pose.orientation.w = 1.0
-                    m.scale.x = m.scale.y = m.scale.z = 0.04
-                    m.color.r, m.color.g, m.color.b = [c / 255.0 for c in color]
-                    m.color.a = 0.85
-                    m.lifetime.sec = int(self._interval * 2)
-                    markers.markers.append(m)
-                    coord = f"({xyz[0]:+.3f}, {xyz[1]:+.3f}, {xyz[2]:+.3f})"
-                else:
-                    coord = "depth unavailable"
+                    _draw_and_label(bgr, overlay, mask, bbox, food_type, utensil, color)
 
-                print(f"  {i+1:<3}  {food_type:<12}  {utensil:<7}  "
-                      f"({x1:4d},{y1:4d},{x2:4d},{y2:4d})    {coord}")
+                    if xyz is not None:
+                        m = Marker()
+                        m.header.frame_id    = BASE_FRAME
+                        m.header.stamp       = self.get_clock().now().to_msg()
+                        m.ns, m.id           = "food_items", i
+                        m.type, m.action     = Marker.SPHERE, Marker.ADD
+                        m.pose.position.x    = float(xyz[0])
+                        m.pose.position.y    = float(xyz[1])
+                        m.pose.position.z    = float(xyz[2])
+                        m.pose.orientation.w = 1.0
+                        m.scale.x = m.scale.y = m.scale.z = 0.04
+                        m.color.r, m.color.g, m.color.b = [c / 255.0 for c in color]
+                        m.color.a = 0.85
+                        m.lifetime.sec = int(self._interval * 2)
+                        markers.markers.append(m)
+                        coord = f"({xyz[0]:+.3f}, {xyz[1]:+.3f}, {xyz[2]:+.3f})"
+                    else:
+                        coord = "depth unavailable"
 
-            print()
+                    print(f"  {i+1:<3}  {food_type:<12}  "
+                          f"({x1:4d},{y1:4d},{x2:4d},{y2:4d})    {coord}")
 
-            if markers.markers:
-                self._marker_pub.publish(markers)
-            self._overlay_pub.publish(self._bridge.cv2_to_imgmsg(overlay, "bgr8"))
+                print()
+                if markers.markers:
+                    self._marker_pub.publish(markers)
+                self._overlay_pub.publish(self._bridge.cv2_to_imgmsg(overlay, "bgr8"))
 
-        except Exception as e:
-            self.get_logger().error(f"Segmentation run failed: {e}")
-        finally:
-            self._busy = False
+            except Exception as e:
+                self.get_logger().error(f"Segmentation run failed: {e}")
+            finally:
+                self._busy = False
 
 
 def main():
@@ -333,10 +417,20 @@ def main():
     ap.add_argument("--device",   default="cpu",  choices=["cpu", "cuda", "mps"])
     ap.add_argument("--interval", default=3.0,    type=float,
                     help="Seconds between segmentation passes (default 3)")
+    ap.add_argument("--image",    default=None,
+                    help="Path to a single image file — runs without ROS")
     known, ros_args = ap.parse_known_args()
 
+    sam = _load_sam(known.checkpoint, known.device)
+
+    if known.image:
+        _run_on_image(sam, known.image)
+        return
+
+    if not _ROS_AVAILABLE:
+        raise RuntimeError("ROS 2 is not available. Use --image for standalone mode.")
+
     rclpy.init(args=ros_args if ros_args else None)
-    sam  = _load_sam(known.checkpoint, known.device)
     node = FoodSegmenterNode(sam, known.interval)
     try:
         rclpy.spin(node)

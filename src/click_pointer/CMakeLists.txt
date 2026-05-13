@@ -3,9 +3,18 @@ project(click_pointer)
 
 find_package(ament_cmake REQUIRED)
 
-install(PROGRAMS scripts/click_pointer.py
+install(PROGRAMS
+  scripts/click_pointer.py
+  scripts/fork_acquisition.py
   DESTINATION lib/${PROJECT_NAME}
-  RENAME click_pointer
+)
+
+install(FILES
+  scripts/tui.py
+  scripts/face_overlay.py
+  scripts/algo.py
+  scripts/utils.py
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 ament_package()

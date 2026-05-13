@@ -48,6 +48,7 @@ ARM_JOINT_NAMES = [
 ]
 
 CAM_Y_OFFSET = 0.09
+CAM_X_OFFSET = -0.187
 STEP_RADS    = 0.05
 CART_DELTA_X = 0.15
 CART_DELTA_Y = 0.12
@@ -246,7 +247,7 @@ class ClickPointer(Node):
 
         x_cam = (u - CX) * z_raw / FX
         y_cam = (v - CY) * z_raw / FY
-        target_cam = np.array([x_cam, y_cam - CAM_Y_OFFSET, z_raw])
+        target_cam = np.array([x_cam + CAM_X_OFFSET, y_cam - CAM_Y_OFFSET, z_raw])
 
         self.tui.separator()
         self.tui.info(f"Click at pixel ({u}, {v}),  depth = {z_raw*100:.1f} cm")
@@ -267,9 +268,9 @@ class ClickPointer(Node):
         self.tui.coord_block("Target (base-frame):", *target_base, color=TUI.BLU)
 
         self.pending_target_cam = target_cam
+        self.tui.info(f"dx = {target_cam[0]:+.3f} m  dy = {target_cam[1]:+.3f} m")
         self.tui.prompt("Press  Y  to feed   ·   N  to cancel")
 
-    # ── RViz markers ─────────────────────────────────────────────────────────
 
     def publish_marker(self, pt, fid):
         m = Marker()

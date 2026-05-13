@@ -7,8 +7,6 @@ from typing import List, Optional, Tuple
 import cv2
 import numpy as np
 
-<<<<<<< HEAD
-=======
 # ── ChromaRefine (CCMR) — optional novel post-processing ─────────────────────
 _CCMR_ENABLED = False
 
@@ -93,7 +91,6 @@ def _segment_yolo(model, bgr: np.ndarray):
     accepted.sort(key=lambda c: (c[2][1], c[2][0]))
     return accepted
 
->>>>>>> 4ebc471 (food)
 # ROS imports — only needed in live-camera mode
 try:
     import rclpy
@@ -115,11 +112,7 @@ CX, CY = 319.0870, 236.3678
 CAM_FRAME  = "camera_color_optical_frame"
 BASE_FRAME = "j2s6s200_link_base"
 
-<<<<<<< HEAD
 MIN_AREA_RATIO = 0.005   # ignore fragments smaller than 0.5% of image
-=======
-MIN_AREA_RATIO = 0.002   # ignore fragments smaller than 0.2% of image
->>>>>>> 4ebc471 (food)
 MAX_AREA_RATIO = 0.60    # ignore large background regions
 NMS_IOU_THR    = 0.80    # mask IoU threshold for duplicate suppression
 
@@ -353,58 +346,36 @@ def _segment(sam, bgr: np.ndarray):
     return accepted
 
 
-<<<<<<< HEAD
-def _run_on_image(sam, image_path: str):
-=======
 def _run_on_image(model, image_path: str, use_yolo: bool = False):
->>>>>>> 4ebc471 (food)
     """Standalone mode: segment a single image file, no ROS required."""
     bgr = cv2.imread(image_path)
     if bgr is None:
         raise FileNotFoundError(f"Cannot read image: {image_path}")
 
-<<<<<<< HEAD
-    h, w = bgr.shape[:2]
-    print(f"[food_segmenter] Running SAM on {image_path} ({w}x{h})...")
-    t0       = time.monotonic()
-    accepted = _segment(sam, bgr)
-    print(f"[food_segmenter] SAM done ({time.monotonic()-t0:.1f}s) — "
-=======
     h, w    = bgr.shape[:2]
     backend = "YOLO" if use_yolo else "SAM"
     print(f"[food_segmenter] Running {backend} on {image_path} ({w}x{h})...")
     t0       = time.monotonic()
     accepted = _segment_yolo(model, bgr) if use_yolo else _segment(model, bgr)
     print(f"[food_segmenter] {backend} done ({time.monotonic()-t0:.1f}s) — "
->>>>>>> 4ebc471 (food)
           f"{len(accepted)} item(s) after filtering")
 
     if not accepted:
         print("[food_segmenter] No food items detected.")
         return
 
-<<<<<<< HEAD
-    utensil = pick_utensil(len(accepted))
-    overlay = bgr.copy()
-    header  = f"  {'#':<3}  {'type':<12}  {'bbox (x1,y1,x2,y2)':<26}"
-=======
     # Multiple discrete pieces → all solid, use fork.
     # Single mass/blob → texture-classify it, use spoon.
     is_multi  = len(accepted) >= 2
     utensil   = pick_utensil(len(accepted))
     overlay   = bgr.copy()
     header    = f"  {'#':<3}  {'type':<12}  {'bbox (x1,y1,x2,y2)':<26}"
->>>>>>> 4ebc471 (food)
     print(f"\n[food_segmenter] {len(accepted)} food item(s) → use {utensil.upper()}")
     print(header)
     print("  " + "-" * (len(header) - 2))
 
     for i, (mask, score, bbox) in enumerate(accepted):
-<<<<<<< HEAD
-        food_type = classify_food(bgr, mask)
-=======
         food_type = "solid" if is_multi else classify_food(bgr, mask)
->>>>>>> 4ebc471 (food)
         x1, y1, x2, y2 = bbox
         color = _PALETTE[i % len(_PALETTE)]
         _draw_and_label(bgr, overlay, mask, bbox, food_type, utensil, color)
@@ -418,16 +389,10 @@ def _run_on_image(model, image_path: str, use_yolo: bool = False):
 if _ROS_AVAILABLE:
     class FoodSegmenterNode(Node):
 
-<<<<<<< HEAD
-        def __init__(self, sam, interval: float):
-            super().__init__("food_segmenter")
-            self._sam      = sam
-=======
         def __init__(self, model, interval: float, use_yolo: bool = False):
             super().__init__("food_segmenter")
             self._model    = model
             self._use_yolo = use_yolo
->>>>>>> 4ebc471 (food)
             self._interval = interval
 
             self._lock      = threading.Lock()
@@ -473,35 +438,24 @@ if _ROS_AVAILABLE:
         def _run(self, bgr: np.ndarray, depth: np.ndarray):
             try:
                 t_start  = time.monotonic()
-<<<<<<< HEAD
-                accepted = _segment(self._sam, bgr)
-                self.get_logger().info(f"SAM: {len(accepted)} item(s) "
-=======
                 if self._use_yolo:
                     accepted = _segment_yolo(self._model, bgr)
                 else:
                     accepted = _segment(self._model, bgr)
                 backend = "YOLO" if self._use_yolo else "SAM"
                 self.get_logger().info(f"{backend}: {len(accepted)} item(s) "
->>>>>>> 4ebc471 (food)
                                        f"({time.monotonic()-t_start:.1f}s)")
 
                 if not accepted:
                     print("[FoodSegmenter] No food items detected.")
                     return
 
-<<<<<<< HEAD
-                utensil = pick_utensil(len(accepted))
-                overlay = bgr.copy()
-                markers = MarkerArray()
-=======
                 # Multiple discrete pieces → all solid, use fork.
                 # Single mass/blob → texture-classify it, use spoon.
                 is_multi = len(accepted) >= 2
                 utensil  = pick_utensil(len(accepted))
                 overlay  = bgr.copy()
                 markers  = MarkerArray()
->>>>>>> 4ebc471 (food)
 
                 print(f"\n[FoodSegmenter] {len(accepted)} food item(s) → use {utensil.upper()}")
                 header = (f"  {'#':<3}  {'type':<12}  "
@@ -510,11 +464,7 @@ if _ROS_AVAILABLE:
                 print("  " + "-" * (len(header) - 2))
 
                 for i, (mask, score, bbox) in enumerate(accepted):
-<<<<<<< HEAD
-                    food_type = classify_food(bgr, mask)
-=======
                     food_type = "solid" if is_multi else classify_food(bgr, mask)
->>>>>>> 4ebc471 (food)
                     x1, y1, x2, y2 = bbox
                     cx_px = (x1 + x2) // 2
                     cy_px = (y1 + y2) // 2
@@ -557,11 +507,6 @@ if _ROS_AVAILABLE:
 
 
 def main():
-<<<<<<< HEAD
-    ap = argparse.ArgumentParser(description="SAM food segmenter for Kinova feeding task")
-    ap.add_argument("--checkpoint", required=True,
-                    help="SAM checkpoint path (.pt) — SAM2 small or SAM1 vit_b/vit_h")
-=======
     ap = argparse.ArgumentParser(description="SAM / YOLO food segmenter for Kinova feeding task")
     # SAM backend
     ap.add_argument("--checkpoint", default=None,
@@ -570,20 +515,11 @@ def main():
     ap.add_argument("--yolo", default=None,
                     help="Path to trained YOLO segmentation weights (.pt). "
                          "Segments any food class-agnostically, like SAM.")
->>>>>>> 4ebc471 (food)
     ap.add_argument("--device",   default="cpu",  choices=["cpu", "cuda", "mps"])
     ap.add_argument("--interval", default=3.0,    type=float,
                     help="Seconds between segmentation passes (default 3)")
     ap.add_argument("--image",    default=None,
                     help="Path to a single image file — runs without ROS")
-<<<<<<< HEAD
-    known, ros_args = ap.parse_known_args()
-
-    sam = _load_sam(known.checkpoint, known.device)
-
-    if known.image:
-        _run_on_image(sam, known.image)
-=======
     ap.add_argument("--refine",   action="store_true",
                     help="Apply ChromaRefine CCMR post-processing to improve mask boundaries")
     known, ros_args = ap.parse_known_args()
@@ -600,16 +536,11 @@ def main():
 
     if known.image:
         _run_on_image(model, known.image, use_yolo=use_yolo)
->>>>>>> 4ebc471 (food)
         return
 
     if not _ROS_AVAILABLE:
         raise RuntimeError("ROS 2 is not available. Use --image for standalone mode.")
 
-<<<<<<< HEAD
-    rclpy.init(args=ros_args if ros_args else None)
-    node = FoodSegmenterNode(sam, known.interval)
-=======
     if use_yolo:
         # wrap YOLO so FoodSegmenterNode._segment call works transparently
         class _YOLOWrapper:
@@ -624,7 +555,6 @@ def main():
 
     rclpy.init(args=ros_args if ros_args else None)
     node = FoodSegmenterNode(_node_model, known.interval, use_yolo=use_yolo)
->>>>>>> 4ebc471 (food)
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:

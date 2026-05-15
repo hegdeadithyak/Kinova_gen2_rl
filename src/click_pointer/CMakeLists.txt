@@ -6,6 +6,7 @@ find_package(ament_cmake REQUIRED)
 install(PROGRAMS
   scripts/click_pointer.py
   scripts/fork_acquisition.py
+  scripts/click_to_point.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

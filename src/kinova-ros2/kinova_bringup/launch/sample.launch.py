@@ -181,9 +181,9 @@ def _launch_setup(context, *args, **kwargs):
             "WARNING: realsense2_camera not installed. "
             "Install with: sudo apt install ros-humble-realsense2-camera")))
 
-    nodes.append(Node(
-        package="mouth_tracking", executable="mouth_tracker",
-        name="mouth_tracker", output="screen"))
+    # nodes.append(Node(
+    #     package="mouth_tracking", executable="mouth_tracker",
+    #     name="mouth_tracker", output="screen"))
 
     nodes.append(Node(
         package=KINOVA_BRINGUP_PKG, executable="demo_feed_planner",
@@ -194,12 +194,12 @@ def _launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
     declared_arguments = [
-        DeclareLaunchArgument("cam_x",     default_value="0.0779"),
-        DeclareLaunchArgument("cam_y",     default_value="0.0660"),
-        DeclareLaunchArgument("cam_z",     default_value="-0.0587"),
-        DeclareLaunchArgument("cam_roll",  default_value="0.2824"),
-        DeclareLaunchArgument("cam_pitch", default_value="0.1040"),
-        DeclareLaunchArgument("cam_yaw",   default_value="2.7041"),
+        DeclareLaunchArgument("cam_x",     default_value="-0.1048"),
+        DeclareLaunchArgument("cam_y",     default_value="0.0303"),
+        DeclareLaunchArgument("cam_z",     default_value="0.0224"),
+        DeclareLaunchArgument("cam_roll",  default_value="2.9128"),
+        DeclareLaunchArgument("cam_pitch", default_value="-3.0427"),
+        DeclareLaunchArgument("cam_yaw",   default_value="2.0524"),
         DeclareLaunchArgument("use_rviz",  default_value="true"),
     ]
     return LaunchDescription(declared_arguments + [OpaqueFunction(function=_launch_setup)])

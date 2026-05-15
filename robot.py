@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import json
 import math
 import time
 from typing import List, Optional
@@ -318,6 +319,45 @@ class FeedingOrchestrator(Node):
         else:
             self.get_logger().error(f'[{label}] failed, error_code={result.error_code}')
         return ok
+
+    def execute_recorded(self, trajectory_file: str) -> bool:
+        """Replay a trajectory saved by record.py."""
+        try:
+            with open(trajectory_file) as f:
+                waypoints = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            self.get_logger().error(f'[RECORDED] cannot load {trajectory_file}: {e}')
+            return False
+
+        if len(waypoints) < 2:
+            self.get_logger().error('[RECORDED] trajectory has fewer than 2 waypoints')
+            return False
+
+        goal = FollowJointTrajectory.Goal()
+        goal.trajectory.joint_names = JOINT_NAMES
+
+        for i, wp in enumerate(waypoints):
+            pt = JointTrajectoryPoint()
+            pt.positions = list(wp['positions'])
+            t = float(wp['time_s'])
+
+            # finite-difference velocities for smooth inter-waypoint motion
+            velocities = [0.0] * NJ
+            if i + 1 < len(waypoints):
+                nxt = waypoints[i + 1]
+                dt = nxt['time_s'] - wp['time_s']
+                if dt > 1e-6:
+                    for j in range(NJ):
+                        velocities[j] = (nxt['positions'][j] - wp['positions'][j]) / dt
+            pt.velocities = velocities
+
+            pt.time_from_start = Duration(sec=int(t), nanosec=int((t - int(t)) * 1e9))
+            goal.trajectory.points.append(pt)
+
+        dur = waypoints[-1]['time_s']
+        self.get_logger().info(
+            f'[RECORDED] replaying {len(waypoints)} waypoints over {dur:.1f}s')
+        return self._send_and_wait(goal, 'RECORDED')
 
     def move_with_orientation_lock(self, target_rad: List[float], duration_s: float, label: str) -> bool:
         ok = self.move_cartesian_orientation_locked(target_rad, duration_s, label)

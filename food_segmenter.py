@@ -7,90 +7,6 @@ from typing import List, Optional, Tuple
 import cv2
 import numpy as np
 
-# ── ChromaRefine (CCMR) — optional novel post-processing ─────────────────────
-_CCMR_ENABLED = False
-
-def _enable_ccmr():
-    global _CCMR_ENABLED
-    _CCMR_ENABLED = True
-
-def _apply_ccmr_batch(bgr: np.ndarray, candidates: list) -> list:
-    """
-    Refine all candidate masks together so CCMR never expands one mask
-    into territory already owned by another (prevents bleed between
-    adjacent same-coloured items like two touching idlis).
-    """
-    if not _CCMR_ENABLED or not candidates:
-        return candidates
-    try:
-        import sys, pathlib
-        sys.path.insert(0, str(pathlib.Path(__file__).parent.parent.parent /
-                               "Downloads" / "coco_food"))
-        from chromarefine import ccmr_batch
-        masks   = [c[0] for c in candidates]
-        refined = ccmr_batch(bgr, masks)
-        return [(refined[i], candidates[i][1], candidates[i][2])
-                for i in range(len(candidates))]
-    except Exception:
-        return candidates
-
-# ── YOLO backend (optional — used when --yolo is passed instead of --checkpoint) ──
-def _load_yolo(weights_path: str, device: str = "cpu"):
-    from ultralytics import YOLO
-    model = YOLO(weights_path)
-    model.to(device)
-    print(f"[food_segmenter] YOLO loaded: {weights_path} on {device}")
-    return model
-
-
-def _segment_yolo(model, bgr: np.ndarray):
-    """
-    Run the YOLO segmentation model and return candidates in the same format
-    as _segment() (SAM backend): list of (mask, score, bbox) tuples.
-
-    The model is trained with a single 'food' class, so it is class-agnostic —
-    it segments any food region regardless of what it is, just like SAM.
-    """
-    h, w     = bgr.shape[:2]
-    img_area = h * w
-
-    results = model(bgr, verbose=False, conf=0.15, iou=0.4)[0]
-    if results.masks is None:
-        return []
-
-    candidates: List[Tuple[np.ndarray, float, Tuple]] = []
-    masks_data = results.masks.data.cpu().numpy()   # (N, H', W')
-    boxes_data = results.boxes
-
-    for i in range(len(masks_data)):
-        # Bilinear upsample then threshold — smoother boundaries than INTER_NEAREST
-        mask_small = masks_data[i]
-        mask_f = cv2.resize(mask_small, (w, h), interpolation=cv2.INTER_LINEAR)
-        mask   = mask_f > 0.5
-
-        ratio = float(mask.sum()) / img_area
-        if not (MIN_AREA_RATIO <= ratio <= MAX_AREA_RATIO):
-            continue
-        if _is_background(mask):
-            continue
-
-        score = float(boxes_data.conf[i].item()) if boxes_data is not None else 0.8
-        bbox  = _mask_bbox(mask)
-        if bbox is None:
-            continue
-        candidates.append((mask, score, bbox))
-
-    if not candidates:
-        return []
-
-    kept     = _nms([(m, s) for m, s, _ in candidates], NMS_IOU_THR)
-    accepted = [candidates[i] for i in kept]
-    accepted = _filter_containers(accepted)
-    # CCMR: refine all masks together — each mask blocked from bleeding into neighbours
-    accepted = _apply_ccmr_batch(bgr, accepted)
-    accepted.sort(key=lambda c: (c[2][1], c[2][0]))
-    return accepted
-
 # ROS imports — only needed in live-camera mode
 try:
     import rclpy
@@ -99,7 +15,9 @@ try:
     from rclpy.node import Node
     from rclpy.time import Time
     from sensor_msgs.msg import Image
+    from std_msgs.msg import Int32MultiArray
     from tf2_ros import Buffer, TransformListener
+    from geometry_msgs.msg import Point
     from visualization_msgs.msg import Marker, MarkerArray
     _ROS_AVAILABLE = True
 except ImportError:
@@ -112,9 +30,14 @@ CX, CY = 319.0870, 236.3678
 CAM_FRAME  = "camera_color_optical_frame"
 BASE_FRAME = "j2s6s200_link_base"
 
-MIN_AREA_RATIO = 0.005   # ignore fragments smaller than 0.5% of image
-MAX_AREA_RATIO = 0.60    # ignore large background regions
-NMS_IOU_THR    = 0.80    # mask IoU threshold for duplicate suppression
+# Camera is ~30 cm above the bowl.  At that height the frame covers ~32×24 cm.
+# A 15 cm bowl takes up ~23 % of the image; individual food items top out at ~10 %.
+MIN_AREA_RATIO  = 0.008   # < 0.8 % → noise / crumbs, skip
+MAX_AREA_RATIO  = 0.30    # > 30 % → bowl / tray / background, skip
+NMS_IOU_THR     = 0.80    # mask IoU threshold for duplicate suppression
+# Central crop fraction: 0.70 → 448×336 px window (≈22×17 cm at 30 cm height)
+# — wide enough for a 15 cm bowl with ~3 cm margin on each side.
+BOWL_CROP_FRAC  = 0.70
 
 # BGR colours for each detected food item in the overlay
 _PALETTE = [
@@ -122,6 +45,28 @@ _PALETTE = [
     (255, 0, 255), (0, 255, 255), (128, 255, 0),
     (0, 200, 255), (200, 0, 255),
 ]
+
+
+def _crop_roi(bgr: np.ndarray) -> Tuple[np.ndarray, int, int]:
+    """Return (cropped_img, x_offset, y_offset) for the central bowl region."""
+    h, w  = bgr.shape[:2]
+    ch, cw = int(h * BOWL_CROP_FRAC), int(w * BOWL_CROP_FRAC)
+    x0, y0 = (w - cw) // 2, (h - ch) // 2
+    return bgr[y0:y0 + ch, x0:x0 + cw], x0, y0
+
+
+def _remap_to_full(candidates: list, x_off: int, y_off: int,
+                   full_h: int, full_w: int) -> list:
+    """Expand cropped-frame masks and bboxes back to the original image frame."""
+    out = []
+    for mask, score, bbox in candidates:
+        full_mask = np.zeros((full_h, full_w), dtype=bool)
+        mh, mw = mask.shape
+        full_mask[y_off:y_off + mh, x_off:x_off + mw] = mask
+        x1, y1, x2, y2 = bbox
+        out.append((full_mask, score,
+                    (x1 + x_off, y1 + y_off, x2 + x_off, y2 + y_off)))
+    return out
 
 
 def _load_sam(checkpoint: str, device: str = "cpu"):
@@ -352,12 +297,11 @@ def _run_on_image(model, image_path: str, use_yolo: bool = False):
     if bgr is None:
         raise FileNotFoundError(f"Cannot read image: {image_path}")
 
-    h, w    = bgr.shape[:2]
-    backend = "YOLO" if use_yolo else "SAM"
-    print(f"[food_segmenter] Running {backend} on {image_path} ({w}x{h})...")
+    h, w = bgr.shape[:2]
+    print(f"[food_segmenter] Running SAM on {image_path} ({w}x{h})...")
     t0       = time.monotonic()
-    accepted = _segment_yolo(model, bgr) if use_yolo else _segment(model, bgr)
-    print(f"[food_segmenter] {backend} done ({time.monotonic()-t0:.1f}s) — "
+    accepted = _segment(sam, bgr)
+    print(f"[food_segmenter] SAM done ({time.monotonic()-t0:.1f}s) — "
           f"{len(accepted)} item(s) after filtering")
 
     if not accepted:
@@ -411,6 +355,8 @@ if _ROS_AVAILABLE:
 
             self._marker_pub  = self.create_publisher(MarkerArray, "/food_segmenter/markers", 10)
             self._overlay_pub = self.create_publisher(Image, "/food_segmenter/overlay", 2)
+            self._fork_pub    = self.create_publisher(Int32MultiArray, "/fork_acquisition/bbox", 1)
+            self._xyz_pub     = self.create_publisher(Point, "/fork_acquisition/target_xyz", 1)
 
             self.create_timer(interval, self._tick)
             self.get_logger().info(f"FoodSegmenter ready — running every {interval:.0f}s")
@@ -438,24 +384,29 @@ if _ROS_AVAILABLE:
         def _run(self, bgr: np.ndarray, depth: np.ndarray):
             try:
                 t_start  = time.monotonic()
-                if self._use_yolo:
-                    accepted = _segment_yolo(self._model, bgr)
-                else:
-                    accepted = _segment(self._model, bgr)
-                backend = "YOLO" if self._use_yolo else "SAM"
-                self.get_logger().info(f"{backend}: {len(accepted)} item(s) "
+                accepted = _segment(self._sam, bgr)
+                self.get_logger().info(f"SAM: {len(accepted)} item(s) "
                                        f"({time.monotonic()-t_start:.1f}s)")
+
+                overlay  = bgr.copy()
+                markers  = MarkerArray()
+
+                # Always draw the crop ROI boundary so rqt shows camera is live
+                fh, fw = bgr.shape[:2]
+                ch, cw = int(fh * BOWL_CROP_FRAC), int(fw * BOWL_CROP_FRAC)
+                rx, ry = (fw - cw) // 2, (fh - ch) // 2
+                cv2.rectangle(overlay, (rx, ry), (rx + cw, ry + ch), (200, 200, 0), 2)
+                cv2.putText(overlay, "bowl ROI", (rx + 4, ry + 18),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 0), 1)
 
                 if not accepted:
                     print("[FoodSegmenter] No food items detected.")
+                    self._overlay_pub.publish(self._bridge.cv2_to_imgmsg(overlay, "bgr8"))
                     return
 
-                # Multiple discrete pieces → all solid, use fork.
-                # Single mass/blob → texture-classify it, use spoon.
-                is_multi = len(accepted) >= 2
-                utensil  = pick_utensil(len(accepted))
-                overlay  = bgr.copy()
-                markers  = MarkerArray()
+                utensil = pick_utensil(len(accepted))
+                overlay = bgr.copy()
+                markers = MarkerArray()
 
                 print(f"\n[FoodSegmenter] {len(accepted)} food item(s) → use {utensil.upper()}")
                 header = (f"  {'#':<3}  {'type':<12}  "
@@ -463,12 +414,15 @@ if _ROS_AVAILABLE:
                 print(header)
                 print("  " + "-" * (len(header) - 2))
 
+                xyz_first = None
                 for i, (mask, score, bbox) in enumerate(accepted):
                     food_type = "solid" if is_multi else classify_food(bgr, mask)
                     x1, y1, x2, y2 = bbox
                     cx_px = (x1 + x2) // 2
                     cy_px = (y1 + y2) // 2
                     xyz   = _pixel_to_base(cx_px, cy_px, depth, self._tf_buffer)
+                    if i == 0:
+                        xyz_first = xyz
                     color = _PALETTE[i % len(_PALETTE)]
 
                     _draw_and_label(bgr, overlay, mask, bbox, food_type, utensil, color)
@@ -500,6 +454,22 @@ if _ROS_AVAILABLE:
                     self._marker_pub.publish(markers)
                 self._overlay_pub.publish(self._bridge.cv2_to_imgmsg(overlay, "bgr8"))
 
+                # Send the first (top-leftmost) food item to fork_acquisition.
+                x1, y1, x2, y2 = accepted[0][2]
+                bbox_msg = Int32MultiArray()
+                bbox_msg.data = [x1, y1, x2, y2]
+                self._fork_pub.publish(bbox_msg)
+                self.get_logger().info(
+                    f"→ /fork_acquisition/bbox  [{x1},{y1},{x2},{y2}]")
+
+                if xyz_first is not None:
+                    pt = Point()
+                    pt.x, pt.y, pt.z = float(xyz_first[0]), float(xyz_first[1]), float(xyz_first[2])
+                    self._xyz_pub.publish(pt)
+                    self.get_logger().info(
+                        f"→ /fork_acquisition/target_xyz  "
+                        f"({xyz_first[0]:+.3f}, {xyz_first[1]:+.3f}, {xyz_first[2]:+.3f}) m")
+
             except Exception as e:
                 self.get_logger().error(f"Segmentation run failed: {e}")
             finally:
@@ -511,10 +481,6 @@ def main():
     # SAM backend
     ap.add_argument("--checkpoint", default=None,
                     help="SAM checkpoint path (.pt) — SAM2 small or SAM1 vit_b/vit_h")
-    # YOLO backend (class-agnostic food segmenter, no class labels required)
-    ap.add_argument("--yolo", default=None,
-                    help="Path to trained YOLO segmentation weights (.pt). "
-                         "Segments any food class-agnostically, like SAM.")
     ap.add_argument("--device",   default="cpu",  choices=["cpu", "cuda", "mps"])
     ap.add_argument("--interval", default=3.0,    type=float,
                     help="Seconds between segmentation passes (default 3)")

@@ -321,7 +321,7 @@ class EyeWaveWorker(QThread):
             min_tracking_confidence=0.5)
         detector = mp_vision.FaceLandmarker.create_from_options(options)
 
-        cam_idx = 8
+        cam_idx = 1
         if cam_idx is None:
             self.error_occurred.emit("No usable camera found. Try --cam <index>.")
             return
@@ -519,16 +519,13 @@ class AegisUI(QMainWindow):
 
     def _on_command(self, cmd):
         if cmd == "Start Feeding":
+            # Always confirm click_pointer if it's running standalone
+            self.ros_node.confirm()
+            self.lbl_pipeline.setText("PIPELINE: CONFIRMED → FEEDING")
+            self.lbl_pipeline.setStyleSheet(f"color: {C_SUCCESS};")
             if not self._feeding_active:
                 self._feeding_active = True
-                self.lbl_pipeline.setText("PIPELINE: STARTING")
-                self.lbl_pipeline.setStyleSheet(f"color: {C_WARN};")
                 threading.Thread(target=self._run_feed_pipeline, daemon=True).start()
-            else:
-                # Already in feeding mode — eye gesture acts as "Y" confirmation
-                self.ros_node.confirm()
-                self.lbl_pipeline.setText("PIPELINE: CONFIRMED → FEEDING")
-                self.lbl_pipeline.setStyleSheet(f"color: {C_SUCCESS};")
         elif cmd == "Stop Feeding":
             self.ros_node.cancel()
             self._stop_pipeline()
@@ -609,7 +606,7 @@ class AegisUI(QMainWindow):
 def main():
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--cam", type=int, default=3, help="DroidCam video device index")
+    parser.add_argument("--cam", type=int, default=0, help="DroidCam video device index")
     args = parser.parse_args()
 
     rclpy.init()

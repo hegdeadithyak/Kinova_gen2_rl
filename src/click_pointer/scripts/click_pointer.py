@@ -17,6 +17,7 @@ from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import ReentrantCallbackGroup
 
 from sensor_msgs.msg import Image, JointState
+from std_msgs.msg import Bool
 from visualization_msgs.msg import Marker
 from cv_bridge import CvBridge
 from tf2_ros import Buffer, TransformListener
@@ -47,11 +48,12 @@ ARM_JOINT_NAMES = [
     "j2s6s200_joint_4", "j2s6s200_joint_5", "j2s6s200_joint_6",
 ]
 
-CAM_Y_OFFSET = 0.09
-CAM_X_OFFSET = -0.187
+CAM_Y_OFFSET = -0.1
+CAM_X_OFFSET = -0.24
+CAM_Z_OFFSET = -0.15
 STEP_RADS    = 0.05
-CART_DELTA_X = 0.15
-CART_DELTA_Y = 0.12
+CART_DELTA_X = 0.08
+CART_DELTA_Y = 0.07
 CART_DELTA_Z = 0.06
 TICK_DUR_S   = 0.6
 ERR_TOL_M    = 0.05
@@ -153,6 +155,9 @@ class ClickPointer(Node):
         self.tui.info("Waiting for trajectory controller ...")
         if not self._traj_client.wait_for_server(timeout_sec=30.0):
             raise RuntimeError("Timed out waiting for trajectory action server")
+
+        self.create_subscription(Bool, '/eye_confirm', self._eye_cb, 10,
+                                 callback_group=self.cb_group)
         self.tui.ready_prompt()
 
     # ── Subscribers ───────────────────────────────────────────────────────────
@@ -224,6 +229,17 @@ class ClickPointer(Node):
         self.pending_target_cam = None
         threading.Thread(target=self.move_to_point_cam, args=(tgt,), daemon=True).start()
 
+    def _eye_cb(self, msg: Bool):
+        if msg.data:
+            threading.Thread(target=self._eye_confirm_sequence, daemon=True).start()
+        else:
+            self.cancel_feed()
+
+    def _eye_confirm_sequence(self):
+        if self.pending_target_cam is None and not self.busy:
+            self.on_space()
+        self.confirm_feed()
+
     def cancel_feed(self):
         if self.pending_target_cam is not None:
             self.pending_target_cam = None
@@ -247,7 +263,7 @@ class ClickPointer(Node):
 
         x_cam = (u - CX) * z_raw / FX
         y_cam = (v - CY) * z_raw / FY
-        target_cam = np.array([x_cam + CAM_X_OFFSET, y_cam - CAM_Y_OFFSET, z_raw])
+        target_cam = np.array([x_cam + CAM_X_OFFSET, y_cam - CAM_Y_OFFSET, z_raw + CAM_Z_OFFSET])
 
         self.tui.separator()
         self.tui.info(f"Click at pixel ({u}, {v}),  depth = {z_raw*100:.1f} cm")

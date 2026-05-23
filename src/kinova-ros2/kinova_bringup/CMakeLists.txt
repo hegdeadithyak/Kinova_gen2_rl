@@ -154,6 +154,11 @@ install(PROGRAMS scripts/demo_feed_planner.py
   RENAME demo_feed_planner
 )
 
+install(PROGRAMS scripts/aruco_tf_publisher.py
+  DESTINATION lib/${PROJECT_NAME}
+  RENAME aruco_tf_publisher.py
+)
+
 install(DIRECTORY moveit_resource
   DESTINATION share/${PROJECT_NAME}
 )

@@ -179,8 +179,8 @@ Visualization Manager:
       eef: j2s6s200_end_effector
       base: root
       # --- Target tab ---
-      target_type: HandEyeTarget/Charuco
-      image_topic: /camera/color/image_raw
+      target_type: HandEyeTarget/ArUco
+      image_topic: /camera/camera/color/image_raw
       squares, X: 5
       squares, Y: 7
       marker size (px): 50
@@ -188,8 +188,8 @@ Visualization Manager:
       margin size (px): 2
       marker border (bits): 1
       ArUco dictionary: DICT_5X5_250
-      longest board side (m): 0.2
-      measured marker size (m): 0.025
+      longest board side (m): 0.2562
+      measured marker size (m): 0.0594
       # --- Control tab ---
       solver: Daniilidis1998
       group: arm

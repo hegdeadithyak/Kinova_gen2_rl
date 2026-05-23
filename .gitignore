@@ -1,3 +1,5 @@
 build/
 install/
-log/
+log/*.pt
+*.pth
+*.pt

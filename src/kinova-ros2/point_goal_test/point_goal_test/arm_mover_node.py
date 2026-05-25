@@ -136,13 +136,19 @@ class ArmMoverNode(Node):
 
 
 def main():
-    rclpy.init(args=sys.argv)
-    node = ArmMoverNode()
-    executor = rclpy.executors.MultiThreadedExecutor(num_threads=4)
-    executor.add_node(node)
     try:
-        executor.spin()
-    except KeyboardInterrupt:
-        pass
-    node.destroy_node()
-    rclpy.shutdown()
+        rclpy.init(args=sys.argv)
+        node = ArmMoverNode()
+        node.get_logger().info('ArmMoverNode initialized')
+        executor = rclpy.executors.MultiThreadedExecutor(num_threads=4)
+        executor.add_node(node)
+        try:
+            executor.spin()
+        except KeyboardInterrupt:
+            pass
+        node.destroy_node()
+        rclpy.shutdown()
+    except Exception as e:
+        print(f'Critical failure in arm_mover_node: {e}')
+        import traceback
+        traceback.print_exc()

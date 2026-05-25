@@ -247,6 +247,7 @@ void sendFingerGoal(const visualization_msgs::msg::InteractiveMarkerFeedback::Co
 
 void result_callback(const rclcpp_action::ClientGoalHandle<kinova_msgs::action::ArmPose>::WrappedResult & result)
 {
+    (void)result;
     is_client_active = false;
     RCLCPP_INFO(nh->get_logger(), "waiting for new action");
     return;
@@ -379,7 +380,7 @@ void processFeedback( const visualization_msgs::msg::InteractiveMarkerFeedback::
 
     case visualization_msgs::msg::InteractiveMarkerFeedback::MOUSE_DOWN:
         // the moment mouse is clicked down, not the moment keeps down.
-        if(mouse_was_up=true)
+        if(mouse_was_up)
         {
             quaternion_mousedown = tf2::Quaternion(feedback->pose.orientation.x, feedback->pose.orientation.y, feedback->pose.orientation.z, feedback->pose.orientation.w);
             tf2::Matrix3x3(quaternion_mousedown).getRPY(roll_mousedown, pitch_mousedown, yaw_mousedown);

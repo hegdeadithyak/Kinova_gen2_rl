@@ -78,25 +78,6 @@ GripperCommandActionController::~GripperCommandActionController()
 }
 
 
-static bool setsEqual(const std::vector<std::string> &a, const std::vector<std::string> &b)
-{
-    if (a.size() != b.size())
-        return false;
-
-    for (size_t i = 0; i < a.size(); ++i)
-    {
-        if (count(b.begin(), b.end(), a[i]) != 1)
-            return false;
-    }
-    for (size_t i = 0; i < b.size(); ++i)
-    {
-        if (count(a.begin(), a.end(), b[i]) != 1)
-            return false;
-    }
-
-    return true;
-}
-
 rclcpp_action::GoalResponse GripperCommandActionController::handle_goal(const rclcpp_action::GoalUUID &uuid, std::shared_ptr<const GCAS::Goal>goal)
 {
     RCLCPP_INFO(nh_->get_logger(), "Received goal request");

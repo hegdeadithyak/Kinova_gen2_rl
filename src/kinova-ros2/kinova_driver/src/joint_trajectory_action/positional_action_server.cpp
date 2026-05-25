@@ -137,26 +137,6 @@ PositionalActionController::~PositionalActionController()
 }
 
 
-static bool setsEqual(const std::vector<std::string> &a, const std::vector<std::string> &b)
-{
-    if (a.size() != b.size())
-        return false;
-
-    for (size_t i = 0; i < a.size(); ++i)
-    {
-        if (count(b.begin(), b.end(), a[i]) != 1)
-            return false;
-    }
-    for (size_t i = 0; i < b.size(); ++i)
-    {
-        if (count(a.begin(), a.end(), b[i]) != 1)
-            return false;
-    }
-
-    return true;
-}
-
-
 void PositionalActionController::watchdog()
 {
     rclcpp::Time now = nh_->get_clock()->now();

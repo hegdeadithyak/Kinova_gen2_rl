@@ -44,10 +44,16 @@ install(PROGRAMS point_goal_test/point_selector_node.py
 install(PROGRAMS point_goal_test/arm_mover_node.py
   RENAME arm_mover_node
   DESTINATION lib/${PROJECT_NAME})
+install(PROGRAMS point_goal_test/test_scoop_gazebo.py
+  RENAME test_scoop_gazebo
+  DESTINATION lib/${PROJECT_NAME})
+install(PROGRAMS point_goal_test/gazebo_teleop.py
+  RENAME gazebo_teleop
+  DESTINATION lib/${PROJECT_NAME})
 
 # ---- shared resources ----
-install(DIRECTORY launch/
-  DESTINATION share/${PROJECT_NAME}/launch)
+install(DIRECTORY launch config worlds
+  DESTINATION share/${PROJECT_NAME})
 install(FILES resource/${PROJECT_NAME}
   DESTINATION share/ament_index/resource_index/packages)
 install(FILES package.xml

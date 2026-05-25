@@ -17,14 +17,16 @@ import tf2_geometry_msgs  # noqa: F401
 class PointSelectorNode(Node):
     def __init__(self):
         super().__init__('point_selector_node')
+        self.get_logger().info('Initializing PointSelectorNode...')
         self._bridge = CvBridge()
         self._K = None
         self._color_frame = None
         self._depth_frame = None
         self._clicked_px = None
+        self._gui_enabled = True
 
-        self.declare_parameter('cam_offset_x', 0.0)  # + = camera right, - = camera left
-        self.declare_parameter('cam_offset_y', 0.0)  # + = camera down,  - = camera up
+        self.declare_parameter('cam_offset_x', 0.0)
+        self.declare_parameter('cam_offset_y', 0.0)
 
         self._tf_buffer = tf2_ros.Buffer()
         self._tf_listener = tf2_ros.TransformListener(self._tf_buffer, self)
@@ -39,10 +41,16 @@ class PointSelectorNode(Node):
 
         self._tf_ready = False
 
-        cv2.namedWindow('PointSelector', cv2.WINDOW_NORMAL)
-        cv2.setMouseCallback('PointSelector', self._mouse_cb)
+        try:
+            cv2.namedWindow('PointSelector', cv2.WINDOW_NORMAL)
+            cv2.setMouseCallback('PointSelector', self._mouse_cb)
+            self.get_logger().info('GUI initialized successfully')
+        except Exception as e:
+            self.get_logger().warn(f'Could not initialize GUI (OpenCV): {e}. Running in headless mode.')
+            self._gui_enabled = False
+
         self.create_timer(1.0, self._check_tf)
-        self.get_logger().info('PointSelector started — waiting for TF tree...')
+        self.get_logger().info('PointSelector ready — waiting for TF tree...')
 
     def _check_tf(self):
         if self._tf_ready:
@@ -71,6 +79,7 @@ class PointSelectorNode(Node):
         try:
             self._depth_frame = self._bridge.imgmsg_to_cv2(
                 msg, desired_encoding='passthrough')
+            self._depth_encoding = msg.encoding
         except Exception as e:
             self.get_logger().error(f'Depth decode error: {e}')
 
@@ -87,11 +96,20 @@ class PointSelectorNode(Node):
             self.get_logger().warn('No depth frame yet')
             return
 
-        raw = int(self._depth_frame[v, u])
-        depth_m = raw / 1000.0
+        # Handle different depth encodings (Hardware: 16UC1 in mm, Sim: 32FC1 in m)
+        raw_val = self._depth_frame[v, u]
+        if self._depth_encoding == '16UC1':
+            depth_m = float(raw_val) / 1000.0
+        elif self._depth_encoding == '32FC1':
+            depth_m = float(raw_val)
+        else:
+            # Fallback/Guess
+            depth_m = float(raw_val)
+            if depth_m > 10.0: # Likely mm
+                depth_m /= 1000.0
 
-        if raw == 0 or depth_m > 2.0:
-            print(f'Pixel ({u},{v}) depth={depth_m:.3f}m — skipped (invalid)')
+        if depth_m < 0.1 or depth_m > 5.0:
+            print(f'Pixel ({u},{v}) depth={depth_m:.3f}m — skipped (invalid/out of range)')
             return
 
         fx, fy = self._K[0, 0], self._K[1, 1]
@@ -123,6 +141,9 @@ class PointSelectorNode(Node):
         self._clicked_px = (u, v)
 
     def display_once(self):
+        if not self._gui_enabled:
+            return -1
+        
         if self._color_frame is None:
             blank = np.zeros((480, 640, 3), dtype=np.uint8)
             cv2.putText(blank, 'Waiting for camera...', (50, 240),
@@ -138,16 +159,28 @@ class PointSelectorNode(Node):
 
 
 def main():
-    rclpy.init(args=sys.argv)
-    node = PointSelectorNode()
+    print("PointSelectorNode process starting...", flush=True)
     try:
+        rclpy.init(args=sys.argv)
+        node = PointSelectorNode()
+        node.get_logger().info('PointSelectorNode main loop starting')
+        
         while rclpy.ok():
-            rclpy.spin_once(node, timeout_sec=0.01)
-            key = node.display_once()
-            if key == 27:  # ESC to quit
-                break
-    except KeyboardInterrupt:
-        pass
-    cv2.destroyAllWindows()
-    node.destroy_node()
-    rclpy.shutdown()
+            rclpy.spin_once(node, timeout_sec=0.1)
+            try:
+                key = node.display_once()
+                if key == 27:  # ESC to quit
+                    node.get_logger().info('ESC pressed, exiting...')
+                    break
+            except Exception as e:
+                node.get_logger().error(f'Display error: {e}')
+                # Don't break here, just disable GUI and continue
+                node._gui_enabled = False
+                
+        node.destroy_node()
+        rclpy.shutdown()
+    except Exception as e:
+        print(f'Critical failure in point_selector_node: {e}', flush=True)
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)

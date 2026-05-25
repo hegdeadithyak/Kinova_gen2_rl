@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kinova Gen2 ROS 2 Port Documentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pt-orange: #EE4C2C;
+            --pt-dark: #1F1F1F;
+            --pt-sidebar: #F8F9FA;
+            --pt-border: #E5E7EB;
+            --pt-text: #333333;
+            --pt-code-bg: #282C34;
+            --pt-code-text: #ABB2BF;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--pt-text);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background-color: var(--pt-sidebar);
+            border-right: 1px solid var(--pt-border);
+            height: 100%;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--pt-dark);
+            border-bottom: 1px solid var(--pt-border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-header .dot {
+            width: 12px;
+            height: 12px;
+            background-color: var(--pt-orange);
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li {
+            border-bottom: 1px solid var(--pt-border);
+        }
+
+        .nav-links a {
+            display: block;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: var(--pt-text);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: #EFEFEF;
+            color: var(--pt-orange);
+            border-left: 4px solid var(--pt-orange);
+            padding-left: 16px;
+        }
+
+        /* Content Styles */
+        .content-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            background-color: #FFFFFF;
+            scroll-behavior: smooth;
+        }
+
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        h1 { font-size: 2.5rem; color: var(--pt-dark); margin-bottom: 10px; }
+        h2 { font-size: 1.8rem; color: var(--pt-dark); margin-top: 40px; border-bottom: 1px solid var(--pt-border); padding-bottom: 10px;}
+        h3 { font-size: 1.3rem; color: var(--pt-dark); margin-top: 30px; }
+        p { line-height: 1.6; font-size: 1.05rem; color: #4b5563; }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: #E8F0FE;
+            color: #1A73E8;
+            margin-bottom: 20px;
+        }
+
+        /* Callout boxes */
+        .callout {
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+            border-left: 4px solid;
+        }
+        
+        .callout-error {
+            background-color: #FEF2F2;
+            border-left-color: #EF4444;
+        }
+        .callout-error h4 { color: #991B1B; margin-top: 0; }
+
+        .callout-solution {
+            background-color: #ECFDF5;
+            border-left-color: #10B981;
+        }
+        .callout-solution h4 { color: #065F46; margin-top: 0; }
+
+        /* Code Styles */
+        pre {
+            background-color: var(--pt-code-bg);
+            color: var(--pt-code-text);
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        code {
+            font-family: 'Fira Code', 'Courier New', Courier, monospace;
+            background-color: #F3F4F6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #E11D48;
+            font-size: 0.9em;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="dot"></div>
+            Kinova ROS 2 Port
+        </div>
+        <ul class="nav-links">
+            <li><a href="#overview" class="active">Overview</a></li>
+            <li><a href="#build-errors">Build Errors & Missing Files</a></li>
+            <li><a href="#gazebo-issues">Gazebo Simulation Issues</a></li>
+            <li><a href="#moveit-issues">MoveIt 2 & Planning</a></li>
+            <li><a href="#runtime-stability">Runtime Stability & Hangs</a></li>
+            <li><a href="#legacy-code">Legacy C++ Warnings & Bugs</a></li>
+        </ul>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="content">
+            <span class="badge">Knowledge Transfer Document</span>
+            <h1 id="overview">Kinova Gen2 ROS 2 Port</h1>
+            <p>
+                This document serves as a knowledge transfer artifact detailing the migration of the <code>kinova-ros</code> package (originally written for ROS 1) to ROS 2 (Humble). 
+                Porting legacy robotics drivers and simulation environments involves bridging gaps between old build systems (catkin to ament), updated physics engines (Gazebo Classic to Ignition/Gazebo), and entirely rewritten motion planning frameworks (MoveIt to MoveIt 2).
+            </p>
+            <p>
+                Below is a comprehensive guide to the specific errors encountered during this port, the underlying mistakes that caused them, and the implemented solutions. This format mimics the standard PyTorch documentation to provide a clean, highly readable reference.
+            </p>
+
+            <!-- SECTION 1 -->
+            <h2 id="build-errors">1. Build Errors & Missing Files</h2>
+            
+            <h3>1.1 Missing Vendor Binary Blobs (<code>.so</code> files)</h3>
+            <div class="callout callout-error">
+                <h4>Error Output</h4>
+                <pre>CMake Error at cmake_install.cmake:46 (file):
+file INSTALL cannot find
+"/home/user/workspace/src/kinova-ros2/kinova_driver/lib/x86_64-linux-gnu/USBCommLayerUbuntu.so":
+No such file or directory.</pre>
+            </div>
+            <p><strong>The Mistake:</strong> The Kinova ROS 1 driver relies on proprietary, pre-compiled C++ binaries provided by Kinova (e.g., <code>USBCommLayerUbuntu.so</code>). When transferring the source code to a new ROS 2 workspace, these binary folders (<code>i386-linux-gnu</code> and <code>x86_64-linux-gnu</code>) were not tracked by git or were accidentally omitted from the <code>lib</code> folder.</p>
+            <div class="callout callout-solution">
+                <h4>The Solution</h4>
+                <p>Locate the original binary blobs from the vendor SDK or the old ROS 1 workspace and copy them into the correct directory structure before building.</p>
+                <pre>cp -r /old_workspace/src/kinova-ros/kinova_driver/lib/* src/kinova-ros2/kinova_driver/lib/</pre>
+                <p>Ensure <code>CMakeLists.txt</code> uses the <code>install(FILES ...)</code> directive to copy these into the ROS 2 <code>install/lib</code> directory.</p>
+            </div>
+
+
+            <!-- SECTION 2 -->
+            <h2 id="gazebo-issues">2. Gazebo Simulation Issues</h2>
+
+            <h3>2.1 Meshes Failing to Load in Gazebo (Invisible Robot)</h3>
+            <div class="callout callout-error">
+                <h4>Error Output</h4>
+                <pre>[GUI] [Err] [SystemPaths.cc:474] Could not resolve file [model://kinova_description/meshes/wrist_spherical_1.STL]
+[GUI] [Err] [SceneManager.cc:404] Failed to load geometry for visual</pre>
+            </div>
+            <p><strong>The Mistake:</strong> In ROS 1 + Gazebo Classic, the <code>package://</code> or <code>model://</code> URIs resolved magically via the <code>ROS_PACKAGE_PATH</code>. In ROS 2 + Ignition/New Gazebo, the physics engine operates independently of ROS packages unless explicitly told where to look. The launch files did not export the correct resource paths.</p>
+            <div class="callout callout-solution">
+                <h4>The Solution</h4>
+                <p>Pass the explicit ROS 2 <code>share</code> directory paths to Gazebo using environment variables within the Python Launch file. Both <code>IGN_GAZEBO_RESOURCE_PATH</code> and <code>GZ_SIM_RESOURCE_PATH</code> must be set.</p>
+                <pre><code class="language-python">pkg_share_path = os.path.dirname(get_package_share_directory('kinova_description'))
+gazebo = ExecuteProcess(
+    cmd=['ign', 'gazebo', '-r', world_file],
+    additional_env={
+        'IGN_GAZEBO_RESOURCE_PATH': pkg_share_path + ':/opt/ros/humble/share',
+        'GZ_SIM_RESOURCE_PATH': pkg_share_path + ':/opt/ros/humble/share',
+    }
+)</code></pre>
+            </div>
+
+            <h3>2.2 Controller Manager Fails to Start</h3>
+            <div class="callout callout-error">
+                <h4>Error Output</h4>
+                <pre>[spawner] [WARN]: Could not contact service /controller_manager/list_controllers
+[spawner] [INFO]: waiting for service /controller_manager/list_controllers to become available...</pre>
+            </div>
+            <p><strong>The Mistake:</strong> This happens when the <code>ros_gz_sim</code> spawner node attempts to inject the URDF into the simulation, but it spawns the robot into the wrong "world" internally, or the URDF lacks the <code>gz_ros2_control</code> plugin. If the robot isn't spawned, the simulated controller manager is never instantiated.</p>
+            <div class="callout callout-solution">
+                <h4>The Solution</h4>
+                <p>Add the <code>-world</code> argument to the <code>ros_gz_sim</code> create node, ensuring it targets the exact name defined inside the <code>.sdf</code> file (e.g., <code>&lt;world name="point_goal_scene"&gt;</code>).</p>
+            </div>
+
+
+            <!-- SECTION 3 -->
+            <h2 id="moveit-issues">3. MoveIt 2 & Planning</h2>
+
+            <h3>3.1 Pilz Planner Missing Cartesian Limits</h3>
+            <div class="callout callout-error">
+                <h4>Error Output</h4>
+                <pre>[move_group]: Parameter 'robot_description_planning.cartesian_limits.max_trans_vel', is not set in the config file.</pre>
+            </div>
+            <p><strong>The Mistake:</strong> MoveIt 2 introduces the Pilz Industrial Motion Planner for deterministic Cartesian movements (LIN, PTP, CIRC). Unlike the default OMPL planner, Pilz strictly requires Cartesian velocity and acceleration limits to be defined. The ported ROS 1 <code>joint_limits.yaml</code> only contained angular limits.</p>
+            <div class="callout callout-solution">
+                <h4>The Solution</h4>
+                <p>Append a <code>cartesian_limits</code> block to the end of your <code>joint_limits.yaml</code> file.</p>
+                <pre><code class="language-yaml">cartesian_limits:
+  max_trans_vel: 0.1
+  max_trans_acc: 0.1
+  max_trans_dec: 0.1
+  max_rot_vel: 0.1</code></pre>
+            </div>
+
+
+            <!-- SECTION 4 -->
+            <h2 id="runtime-stability">4. Runtime Stability & Hangs</h2>
+
+            <h3>4.1 Python Nodes Exiting Silently / GUI Freezing</h3>
+            <div class="callout callout-error">
+                <h4>Symptom</h4>
+                <p>Nodes like <code>point_selector_node</code> exit with <code>process has finished cleanly</code> immediately on boot, or the Ubuntu desktop prompts to "Wait / Force Quit" the Gazebo application.</p>
+            </div>
+            <p><strong>The Mistake:</strong> 
+               1. <b>Silent Exits:</b> The node relied on OpenCV (<code>cv2.namedWindow</code>) to render a UI. In headless environments or environments with X11 forwarding issues, OpenCV throws a fatal exception. Because it wasn't caught, the node died silently.
+               <br>2. <b>GUI Hangs:</b> The Gazebo <code>.sdf</code> file was running the ODE physics engine with a <code>max_step_size</code> of 0.005 and an update rate of 200Hz. This maxed out the CPU threads on standard hardware, starving the GUI thread.
+            </p>
+            <div class="callout callout-solution">
+                <h4>The Solution</h4>
+                <p><strong>Fixing Silent Exits:</strong> Wrap OpenCV initialization in a <code>try/except</code> block and implement a "headless mode" fallback. Add <code>traceback.print_exc()</code> to the main loop to ensure fatal errors are always logged.</p>
+                <p><strong>Fixing Physics Overload:</strong> Edit the <code>.sdf</code> world file to reduce the physics load:</p>
+                <pre><code class="language-xml">&lt;physics name="default_physics" default="true" type="ode"&gt;
+  &lt;max_step_size&gt;0.01&lt;/max_step_size&gt;
+  &lt;real_time_update_rate&gt;100&lt;/real_time_update_rate&gt;
+&lt;/physics&gt;</code></pre>
+            </div>
+
+            <!-- SECTION 5 -->
+            <h2 id="legacy-code">5. Legacy C++ Warnings & Bugs</h2>
+
+            <h3>5.1 Compilation Warnings Treated as Errors</h3>
+            <div class="callout callout-error">
+                <h4>Error Output</h4>
+                <pre>warning: unused parameter ‘result’ [-Wunused-parameter]
+warning: ‘bool setsEqual(const std::vector&lt;std::string&gt;&, ...)’ defined but not used</pre>
+            </div>
+            <p><strong>The Mistake:</strong> The ROS 2 `ament_cmake` environment enforces strict compiler flags (often treating warnings as errors) to enforce modern C++ standards. Legacy ROS 1 code frequently left helper functions unused or ignored actionlib callback parameters.</p>
+            <div class="callout callout-solution">
+                <h4>The Solution</h4>
+                <p>Explicitly cast unused parameters to <code>void</code> to silence the warning, or simply remove unused helper functions from the source files.</p>
+                <pre><code class="language-cpp">void result_callback(const WrappedResult & result) {
+    (void)result; // Silences the unused parameter warning
+    is_client_active = false;
+}</code></pre>
+            </div>
+
+            <h3>5.2 Logical Bug: Assignment in Conditional</h3>
+            <div class="callout callout-error">
+                <h4>Error Output</h4>
+                <pre>warning: suggest parentheses around assignment used as truth value [-Wparentheses]
+if(mouse_was_up=true)</pre>
+            </div>
+            <p><strong>The Mistake:</strong> A classic C++ typo in <code>kinova_interactive_control.cpp</code>. Using a single equals sign <code>=</code> performs an assignment instead of a comparison <code>==</code>. This means the condition always evaluates to true, overriding the intended state machine logic.</p>
+            <div class="callout callout-solution">
+                <h4>The Solution</h4>
+                <p>Change the assignment to an evaluation of the boolean variable itself.</p>
+                <pre><code class="language-cpp">// Old: if(mouse_was_up=true)
+// New:
+if(mouse_was_up) {
+    // Execute state logic...
+}</code></pre>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Simple script to highlight active section in sidebar
+        const sections = document.querySelectorAll('h2');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 60) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+[0.026s] Invoking command in '/home/amma/Kinova_gen2_rl/build/kinova_bringup': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/kinova_bringup -- -j12 -l12
+[0.346s] Invoked command in '/home/amma/Kinova_gen2_rl/build/kinova_bringup' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/kinova_bringup -- -j12 -l12
+[0.347s] Invoking command in '/home/amma/Kinova_gen2_rl/build/kinova_bringup': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/kinova_bringup
+[0.383s] -- Install configuration: ""
+[0.383s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/launch
+[0.384s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/launch/moveit_robot_launch.py
+[0.384s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/launch/kinova_robot.launch
+[0.384s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/launch/intrinsic.py
+[0.384s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/launch/handeye_calibration.launch.py
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/launch/easy_handeye.launch.py
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/launch/kinova_robot_launch.py
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/launch/sample.launch.py
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/launch/config
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/launch/config/multiple_robots.yaml
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/launch/config/robot_parameters.yaml
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/lib/kinova_bringup/kinova_sdk_node
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/lib/kinova_bringup/kinova_trajectory_bridge
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/lib/kinova_bringup/demo_feed_planner
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/lib/kinova_bringup/aruco_tf_publisher.py
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/moveit_resource
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/moveit_resource/visualization.rviz
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/moveit_resource/kinematics.yaml
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/moveit_resource/fake_controllers.yaml
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/moveit_resource/joint_limits.yaml
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/moveit_resource/joint_names.yaml
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/moveit_resource/handeye_calibration.rviz
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/moveit_resource/j2n6s300.srdf
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/moveit_resource/controllers_real.yaml
+[0.385s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/moveit_resource/ompl_planning.yaml
+[0.386s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/moveit_resource/controllers.yaml
+[0.386s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/moveit_resource/ros2_controllers.yaml
+[0.386s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/moveit_resource/controllers_ros_control.yaml
+[0.386s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/moveit_resource/rviz2_params.yaml
+[0.386s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/worlds
+[0.386s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/worlds/feeding_scene.sdf
+[0.386s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/ament_index/resource_index/package_run_dependencies/kinova_bringup
+[0.386s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/ament_index/resource_index/parent_prefix_path/kinova_bringup
+[0.386s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/environment/ament_prefix_path.sh
+[0.386s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/environment/ament_prefix_path.dsv
+[0.386s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/environment/path.sh
+[0.386s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/environment/path.dsv
+[0.386s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/local_setup.bash
+[0.387s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/local_setup.sh
+[0.387s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/local_setup.zsh
+[0.387s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/local_setup.dsv
+[0.387s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/package.dsv
+[0.387s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/ament_index/resource_index/packages/kinova_bringup
+[0.387s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/cmake/kinova_bringupConfig.cmake
+[0.387s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/cmake/kinova_bringupConfig-version.cmake
+[0.387s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_bringup/share/kinova_bringup/package.xml
+[0.398s] Invoked command in '/home/amma/Kinova_gen2_rl/build/kinova_bringup' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/kinova_bringup

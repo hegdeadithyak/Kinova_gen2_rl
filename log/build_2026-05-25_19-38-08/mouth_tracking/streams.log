@@ -1,0 +1,23 @@
+[0.986s] Invoking command in '/home/amma/Kinova_gen2_rl/src/mouth_tracking': PYTHONPATH=/home/amma/Kinova_gen2_rl/build/mouth_tracking/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/mouth_tracking build --build-base /home/amma/Kinova_gen2_rl/build/mouth_tracking/build install --record /home/amma/Kinova_gen2_rl/build/mouth_tracking/install.log --single-version-externally-managed install_data
+[1.168s] running egg_info
+[1.168s] writing ../../build/mouth_tracking/mouth_tracking.egg-info/PKG-INFO
+[1.168s] writing dependency_links to ../../build/mouth_tracking/mouth_tracking.egg-info/dependency_links.txt
+[1.168s] writing entry points to ../../build/mouth_tracking/mouth_tracking.egg-info/entry_points.txt
+[1.169s] writing requirements to ../../build/mouth_tracking/mouth_tracking.egg-info/requires.txt
+[1.169s] writing top-level names to ../../build/mouth_tracking/mouth_tracking.egg-info/top_level.txt
+[1.170s] reading manifest file '../../build/mouth_tracking/mouth_tracking.egg-info/SOURCES.txt'
+[1.171s] writing manifest file '../../build/mouth_tracking/mouth_tracking.egg-info/SOURCES.txt'
+[1.171s] running build
+[1.171s] running build_py
+[1.172s] running install
+[1.172s] running install_lib
+[1.173s] running install_data
+[1.173s] running install_egg_info
+[1.174s] removing '/home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/python3.10/site-packages/mouth_tracking-0.0.0-py3.10.egg-info' (and everything under it)
+[1.174s] Copying ../../build/mouth_tracking/mouth_tracking.egg-info to /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/python3.10/site-packages/mouth_tracking-0.0.0-py3.10.egg-info
+[1.175s] running install_scripts
+[1.191s] Installing mouth_tracker script to /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/mouth_tracking
+[1.191s] Installing room_mapper script to /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/mouth_tracking
+[1.191s] Installing static_pointcloud script to /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/mouth_tracking
+[1.192s] writing list of installed files to '/home/amma/Kinova_gen2_rl/build/mouth_tracking/install.log'
+[1.225s] Invoked command in '/home/amma/Kinova_gen2_rl/src/mouth_tracking' returned '0': PYTHONPATH=/home/amma/Kinova_gen2_rl/build/mouth_tracking/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/mouth_tracking build --build-base /home/amma/Kinova_gen2_rl/build/mouth_tracking/build install --record /home/amma/Kinova_gen2_rl/build/mouth_tracking/install.log --single-version-externally-managed install_data

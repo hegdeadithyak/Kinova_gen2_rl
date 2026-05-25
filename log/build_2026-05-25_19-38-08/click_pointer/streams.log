@@ -1,0 +1,27 @@
+[0.027s] Invoking command in '/home/amma/Kinova_gen2_rl/build/click_pointer': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/click_pointer -- -j12 -l12
+[0.332s] Invoked command in '/home/amma/Kinova_gen2_rl/build/click_pointer' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/click_pointer -- -j12 -l12
+[0.339s] Invoking command in '/home/amma/Kinova_gen2_rl/build/click_pointer': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/click_pointer
+[0.352s] -- Install configuration: ""
+[0.352s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/lib/click_pointer/click_pointer.py
+[0.353s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/lib/click_pointer/fork_acquisition.py
+[0.354s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/lib/click_pointer/click_to_point.py
+[0.355s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/lib/click_pointer/tui.py
+[0.355s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/lib/click_pointer/face_overlay.py
+[0.356s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/lib/click_pointer/algo.py
+[0.356s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/lib/click_pointer/utils.py
+[0.356s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/share/ament_index/resource_index/package_run_dependencies/click_pointer
+[0.356s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/share/ament_index/resource_index/parent_prefix_path/click_pointer
+[0.356s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/environment/ament_prefix_path.sh
+[0.356s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/environment/ament_prefix_path.dsv
+[0.356s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/environment/path.sh
+[0.356s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/environment/path.dsv
+[0.356s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/local_setup.bash
+[0.356s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/local_setup.sh
+[0.356s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/local_setup.zsh
+[0.356s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/local_setup.dsv
+[0.356s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/package.dsv
+[0.356s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/share/ament_index/resource_index/packages/click_pointer
+[0.356s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/cmake/click_pointerConfig.cmake
+[0.356s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/cmake/click_pointerConfig-version.cmake
+[0.356s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/package.xml
+[0.384s] Invoked command in '/home/amma/Kinova_gen2_rl/build/click_pointer' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/click_pointer

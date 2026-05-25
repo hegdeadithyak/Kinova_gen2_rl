@@ -126,7 +126,7 @@ class PointSelectorNode(Node):
         z_c = depth_m
 
         print(f'\n--- Click ({u},{v}) ---')
-        print(f'  raw depth:    {raw}  →  {depth_m:.4f} m')
+        print(f'  raw depth:    {raw_val}  →  {depth_m:.4f} m')
         print(f'  camera frame: x={x_c:.4f}  y={y_c:.4f}  z={z_c:.4f}  (offsets applied)')
 
         pt = PointStamped()
@@ -191,3 +191,7 @@ def main():
         import traceback
         traceback.print_exc()
         sys.exit(1)
+
+
+if __name__ == '__main__':
+    main()

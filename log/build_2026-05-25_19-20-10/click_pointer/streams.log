@@ -1,0 +1,46 @@
+[0.025s] Invoking command in '/home/amma/Kinova_gen2_rl/build/click_pointer': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble /usr/bin/cmake /home/amma/Kinova_gen2_rl/src/click_pointer -DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/click_pointer
+[0.285s] -- The C compiler identification is GNU 11.4.0
+[0.286s] -- The CXX compiler identification is GNU 11.4.0
+[0.286s] -- Detecting C compiler ABI info
+[0.297s] -- Detecting C compiler ABI info - done
+[0.307s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.307s] -- Detecting C compile features
+[0.308s] -- Detecting C compile features - done
+[0.312s] -- Detecting CXX compiler ABI info
+[0.414s] -- Detecting CXX compiler ABI info - done
+[0.421s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.422s] -- Detecting CXX compile features
+[0.422s] -- Detecting CXX compile features - done
+[0.427s] -- Found ament_cmake: 1.3.14 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.612s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.788s] -- Configuring done
+[0.792s] -- Generating done
+[0.795s] -- Build files have been written to: /home/amma/Kinova_gen2_rl/build/click_pointer
+[0.800s] Invoked command in '/home/amma/Kinova_gen2_rl/build/click_pointer' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble /usr/bin/cmake /home/amma/Kinova_gen2_rl/src/click_pointer -DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/click_pointer
+[0.802s] Invoking command in '/home/amma/Kinova_gen2_rl/build/click_pointer': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/click_pointer -- -j12 -l12
+[0.858s] Invoked command in '/home/amma/Kinova_gen2_rl/build/click_pointer' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/click_pointer -- -j12 -l12
+[0.860s] Invoking command in '/home/amma/Kinova_gen2_rl/build/click_pointer': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/click_pointer
+[0.872s] -- Install configuration: ""
+[0.872s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/lib/click_pointer/click_pointer.py
+[0.872s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/lib/click_pointer/fork_acquisition.py
+[0.872s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/lib/click_pointer/click_to_point.py
+[0.873s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/lib/click_pointer/tui.py
+[0.873s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/lib/click_pointer/face_overlay.py
+[0.873s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/lib/click_pointer/algo.py
+[0.873s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/lib/click_pointer/utils.py
+[0.874s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/share/ament_index/resource_index/package_run_dependencies/click_pointer
+[0.875s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/share/ament_index/resource_index/parent_prefix_path/click_pointer
+[0.875s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/environment/ament_prefix_path.sh
+[0.875s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/environment/ament_prefix_path.dsv
+[0.876s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/environment/path.sh
+[0.876s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/environment/path.dsv
+[0.876s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/local_setup.bash
+[0.878s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/local_setup.sh
+[0.879s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/local_setup.zsh
+[0.879s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/local_setup.dsv
+[0.879s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/package.dsv
+[0.879s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/share/ament_index/resource_index/packages/click_pointer
+[0.879s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/cmake/click_pointerConfig.cmake
+[0.879s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/cmake/click_pointerConfig-version.cmake
+[0.879s] -- Installing: /home/amma/Kinova_gen2_rl/install/click_pointer/share/click_pointer/package.xml
+[0.902s] Invoked command in '/home/amma/Kinova_gen2_rl/build/click_pointer' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/click_pointer

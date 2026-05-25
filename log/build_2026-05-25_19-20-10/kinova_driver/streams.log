@@ -1,0 +1,480 @@
+[0.010s] Invoking command in '/home/amma/Kinova_gen2_rl/build/kinova_driver': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/kinova_ws/rl_v2-master/install/pymoveit2:/home/amma/kinova_ws/rl_v2-master/install/moveit_calibration_gui:/home/amma/kinova_ws/rl_v2-master/install/moveit_calibration_plugins:/home/amma/kinova_ws/rl_v2-master/install/kinova_demo:/home/amma/kinova_ws/rl_v2-master/install/kinova_driver:/home/amma/kinova_ws/rl_v2-master/install/kinova_msgs:/home/amma/kinova_ws/rl_v2-master/install/j2s6s200_moveit_config:/home/amma/kinova_ws/rl_v2-master/install/kinova_description:/home/amma/kinova_ws/rl_v2-master/install/kinova_bringup:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2_msgs:/home/amma/kinova_ws/rl_v2-master/install/click_pointer:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver -DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/kinova_driver
+[0.095s] -- The C compiler identification is GNU 11.4.0
+[0.181s] -- The CXX compiler identification is GNU 11.4.0
+[0.191s] -- Detecting C compiler ABI info
+[0.269s] -- Detecting C compiler ABI info - done
+[0.280s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.280s] -- Detecting C compile features
+[0.281s] -- Detecting C compile features - done
+[0.283s] -- Detecting CXX compiler ABI info
+[0.384s] -- Detecting CXX compiler ABI info - done
+[0.392s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.392s] -- Detecting CXX compile features
+[0.392s] -- Detecting CXX compile features - done
+[0.395s] -- Found ament_cmake: 1.3.14 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.562s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.656s] -- Found action_msgs: 1.2.2 (/opt/ros/humble/share/action_msgs/cmake)
+[0.687s] -- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.692s] -- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.699s] -- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.709s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.721s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.751s] -- Found geometry_msgs: 4.9.1 (/opt/ros/humble/share/geometry_msgs/cmake)
+[0.769s] -- Found kinova_msgs: 0.0.1 (/home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake)
+[0.782s] -- Found rclcpp: 16.0.19 (/opt/ros/humble/share/rclcpp/cmake)
+[0.813s] -- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.816s] -- Found rmw_fastrtps_cpp: 6.2.10 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.916s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+[0.942s] -- Found FastRTPS: /opt/ros/humble/include  
+[0.972s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.981s] -- Looking for pthread.h
+[1.062s] -- Looking for pthread.h - found
+[1.063s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[1.159s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[1.161s] -- Found Threads: TRUE  
+[1.206s] -- Found rclcpp_action: 16.0.19 (/opt/ros/humble/share/rclcpp_action/cmake)
+[1.223s] -- Found rclpy: 3.3.21 (/opt/ros/humble/share/rclpy/cmake)
+[1.225s] -- Found sensor_msgs: 4.9.1 (/opt/ros/humble/share/sensor_msgs/cmake)
+[1.237s] -- Found tf2: 0.25.20 (/opt/ros/humble/share/tf2/cmake)
+[1.245s] -- Found tf2_ros: 0.25.20 (/opt/ros/humble/share/tf2_ros/cmake)
+[1.285s] -- Found interactive_markers: 2.3.2 (/opt/ros/humble/share/interactive_markers/cmake)
+[1.303s] -- Found angles: 1.15.0 (/opt/ros/humble/share/angles/cmake)
+[1.306s] -- Found control_msgs: 4.8.0 (/opt/ros/humble/share/control_msgs/cmake)
+[1.393s] -- Configuring done
+[1.419s] -- Generating done
+[1.430s] -- Build files have been written to: /home/amma/Kinova_gen2_rl/build/kinova_driver
+[1.438s] Invoked command in '/home/amma/Kinova_gen2_rl/build/kinova_driver' returned '0': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/kinova_ws/rl_v2-master/install/pymoveit2:/home/amma/kinova_ws/rl_v2-master/install/moveit_calibration_gui:/home/amma/kinova_ws/rl_v2-master/install/moveit_calibration_plugins:/home/amma/kinova_ws/rl_v2-master/install/kinova_demo:/home/amma/kinova_ws/rl_v2-master/install/kinova_driver:/home/amma/kinova_ws/rl_v2-master/install/kinova_msgs:/home/amma/kinova_ws/rl_v2-master/install/j2s6s200_moveit_config:/home/amma/kinova_ws/rl_v2-master/install/kinova_description:/home/amma/kinova_ws/rl_v2-master/install/kinova_bringup:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2_msgs:/home/amma/kinova_ws/rl_v2-master/install/click_pointer:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver -DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/kinova_driver
+[1.439s] Invoking command in '/home/amma/Kinova_gen2_rl/build/kinova_driver': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/kinova_ws/rl_v2-master/install/pymoveit2:/home/amma/kinova_ws/rl_v2-master/install/moveit_calibration_gui:/home/amma/kinova_ws/rl_v2-master/install/moveit_calibration_plugins:/home/amma/kinova_ws/rl_v2-master/install/kinova_demo:/home/amma/kinova_ws/rl_v2-master/install/kinova_driver:/home/amma/kinova_ws/rl_v2-master/install/kinova_msgs:/home/amma/kinova_ws/rl_v2-master/install/j2s6s200_moveit_config:/home/amma/kinova_ws/rl_v2-master/install/kinova_description:/home/amma/kinova_ws/rl_v2-master/install/kinova_bringup:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2_msgs:/home/amma/kinova_ws/rl_v2-master/install/click_pointer:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/kinova_driver -- -j12 -l12
+[1.512s] [  4%] [32mBuilding CXX object CMakeFiles/kinova_driver.dir/src/kinova_comm.cpp.o[0m
+[1.514s] [  8%] [32mBuilding CXX object CMakeFiles/kinova_tf_updater.dir/src/kinova_ros_types.cpp.o[0m
+[1.515s] [ 13%] [32mBuilding CXX object CMakeFiles/kinova_driver.dir/src/kinova_api.cpp.o[0m
+[1.515s] [ 17%] [32mBuilding CXX object CMakeFiles/kinova_driver.dir/src/kinova_arm.cpp.o[0m
+[1.517s] [ 34%] [32mBuilding CXX object CMakeFiles/kinova_driver.dir/src/kinova_fingers_action.cpp.o[0m
+[1.518s] [ 34%] [32mBuilding CXX object CMakeFiles/kinova_driver.dir/src/kinova_joint_angles_action.cpp.o[0m
+[1.518s] [ 34%] [32mBuilding CXX object CMakeFiles/kinova_tf_updater.dir/src/kinova_arm_kinematics.cpp.o[0m
+[1.518s] [ 34%] [32mBuilding CXX object CMakeFiles/kinova_tf_updater.dir/src/nodes/kinova_tf_updater.cpp.o[0m
+[1.519s] [ 39%] [32mBuilding CXX object CMakeFiles/kinova_driver.dir/src/kinova_ros_types.cpp.o[0m
+[1.520s] [ 43%] [32mBuilding CXX object CMakeFiles/kinova_driver.dir/src/kinova_joint_trajectory_controller.cpp.o[0m
+[1.521s] [ 47%] [32mBuilding CXX object CMakeFiles/kinova_driver.dir/src/kinova_tool_pose_action.cpp.o[0m
+[5.924s] In file included from [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:8[m[K:
+[5.925s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_arm_kinematics.h:[m[K In constructor ‘[01m[Kkinova::KinovaKinematics::KinovaKinematics(std::shared_ptr<rclcpp::Node>, std::string&)[m[K’:
+[5.925s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_arm_kinematics.h:54:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kkinova::KinovaKinematics::kinova_robotType_[m[K’ will be initialized after [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[5.925s]    54 |     std::string [01;35m[Kkinova_robotType_[m[K;
+[5.925s]       |                 [01;35m[K^~~~~~~~~~~~~~~~~[m[K
+[5.925s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_arm_kinematics.h:49:35:[m[K [01;35m[Kwarning: [m[K  ‘[01m[Kstd::shared_ptr<rclcpp::Node> kinova::KinovaKinematics::node_handle[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[5.926s]    49 |     std::shared_ptr<rclcpp::Node> [01;35m[Knode_handle[m[K;
+[5.926s]       |                                   [01;35m[K^~~~~~~~~~~[m[K
+[5.926s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:38:1:[m[K [01;35m[Kwarning: [m[K  when initialized here [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[5.926s]    38 | [01;35m[KKinovaKinematics[m[K::KinovaKinematics(const std::shared_ptr<rclcpp::Node> node_handle, std::string& kinova_robotType)
+[5.926s]       | [01;35m[K^~~~~~~~~~~~~~~~[m[K
+[5.927s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:64:24:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[KD2_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[5.927s]    64 |                 double [01;35m[KD2_[m[K = 0.41;
+[5.927s]       |                        [01;35m[K^~~[m[K
+[5.928s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:65:24:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[KD3_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[5.928s]    65 |                 double [01;35m[KD3_[m[K = 0.2073;
+[5.928s]       |                        [01;35m[K^~~[m[K
+[5.928s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:66:24:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Ke2_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[5.928s]    66 |                 double [01;35m[Ke2_[m[K = 0.0098;
+[5.929s]       |                        [01;35m[K^~~[m[K
+[5.929s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:70:24:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[KD2_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[5.929s]    70 |                 double [01;35m[KD2_[m[K = 0.29;
+[5.929s]       |                        [01;35m[K^~~[m[K
+[5.929s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:71:24:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[KD3_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[5.929s]    71 |                 double [01;35m[KD3_[m[K = 0.1233;
+[5.930s]       |                        [01;35m[K^~~[m[K
+[5.930s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:72:24:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Ke2_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[5.930s]    72 |                 double [01;35m[Ke2_[m[K = 0.0070;
+[5.930s]       |                        [01;35m[K^~~[m[K
+[5.933s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:96:52:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Ksa[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[5.933s]    96 |             double aa = wrist_deg_/2 * M_PI/180.0, [01;35m[Ksa[m[K = sin(aa), s2a = sin(2*aa); // temp parameters
+[5.933s]       |                                                    [01;35m[K^~[m[K
+[5.935s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:96:66:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Ks2a[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[5.936s]    96 |             double aa = wrist_deg_/2 * M_PI/180.0, sa = sin(aa), [01;35m[Ks2a[m[K = sin(2*aa); // temp parameters
+[5.936s]       |                                                                  [01;35m[K^~~[m[K
+[5.936s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:118:20:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[KD2_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[5.937s]   118 |             double [01;35m[KD2_[m[K = 0.41;
+[5.937s]       |                    [01;35m[K^~~[m[K
+[5.938s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:119:20:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[KD3_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[5.938s]   119 |             double [01;35m[KD3_[m[K = 0.2073;
+[5.938s]       |                    [01;35m[K^~~[m[K
+[5.938s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:120:20:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Ke2_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[5.939s]   120 |             double [01;35m[Ke2_[m[K = 0.0098;
+[5.939s]       |                    [01;35m[K^~~[m[K
+[5.939s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:124:20:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[KD2_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[5.939s]   124 |             double [01;35m[KD2_[m[K = 0.29;
+[5.939s]       |                    [01;35m[K^~~[m[K
+[5.940s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:125:20:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[KD3_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[5.940s]   125 |             double [01;35m[KD3_[m[K = 0.1233;
+[5.940s]       |                    [01;35m[K^~~[m[K
+[5.940s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:126:20:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Ke2_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[5.940s]   126 |             double [01;35m[Ke2_[m[K = 0.0070;
+[5.940s]       |                    [01;35m[K^~~[m[K
+[5.951s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm_kinematics.cpp:57:9:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Kjoint_total_number_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
+[5.951s]    57 |     int [01;35m[Kjoint_total_number_[m[K = arm_joint_number_ + finger_number_;
+[5.951s]       |         [01;35m[K^~~~~~~~~~~~~~~~~~~[m[K
+[6.174s] In file included from [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_comm.cpp:47[m[K:
+[6.174s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_comm.h:[m[K In constructor ‘[01m[Kkinova::KinovaComm::KinovaComm(std::shared_ptr<rclcpp::Node>, boost::recursive_mutex&, bool, const string&)[m[K’:
+[6.174s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_comm.h:186:10:[m[K [01;35m[Kwarning: [m[K‘[01m[Kkinova::KinovaComm::is_software_stop_[m[K’ will be initialized after [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[6.174s]   186 |     bool [01;35m[Kis_software_stop_[m[K;
+[6.174s]       |          [01;35m[K^~~~~~~~~~~~~~~~~[m[K
+[6.174s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_comm.h:184:29:[m[K [01;35m[Kwarning: [m[K  ‘[01m[Kboost::recursive_mutex& kinova::KinovaComm::api_mutex_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[6.174s]   184 |     boost::recursive_mutex& [01;35m[Kapi_mutex_[m[K;
+[6.174s]       |                             [01;35m[K^~~~~~~~~~[m[K
+[6.174s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_comm.cpp:56:1:[m[K [01;35m[Kwarning: [m[K  when initialized here [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[6.174s]    56 | [01;35m[KKinovaComm[m[K::KinovaComm(const std::shared_ptr<rclcpp::Node> node_handle,
+[6.175s]       | [01;35m[K^~~~~~~~~~[m[K
+[6.195s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_comm.cpp:[m[K In member function ‘[01m[Kvoid kinova::KinovaComm::setJointAngles(const kinova::KinovaAngles&, double, double, int, bool)[m[K’:
+[6.195s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_comm.cpp:571:110:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Ktimeout[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[6.195s]   571 | void KinovaComm::setJointAngles(const KinovaAngles &angles, double speedJoint123, double speedJoint4567, [01;35m[Kint timeout[m[K, bool push)
+[6.195s]       |                                                                                                          [01;35m[K~~~~^~~~~~~[m[K
+[6.201s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_comm.cpp:[m[K In member function ‘[01m[Kvoid kinova::KinovaComm::setRobotCOMParam(GRAVITY_TYPE, std::vector<float>)[m[K’:
+[6.201s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_comm.cpp:875:20:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<float>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+[6.202s]   875 |     for (int i=0; [01;35m[Ki<params.size()[m[K; i++)
+[6.202s]       |                   [01;35m[K~^~~~~~~~~~~~~~[m[K
+[6.207s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_comm.cpp:[m[K In member function ‘[01m[Kvoid kinova::KinovaComm::setCartesianPosition(const kinova::KinovaPose&, int, bool)[m[K’:
+[6.207s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_comm.cpp:1057:67:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Ktimeout[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[6.208s]  1057 | void KinovaComm::setCartesianPosition(const KinovaPose &pose, [01;35m[Kint timeout[m[K, bool push)
+[6.208s]       |                                                               [01;35m[K~~~~^~~~~~~[m[K
+[6.212s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_comm.cpp:[m[K In member function ‘[01m[Kvoid kinova::KinovaComm::setFingerPositions(const kinova::FingerAngles&, int, bool)[m[K’:
+[6.213s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_comm.cpp:1435:70:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Ktimeout[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[6.213s]  1435 | void KinovaComm::setFingerPositions(const FingerAngles &fingers, [01;35m[Kint timeout[m[K, bool push)
+[6.213s]       |                                                                  [01;35m[K~~~~^~~~~~~[m[K
+[6.217s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_comm.cpp:[m[K In member function ‘[01m[Kint kinova::KinovaComm::SetRedundancyResolutionToleastSquares(int)[m[K’:
+[6.218s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_comm.cpp:1717:59:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kstate[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[6.218s]  1717 | int KinovaComm::SetRedundancyResolutionToleastSquares([01;35m[Kint state[m[K)
+[6.218s]       |                                                       [01;35m[K~~~~^~~~~[m[K
+[6.586s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_tool_pose_action.cpp:[m[K In function ‘[01m[Kgeometry_msgs::msg::PoseStamped transform_pose(std::shared_ptr<tf2_ros::Buffer>, std::shared_ptr<rclcpp::Node>, geometry_msgs::msg::PoseStamped, std::string)[m[K’:
+[6.587s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_tool_pose_action.cpp:50:128:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Ktp_node[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[6.587s]    50 | geometry_msgs::msg::PoseStamped transform_pose(const std::shared_ptr<tf2_ros::Buffer> tf_, [01;35m[Kconst std::shared_ptr<rclcpp::Node> tp_node[m[K, const geometry_msgs::msg::PoseStamped in, const std::string target_frame)
+[6.587s]       |                                                                                            [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~[m[K
+[6.587s] In file included from [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_tool_pose_action.cpp:46[m[K:
+[6.587s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_tool_pose_action.h:[m[K In constructor ‘[01m[Kkinova::KinovaPoseActionServer::KinovaPoseActionServer(kinova::KinovaComm&, std::shared_ptr<rclcpp::Node>, const string&, const string&)[m[K’:
+[6.587s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_tool_pose_action.h:81:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kkinova::KinovaPoseActionServer::arm_comm_[m[K’ will be initialized after [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[6.587s]    81 |     KinovaComm &[01;35m[Karm_comm_[m[K;
+[6.587s]       |                 [01;35m[K^~~~~~~~~[m[K
+[6.588s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_tool_pose_action.h:78:35:[m[K [01;35m[Kwarning: [m[K  ‘[01m[Kstd::shared_ptr<rclcpp::Node> kinova::KinovaPoseActionServer::node_handle_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[6.588s]    78 |     std::shared_ptr<rclcpp::Node> [01;35m[Knode_handle_[m[K;
+[6.588s]       |                                   [01;35m[K^~~~~~~~~~~~[m[K
+[6.588s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_tool_pose_action.cpp:79:1:[m[K [01;35m[Kwarning: [m[K  when initialized here [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[6.588s]    79 | [01;35m[KKinovaPoseActionServer[m[K::KinovaPoseActionServer(KinovaComm &arm_comm, const std::shared_ptr<rclcpp::Node> nh, const std::string &kinova_robotType, const std::string &kinova_robotName)
+[6.588s]       | [01;35m[K^~~~~~~~~~~~~~~~~~~~~~[m[K
+[6.669s] In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/logging.hpp:24[m[K,
+[6.670s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40[m[K,
+[6.670s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+[6.670s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20[m[K,
+[6.670s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25[m[K,
+[6.670s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18[m[K,
+[6.670s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20[m[K,
+[6.670s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37[m[K,
+[6.670s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25[m[K,
+[6.670s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21[m[K,
+[6.670s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155[m[K,
+[6.670s]                  from [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_tool_pose_action.h:49[m[K,
+[6.670s]                  from [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_tool_pose_action.cpp:46[m[K:
+[6.670s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_tool_pose_action.cpp:[m[K In member function ‘[01m[Krclcpp_action::GoalResponse kinova::KinovaPoseActionServer::handle_goal(const GoalUUID&, std::shared_ptr<const kinova_msgs::action::ArmPose_Goal_<std::allocator<void> > >)[m[K’:
+[6.670s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_tool_pose_action.cpp:137:45:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%d[m[K’ expects argument of type ‘[01m[Kint[m[K’, but argument 5 has type ‘[01m[Kconst _pose_type[m[K’ {aka ‘[01m[Kconst geometry_msgs::msg::PoseStamped_<std::allocator<void> >[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wformat=-Wformat=]8;;[m[K]
+[6.670s]   137 |     RCLCPP_INFO(node_handle_->get_logger(), [01;35m[K"Received goal request with pose %d"[m[K, goal->pose);
+[6.671s]       |                                             [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[6.671s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_tool_pose_action.cpp:137:79:[m[K [01;36m[Knote: [m[Kformat string is defined here
+[6.671s]   137 |     RCLCPP_INFO(node_handle_->get_logger(), "Received goal request with pose [01;36m[K%d[m[K", goal->pose);
+[6.671s]       |                                                                              [01;36m[K~^[m[K
+[6.671s]       |                                                                               [01;36m[K|[m[K
+[6.671s]       |                                                                               [01;36m[Kint[m[K
+[6.680s] In file included from [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_angles_action.cpp:47[m[K:
+[6.680s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_joint_angles_action.h:[m[K In constructor ‘[01m[Kkinova::KinovaAnglesActionServer::KinovaAnglesActionServer(kinova::KinovaComm&, std::shared_ptr<rclcpp::Node>, std::shared_ptr<rclcpp::Node>, const string&, const string&)[m[K’:
+[6.680s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_joint_angles_action.h:78:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kkinova::KinovaAnglesActionServer::arm_comm_[m[K’ will be initialized after [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[6.680s]    78 |     KinovaComm &[01;35m[Karm_comm_[m[K;
+[6.680s]       |                 [01;35m[K^~~~~~~~~[m[K
+[6.680s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_joint_angles_action.h:74:35:[m[K [01;35m[Kwarning: [m[K  ‘[01m[Kstd::shared_ptr<rclcpp::Node> kinova::KinovaAnglesActionServer::node_driver_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[6.680s]    74 |     std::shared_ptr<rclcpp::Node> [01;35m[Knode_driver_[m[K;
+[6.680s]       |                                   [01;35m[K^~~~~~~~~~~~[m[K
+[6.680s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_angles_action.cpp:54:1:[m[K [01;35m[Kwarning: [m[K  when initialized here [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[6.680s]    54 | [01;35m[KKinovaAnglesActionServer[m[K::KinovaAnglesActionServer(KinovaComm &arm_comm, const std::shared_ptr<rclcpp::Node> nd, const std::shared_ptr<rclcpp::Node> nh, const std::string &kinova_robotType, const std::string &kinova_robotName)
+[6.680s]       | [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[6.740s] In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/logging.hpp:24[m[K,
+[6.740s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40[m[K,
+[6.740s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+[6.740s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20[m[K,
+[6.740s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25[m[K,
+[6.740s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18[m[K,
+[6.740s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20[m[K,
+[6.740s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37[m[K,
+[6.740s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25[m[K,
+[6.740s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21[m[K,
+[6.740s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155[m[K,
+[6.740s]                  from [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_joint_angles_action.h:49[m[K,
+[6.740s]                  from [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_angles_action.cpp:47[m[K:
+[6.740s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_angles_action.cpp:[m[K In member function ‘[01m[Krclcpp_action::GoalResponse kinova::KinovaAnglesActionServer::handle_goal(const GoalUUID&, std::shared_ptr<const kinova_msgs::action::ArmJointAngles_Goal_<std::allocator<void> > >)[m[K’:
+[6.741s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_angles_action.cpp:100:45:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%d[m[K’ expects argument of type ‘[01m[Kint[m[K’, but argument 5 has type ‘[01m[Kconst _angles_type[m[K’ {aka ‘[01m[Kconst kinova_msgs::msg::JointAngles_<std::allocator<void> >[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wformat=-Wformat=]8;;[m[K]
+[6.741s]   100 |     RCLCPP_INFO(node_handle_->get_logger(), [01;35m[K"Received goal request with pose %d"[m[K, [32m[Kgoal->angles[m[K);
+[6.741s]       |                                             [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K  [32m[K~~~~~~~~~~~~[m[K
+[6.741s]       |                                                                                         [32m[K|[m[K
+[6.741s]       |                                                                                         [32m[Kconst _angles_type {aka const kinova_msgs::msg::JointAngles_<std::allocator<void> >}[m[K
+[6.741s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_angles_action.cpp:100:79:[m[K [01;36m[Knote: [m[Kformat string is defined here
+[6.741s]   100 |     RCLCPP_INFO(node_handle_->get_logger(), "Received goal request with pose [01;36m[K%d[m[K", goal->angles);
+[6.741s]       |                                                                              [01;36m[K~^[m[K
+[6.741s]       |                                                                               [01;36m[K|[m[K
+[6.741s]       |                                                                               [01;36m[Kint[m[K
+[7.193s] In file included from [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_fingers_action.cpp:46[m[K:
+[7.193s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_fingers_action.h:[m[K In constructor ‘[01m[Kkinova::KinovaFingersActionServer::KinovaFingersActionServer(kinova::KinovaComm&, std::shared_ptr<rclcpp::Node>, const string&, const string&)[m[K’:
+[7.193s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_fingers_action.h:77:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kkinova::KinovaFingersActionServer::arm_comm_[m[K’ will be initialized after [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[7.193s]    77 |     KinovaComm &[01;35m[Karm_comm_[m[K;
+[7.193s]       |                 [01;35m[K^~~~~~~~~[m[K
+[7.193s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_fingers_action.h:74:35:[m[K [01;35m[Kwarning: [m[K  ‘[01m[Kstd::shared_ptr<rclcpp::Node> kinova::KinovaFingersActionServer::node_handle_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[7.193s]    74 |     std::shared_ptr<rclcpp::Node> [01;35m[Knode_handle_[m[K;
+[7.193s]       |                                   [01;35m[K^~~~~~~~~~~~[m[K
+[7.194s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_fingers_action.cpp:53:1:[m[K [01;35m[Kwarning: [m[K  when initialized here [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[7.194s]    53 | [01;35m[KKinovaFingersActionServer[m[K::KinovaFingersActionServer(KinovaComm &arm_comm, const std::shared_ptr<rclcpp::Node> nh, const std::string &kinova_robotType, const std::string &kinova_robotName)
+[7.194s]       | [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[7.251s] In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/logging.hpp:24[m[K,
+[7.251s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40[m[K,
+[7.252s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+[7.252s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20[m[K,
+[7.252s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25[m[K,
+[7.252s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18[m[K,
+[7.252s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20[m[K,
+[7.252s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37[m[K,
+[7.252s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25[m[K,
+[7.252s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21[m[K,
+[7.252s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155[m[K,
+[7.252s]                  from [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_fingers_action.h:49[m[K,
+[7.253s]                  from [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_fingers_action.cpp:46[m[K:
+[7.253s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_fingers_action.cpp:[m[K In member function ‘[01m[Krclcpp_action::GoalResponse kinova::KinovaFingersActionServer::handle_goal(const GoalUUID&, std::shared_ptr<const kinova_msgs::action::SetFingersPosition_Goal_<std::allocator<void> > >)[m[K’:
+[7.253s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_fingers_action.cpp:92:45:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%d[m[K’ expects argument of type ‘[01m[Kint[m[K’, but argument 5 has type ‘[01m[Kconst _fingers_type[m[K’ {aka ‘[01m[Kconst kinova_msgs::msg::FingerPosition_<std::allocator<void> >[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wformat=-Wformat=]8;;[m[K]
+[7.253s]    92 |     RCLCPP_INFO(node_handle_->get_logger(), [01;35m[K"Received goal request with pose %d"[m[K, [32m[Kgoal->fingers[m[K);
+[7.253s]       |                                             [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K  [32m[K~~~~~~~~~~~~~[m[K
+[7.253s]       |                                                                                         [32m[K|[m[K
+[7.253s]       |                                                                                         [32m[Kconst _fingers_type {aka const kinova_msgs::msg::FingerPosition_<std::allocator<void> >}[m[K
+[7.253s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_fingers_action.cpp:92:79:[m[K [01;36m[Knote: [m[Kformat string is defined here
+[7.253s]    92 |     RCLCPP_INFO(node_handle_->get_logger(), "Received goal request with pose [01;36m[K%d[m[K", goal->fingers);
+[7.254s]       |                                                                              [01;36m[K~^[m[K
+[7.254s]       |                                                                               [01;36m[K|[m[K
+[7.254s]       |                                                                               [01;36m[Kint[m[K
+[8.709s] In file included from [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_trajectory_controller.cpp:1[m[K:
+[8.709s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_joint_trajectory_controller.h:[m[K In constructor ‘[01m[Kkinova::JointTrajectoryController::JointTrajectoryController(kinova::KinovaComm&, std::shared_ptr<rclcpp::Node>)[m[K’:
+[8.709s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_joint_trajectory_controller.h:45:16:[m[K [01;35m[Kwarning: [m[K‘[01m[Kkinova::JointTrajectoryController::kinova_comm_[m[K’ will be initialized after [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[8.709s]    45 |     KinovaComm [01;35m[Kkinova_comm_[m[K;
+[8.709s]       |                [01;35m[K^~~~~~~~~~~~[m[K
+[8.709s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_joint_trajectory_controller.h:27:35:[m[K [01;35m[Kwarning: [m[K  ‘[01m[Kstd::shared_ptr<rclcpp::Node> kinova::JointTrajectoryController::nh_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[8.709s]    27 |     std::shared_ptr<rclcpp::Node> [01;35m[Knh_[m[K;
+[8.710s]       |                                   [01;35m[K^~~[m[K
+[8.710s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_trajectory_controller.cpp:7:1:[m[K [01;35m[Kwarning: [m[K  when initialized here [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[8.710s]     7 | [01;35m[KJointTrajectoryController[m[K::JointTrajectoryController(kinova::KinovaComm &kinova_comm, std::shared_ptr<rclcpp::Node> n):
+[8.710s]       | [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[8.770s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_trajectory_controller.cpp:[m[K In member function ‘[01m[Kvoid kinova::JointTrajectoryController::commandCB(trajectory_msgs::msg::JointTrajectory_<std::allocator<void> >::SharedPtr)[m[K’:
+[8.770s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_trajectory_controller.cpp:193:22:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<trajectory_msgs::msg::JointTrajectoryPoint_<std::allocator<void> >, std::allocator<trajectory_msgs::msg::JointTrajectoryPoint_<std::allocator<void> > > >::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+[8.770s]   193 |     for (int i = 1; [01;35m[Ki<traj_command_points_.size()[m[K; i++)
+[8.770s]       |                     [01;35m[K~^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[8.772s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_trajectory_controller.cpp:[m[K In member function ‘[01m[Kvoid kinova::JointTrajectoryController::pub_joint_vel()[m[K’:
+[8.772s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_trajectory_controller.cpp:216:36:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<kinova::KinovaAngles>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+[8.772s]   216 |     if ([01;35m[Ktraj_command_points_index_ <  kinova_angle_command_.size()[m[K && rclcpp::ok())
+[8.772s]       |         [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[8.773s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_trajectory_controller.cpp:220:39:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<kinova::KinovaAngles>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+[8.773s]   220 |         if([01;35m[Ktraj_command_points_index_ == kinova_angle_command_.size()-1[m[K)
+[8.773s]       |            [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[8.773s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_trajectory_controller.cpp:223:27:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kuint[m[K’ {aka ‘[01m[Kunsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+[8.773s]   223 |             for(int i=0; [01;35m[Ki<number_joint_[m[K; i++)
+[8.773s]       |                          [01;35m[K~^~~~~~~~~~~~~~[m[K
+[8.775s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_trajectory_controller.cpp:255:43:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<kinova::KinovaAngles>::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+[8.775s]   255 |             if([01;35m[Ktraj_command_points_index_ == kinova_angle_command_.size()-1[m[K)
+[8.775s]       |                [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[8.775s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_trajectory_controller.cpp:258:31:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kuint[m[K’ {aka ‘[01m[Kunsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+[8.775s]   258 |                 for(int i=0; [01;35m[Ki<number_joint_[m[K; i++)
+[8.775s]       |                              [01;35m[K~^~~~~~~~~~~~~~[m[K
+[9.156s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:[m[K In function ‘[01m[Kvoid {anonymous}::convertKinDeg(std::vector<double, std::allocator<double> >&)[m[K’:
+[9.157s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:31:27:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<double, std::allocator<double> >::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+[9.157s]    31 |         for (int i = 0; [01;35m[Ki < qds.size()[m[K; ++i) {
+[9.157s]       |                         [01;35m[K~~^~~~~~~~~~~~[m[K
+[9.158s] In file included from [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:9[m[K:
+[9.158s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_arm.h:[m[K In constructor ‘[01m[Kkinova::KinovaArm::KinovaArm(kinova::KinovaComm&, std::shared_ptr<rclcpp::Node>, const string&, const string&)[m[K’:
+[9.158s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_arm.h:152:17:[m[K [01;35m[Kwarning: [m[K‘[01m[Kkinova::KinovaArm::kinova_comm_[m[K’ will be initialized after [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[9.158s]   152 |     KinovaComm &[01;35m[Kkinova_comm_[m[K;
+[9.158s]       |                 [01;35m[K^~~~~~~~~~~~[m[K
+[9.159s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_arm.h:151:35:[m[K [01;35m[Kwarning: [m[K  ‘[01m[Kstd::shared_ptr<rclcpp::Node> kinova::KinovaArm::node_handle_[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[9.159s]   151 |     std::shared_ptr<rclcpp::Node> [01;35m[Knode_handle_[m[K;
+[9.159s]       |                                   [01;35m[K^~~~~~~~~~~~[m[K
+[9.159s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:48:1:[m[K [01;35m[Kwarning: [m[K  when initialized here [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreorder-Wreorder]8;;[m[K]
+[9.159s]    48 | [01;35m[KKinovaArm[m[K::KinovaArm(KinovaComm &arm, const std::shared_ptr<rclcpp::Node> nodeHandle, const std::string &kinova_robotType, const std::string &kinova_robotName)
+[9.159s]       | [01;35m[K^~~~~~~~~[m[K
+[9.307s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:[m[K In member function ‘[01m[Kbool kinova::KinovaArm::homeArmServiceCallback(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<kinova_msgs::srv::HomeArm_Request_<std::allocator<void> > >, std::shared_ptr<kinova_msgs::srv::HomeArm_Response_<std::allocator<void> > >)[m[K’:
+[9.307s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:260:45:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Krequest_header[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.307s]   260 |     [01;35m[Kconst std::shared_ptr<rmw_request_id_t> request_header[m[K,
+[9.307s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~[m[K
+[9.307s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:261:63:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kreq[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.307s]   261 |     [01;35m[Kconst std::shared_ptr<kinova_msgs::srv::HomeArm::Request> req[m[K,
+[9.307s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.315s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:[m[K In member function ‘[01m[Kbool kinova::KinovaArm::ActivateNullSpaceModeCallback(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<kinova_msgs::srv::SetNullSpaceModeState_Request_<std::allocator<void> > >, std::shared_ptr<kinova_msgs::srv::SetNullSpaceModeState_Response_<std::allocator<void> > >)[m[K’:
+[9.316s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:271:45:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Krequest_header[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.316s]   271 |     [01;35m[Kconst std::shared_ptr<rmw_request_id_t> request_header[m[K,
+[9.316s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~[m[K
+[9.316s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:273:72:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kres[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.316s]   273 |     [01;35m[Kstd::shared_ptr<kinova_msgs::srv::SetNullSpaceModeState::Response> res[m[K)
+[9.316s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.324s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:[m[K In member function ‘[01m[Kbool kinova::KinovaArm::setTorqueControlModeService(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<kinova_msgs::srv::SetTorqueControlMode_Request_<std::allocator<void> > >, std::shared_ptr<kinova_msgs::srv::SetTorqueControlMode_Response_<std::allocator<void> > >)[m[K’:
+[9.324s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:280:45:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Krequest_header[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.325s]   280 |     [01;35m[Kconst std::shared_ptr<rmw_request_id_t> request_header[m[K,
+[9.325s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~[m[K
+[9.325s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:282:71:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kres[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.325s]   282 |     [01;35m[Kstd::shared_ptr<kinova_msgs::srv::SetTorqueControlMode::Response> res[m[K)
+[9.325s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.344s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:[m[K In member function ‘[01m[Kbool kinova::KinovaArm::setTorqueControlParametersService(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<kinova_msgs::srv::SetTorqueControlParameters_Request_<std::allocator<void> > >, std::shared_ptr<kinova_msgs::srv::SetTorqueControlParameters_Response_<std::allocator<void> > >)[m[K’:
+[9.344s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:324:26:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<double, std::allocator<double> >::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+[9.344s]   324 |         for (int i = 0; [01;35m[Ki<min_torque.size()[m[K; i++)
+[9.344s]       |                         [01;35m[K~^~~~~~~~~~~~~~~~~~[m[K
+[9.346s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:289:45:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Krequest_header[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.346s]   289 |     [01;35m[Kconst std::shared_ptr<rmw_request_id_t> request_header[m[K,
+[9.346s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~[m[K
+[9.346s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:290:82:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kreq[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.346s]   290 |     [01;35m[Kconst std::shared_ptr<kinova_msgs::srv::SetTorqueControlParameters::Request> req[m[K,
+[9.346s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.346s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:291:77:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kres[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.347s]   291 |     [01;35m[Kstd::shared_ptr<kinova_msgs::srv::SetTorqueControlParameters::Response> res[m[K)
+[9.347s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.371s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:[m[K In member function ‘[01m[Kbool kinova::KinovaArm::stopServiceCallback(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<kinova_msgs::srv::Stop_Request_<std::allocator<void> > >, std::shared_ptr<kinova_msgs::srv::Stop_Response_<std::allocator<void> > >)[m[K’:
+[9.371s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:408:45:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Krequest_header[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.371s]   408 |     [01;35m[Kconst std::shared_ptr<rmw_request_id_t> request_header[m[K,
+[9.371s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~[m[K
+[9.371s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:409:60:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kreq[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.371s]   409 |     [01;35m[Kconst std::shared_ptr<kinova_msgs::srv::Stop::Request> req[m[K,
+[9.372s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.381s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:[m[K In member function ‘[01m[Kbool kinova::KinovaArm::startServiceCallback(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<kinova_msgs::srv::Start_Request_<std::allocator<void> > >, std::shared_ptr<kinova_msgs::srv::Start_Response_<std::allocator<void> > >)[m[K’:
+[9.381s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:425:45:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Krequest_header[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.381s]   425 |     [01;35m[Kconst std::shared_ptr<rmw_request_id_t> request_header[m[K,
+[9.381s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~[m[K
+[9.382s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:426:61:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kreq[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.382s]   426 |     [01;35m[Kconst std::shared_ptr<kinova_msgs::srv::Start::Request> req[m[K,
+[9.382s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.391s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:[m[K In member function ‘[01m[Kbool kinova::KinovaArm::addCartesianPoseToTrajectory(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<kinova_msgs::srv::AddPoseToCartesianTrajectory_Request_<std::allocator<void> > >, std::shared_ptr<kinova_msgs::srv::AddPoseToCartesianTrajectory_Response_<std::allocator<void> > >)[m[K’:
+[9.391s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:436:45:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Krequest_header[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.391s]   436 |     [01;35m[Kconst std::shared_ptr<rmw_request_id_t> request_header[m[K,
+[9.391s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~[m[K
+[9.391s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:438:79:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kres[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.391s]   438 |     [01;35m[Kstd::shared_ptr<kinova_msgs::srv::AddPoseToCartesianTrajectory::Response> res[m[K)
+[9.391s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.400s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:[m[K In member function ‘[01m[Kbool kinova::KinovaArm::clearTrajectoriesServiceCallback(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<kinova_msgs::srv::ClearTrajectories_Request_<std::allocator<void> > >, std::shared_ptr<kinova_msgs::srv::ClearTrajectories_Response_<std::allocator<void> > >)[m[K’:
+[9.400s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:452:45:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Krequest_header[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.400s]   452 |     [01;35m[Kconst std::shared_ptr<rmw_request_id_t> request_header[m[K,
+[9.400s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~[m[K
+[9.400s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:453:73:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kreq[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.400s]   453 |     [01;35m[Kconst std::shared_ptr<kinova_msgs::srv::ClearTrajectories::Request> req[m[K,
+[9.401s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.401s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:454:68:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kres[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.401s]   454 |     [01;35m[Kstd::shared_ptr<kinova_msgs::srv::ClearTrajectories::Response> res[m[K)
+[9.401s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.409s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:[m[K In member function ‘[01m[Kbool kinova::KinovaArm::setForceControlParamsCallback(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<kinova_msgs::srv::SetForceControlParams_Request_<std::allocator<void> > >, std::shared_ptr<kinova_msgs::srv::SetForceControlParams_Response_<std::allocator<void> > >)[m[K’:
+[9.410s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:461:45:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Krequest_header[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.410s]   461 |     [01;35m[Kconst std::shared_ptr<rmw_request_id_t> request_header[m[K,
+[9.410s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~[m[K
+[9.410s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:463:72:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kres[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.410s]   463 |     [01;35m[Kstd::shared_ptr<kinova_msgs::srv::SetForceControlParams::Response> res[m[K)
+[9.410s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.411s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:[m[K In member function ‘[01m[Kbool kinova::KinovaArm::startForceControlCallback(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<kinova_msgs::srv::Start_Request_<std::allocator<void> > >, std::shared_ptr<kinova_msgs::srv::Start_Response_<std::allocator<void> > >)[m[K’:
+[9.411s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:500:45:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Krequest_header[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.411s]   500 |     [01;35m[Kconst std::shared_ptr<rmw_request_id_t> request_header[m[K,
+[9.411s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~[m[K
+[9.411s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:501:61:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kreq[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.411s]   501 |     [01;35m[Kconst std::shared_ptr<kinova_msgs::srv::Start::Request> req[m[K,
+[9.411s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.411s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:[m[K In member function ‘[01m[Kbool kinova::KinovaArm::stopForceControlCallback(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<kinova_msgs::srv::Stop_Request_<std::allocator<void> > >, std::shared_ptr<kinova_msgs::srv::Stop_Response_<std::allocator<void> > >)[m[K’:
+[9.411s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:510:45:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Krequest_header[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.412s]   510 |     [01;35m[Kconst std::shared_ptr<rmw_request_id_t> request_header[m[K,
+[9.412s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~[m[K
+[9.412s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:511:60:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kreq[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.412s]   511 |     [01;35m[Kconst std::shared_ptr<kinova_msgs::srv::Stop::Request> req[m[K,
+[9.412s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.420s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:[m[K In member function ‘[01m[Kbool kinova::KinovaArm::setJointTorquesToZeroService(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<kinova_msgs::srv::ZeroTorques_Request_<std::allocator<void> > >, std::shared_ptr<kinova_msgs::srv::ZeroTorques_Response_<std::allocator<void> > >)[m[K’:
+[9.420s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:520:45:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Krequest_header[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.420s]   520 |     [01;35m[Kconst std::shared_ptr<rmw_request_id_t> request_header[m[K,
+[9.420s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~[m[K
+[9.420s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:521:67:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kreq[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.420s]   521 |     [01;35m[Kconst std::shared_ptr<kinova_msgs::srv::ZeroTorques::Request> req[m[K,
+[9.420s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.421s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:522:62:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kres[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.421s]   522 |     [01;35m[Kstd::shared_ptr<kinova_msgs::srv::ZeroTorques::Response> res[m[K)
+[9.421s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.429s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:[m[K In member function ‘[01m[Kbool kinova::KinovaArm::runCOMParameterEstimationService(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<kinova_msgs::srv::RunCOMParametersEstimation_Request_<std::allocator<void> > >, std::shared_ptr<kinova_msgs::srv::RunCOMParametersEstimation_Response_<std::allocator<void> > >)[m[K’:
+[9.429s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:529:45:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Krequest_header[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.429s]   529 |     [01;35m[Kconst std::shared_ptr<rmw_request_id_t> request_header[m[K,
+[9.429s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~[m[K
+[9.429s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:530:82:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kreq[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.429s]   530 |     [01;35m[Kconst std::shared_ptr<kinova_msgs::srv::RunCOMParametersEstimation::Request> req[m[K,
+[9.430s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.430s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:531:77:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kres[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.430s]   531 |     [01;35m[Kstd::shared_ptr<kinova_msgs::srv::RunCOMParametersEstimation::Response> res[m[K)
+[9.430s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[9.438s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:[m[K In member function ‘[01m[Kbool kinova::KinovaArm::setEndEffectorOffsetCallback(std::shared_ptr<rmw_request_id_s>, std::shared_ptr<kinova_msgs::srv::SetEndEffectorOffset_Request_<std::allocator<void> > >, std::shared_ptr<kinova_msgs::srv::SetEndEffectorOffset_Response_<std::allocator<void> > >)[m[K’:
+[9.439s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:538:45:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Krequest_header[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.439s]   538 |     [01;35m[Kconst std::shared_ptr<rmw_request_id_t> request_header[m[K,
+[9.439s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~[m[K
+[9.439s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_arm.cpp:540:71:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kres[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.439s]   540 |     [01;35m[Kstd::shared_ptr<kinova_msgs::srv::SetEndEffectorOffset::Response> res[m[K)
+[9.439s]       |     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~[m[K
+[11.478s] [ 52%] [32m[1mLinking CXX executable kinova_tf_updater[0m
+[12.142s] [ 52%] Built target kinova_tf_updater
+[12.208s] In file included from [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_ros_types.h:49[m[K,
+[12.208s]                  from [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova_driver/kinova_joint_trajectory_controller.h:12[m[K,
+[12.208s]                  from [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/kinova_joint_trajectory_controller.cpp:1[m[K:
+[12.208s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova/KinovaTypes.h:[m[K In member function ‘[01m[Kfloat& AngularInfo::operator[](int)[m[K’:
+[12.208s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/include/kinova/KinovaTypes.h:483:9:[m[K [01;35m[Kwarning: [m[Kcontrol reaches end of non-void function [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wreturn-type-Wreturn-type]8;;[m[K]
+[12.208s]   483 |         [01;35m[K}[m[K
+[12.208s]       |         [01;35m[K^[m[K
+[29.954s] [ 56%] [32m[1mLinking CXX static library libkinova_driver.a[0m
+[30.651s] [ 56%] Built target kinova_driver
+[30.682s] [ 60%] [32mBuilding CXX object CMakeFiles/gripper_command_action_server.dir/src/joint_trajectory_action/gripper_command_action_server.cpp.o[0m
+[30.689s] [ 65%] [32mBuilding CXX object CMakeFiles/joint_trajectory_action_server.dir/src/joint_trajectory_action/joint_trajectory_action_server.cpp.o[0m
+[30.693s] [ 69%] [32mBuilding CXX object CMakeFiles/kinova_arm_driver.dir/src/nodes/kinova_arm_driver.cpp.o[0m
+[30.693s] [ 73%] [32mBuilding CXX object CMakeFiles/positional_action_server.dir/src/joint_trajectory_action/positional_action_server.cpp.o[0m
+[30.701s] [ 78%] [32mBuilding CXX object CMakeFiles/kinova_interactive_control.dir/src/nodes/kinova_interactive_control.cpp.o[0m
+[32.694s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/joint_trajectory_action/gripper_command_action_server.cpp:[m[K In member function ‘[01m[Krclcpp_action::GoalResponse kinova::GripperCommandActionController::handle_goal(const GoalUUID&, std::shared_ptr<const control_msgs::action::GripperCommand_Goal_<std::allocator<void> > >)[m[K’:
+[32.695s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/joint_trajectory_action/gripper_command_action_server.cpp:81:143:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kgoal[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[32.695s]    81 | rclcpp_action::GoalResponse GripperCommandActionController::handle_goal(const rclcpp_action::GoalUUID &uuid, [01;35m[Kstd::shared_ptr<const GCAS::Goal>goal[m[K)
+[32.695s]       |                                                                                                              [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~[m[K
+[32.695s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/joint_trajectory_action/gripper_command_action_server.cpp:[m[K In member function ‘[01m[Kvoid kinova::GripperCommandActionController::result_callback(const rclcpp_action::ClientGoalHandle<kinova_msgs::action::SetFingersPosition>::WrappedResult&)[m[K’:
+[32.695s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/joint_trajectory_action/gripper_command_action_server.cpp:105:150:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kresult[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[32.696s]   105 | void GripperCommandActionController::result_callback([01;35m[Kconst rclcpp_action::ClientGoalHandle<kinova_msgs::action::SetFingersPosition>::WrappedResult & result[m[K)
+[32.696s]       |                                                      [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~[m[K
+[33.496s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/joint_trajectory_action/positional_action_server.cpp:[m[K In member function ‘[01m[Krclcpp_action::GoalResponse kinova::PositionalActionController::handle_goal(const GoalUUID&, std::shared_ptr<const control_msgs::action::FollowJointTrajectory_Goal_<std::allocator<void> > >)[m[K’:
+[33.496s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/joint_trajectory_action/positional_action_server.cpp:147:140:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kgoal[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[33.497s]   147 | rclcpp_action::GoalResponse PositionalActionController::handle_goal(const rclcpp_action::GoalUUID &uuid, [01;35m[Kstd::shared_ptr<const FJTAS::Goal>goal[m[K)
+[33.497s]       |                                                                                                          [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~[m[K
+[33.508s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/joint_trajectory_action/positional_action_server.cpp:[m[K In member function ‘[01m[Kvoid kinova::PositionalActionController::goalCBFollow(std::shared_ptr<rclcpp_action::ServerGoalHandle<control_msgs::action::FollowJointTrajectory> >)[m[K’:
+[33.509s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/joint_trajectory_action/positional_action_server.cpp:204:23:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<trajectory_msgs::msg::JointTrajectoryPoint_<std::allocator<void> >, std::allocator<trajectory_msgs::msg::JointTrajectoryPoint_<std::allocator<void> > > >::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+[33.509s]   204 |     for (int i = 0; [01;35m[Ki < current_traj_.points.size()[m[K; i++) {
+[33.509s]       |                     [01;35m[K~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[33.512s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/joint_trajectory_action/positional_action_server.cpp:235:19:[m[K [01;35m[Kwarning: [m[Kcomparison of integer expressions of different signedness: ‘[01m[Kint[m[K’ and ‘[01m[Kstd::vector<kinova_msgs::action::ArmJointAngles_Goal_<std::allocator<void> > >::size_type[m[K’ {aka ‘[01m[Klong unsigned int[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wsign-compare-Wsign-compare]8;;[m[K]
+[33.513s]   235 |             if ([01;35m[Ki == client_goals.size()[m[K) {
+[33.513s]       |                 [01;35m[K~~^~~~~~~~~~~~~~~~~~~~~~[m[K
+[33.514s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/joint_trajectory_action/positional_action_server.cpp:221:10:[m[K [01;35m[Kwarning: [m[Kvariable ‘[01m[Kfinal_goal_aborted[m[K’ set but not used [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-but-set-variable-Wunused-but-set-variable]8;;[m[K]
+[33.514s]   221 |     bool [01;35m[Kfinal_goal_aborted[m[K = false;
+[33.514s]       |          [01;35m[K^~~~~~~~~~~~~~~~~~[m[K
+[33.514s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/joint_trajectory_action/positional_action_server.cpp:222:10:[m[K [01;35m[Kwarning: [m[Kvariable ‘[01m[Kfinal_goal_succeeded[m[K’ set but not used [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-but-set-variable-Wunused-but-set-variable]8;;[m[K]
+[33.514s]   222 |     bool [01;35m[Kfinal_goal_succeeded[m[K = false;
+[33.514s]       |          [01;35m[K^~~~~~~~~~~~~~~~~~~~[m[K
+[33.544s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/joint_trajectory_action/joint_trajectory_action_server.cpp:[m[K In member function ‘[01m[Krclcpp_action::GoalResponse kinova::JointTrajectoryActionController::handle_goal(const GoalUUID&, std::shared_ptr<const control_msgs::action::FollowJointTrajectory_Goal_<std::allocator<void> > >)[m[K’:
+[33.544s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/joint_trajectory_action/joint_trajectory_action_server.cpp:152:145:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kgoal[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[33.544s]   152 | rclcpp_action::GoalResponse JointTrajectoryActionController::handle_goal(const rclcpp_action::GoalUUID &uuid, [01;35m[Kstd::shared_ptr<const FJTAS::Goal>goal[m[K)
+[33.544s]       |                                                                                                               [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~[m[K
+[36.490s] [ 82%] [32m[1mLinking CXX executable positional_action_server[0m
+[36.884s] [ 82%] Built target positional_action_server
+[37.780s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/nodes/kinova_interactive_control.cpp:[m[K In function ‘[01m[Kvoid make6DofMarker(bool, unsigned int, geometry_msgs::msg::Pose, bool)[m[K’:
+[37.780s] [01m[K/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/src/nodes/kinova_interactive_control.cpp:153:47:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kinteraction_mode[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[37.780s]   153 | void make6DofMarker( bool fixed, [01;35m[Kunsigned int interaction_mode[m[K, const geometry_msgs::msg::Pose pose, bool show_6dof )
+[37.780s]       |                                  [01;35m[K~~~~~~~~~~~~~^~~~~~~~~~~~~~~~[m[K
+[38.541s] [ 86%] [32m[1mLinking CXX executable kinova_arm_driver[0m
+[40.094s] [ 91%] [32m[1mLinking CXX executable gripper_command_action_server[0m
+[40.582s] [ 95%] [32m[1mLinking CXX executable joint_trajectory_action_server[0m
+[40.876s] [ 95%] Built target gripper_command_action_server
+[41.170s] [ 95%] Built target joint_trajectory_action_server
+[41.597s] [ 95%] Built target kinova_arm_driver
+[47.646s] [100%] [32m[1mLinking CXX executable kinova_interactive_control[0m
+[48.303s] [100%] Built target kinova_interactive_control
+[48.318s] Invoked command in '/home/amma/Kinova_gen2_rl/build/kinova_driver' returned '0': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/kinova_ws/rl_v2-master/install/pymoveit2:/home/amma/kinova_ws/rl_v2-master/install/moveit_calibration_gui:/home/amma/kinova_ws/rl_v2-master/install/moveit_calibration_plugins:/home/amma/kinova_ws/rl_v2-master/install/kinova_demo:/home/amma/kinova_ws/rl_v2-master/install/kinova_driver:/home/amma/kinova_ws/rl_v2-master/install/kinova_msgs:/home/amma/kinova_ws/rl_v2-master/install/j2s6s200_moveit_config:/home/amma/kinova_ws/rl_v2-master/install/kinova_description:/home/amma/kinova_ws/rl_v2-master/install/kinova_bringup:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2_msgs:/home/amma/kinova_ws/rl_v2-master/install/click_pointer:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/kinova_driver -- -j12 -l12
+[48.321s] Invoking command in '/home/amma/Kinova_gen2_rl/build/kinova_driver': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/kinova_ws/rl_v2-master/install/pymoveit2:/home/amma/kinova_ws/rl_v2-master/install/moveit_calibration_gui:/home/amma/kinova_ws/rl_v2-master/install/moveit_calibration_plugins:/home/amma/kinova_ws/rl_v2-master/install/kinova_demo:/home/amma/kinova_ws/rl_v2-master/install/kinova_driver:/home/amma/kinova_ws/rl_v2-master/install/kinova_msgs:/home/amma/kinova_ws/rl_v2-master/install/j2s6s200_moveit_config:/home/amma/kinova_ws/rl_v2-master/install/kinova_description:/home/amma/kinova_ws/rl_v2-master/install/kinova_bringup:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2_msgs:/home/amma/kinova_ws/rl_v2-master/install/click_pointer:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/kinova_driver
+[48.331s] -- Install configuration: ""
+[48.331s] [31mCMake Error at cmake_install.cmake:46 (file):
+[48.332s]   file INSTALL cannot find
+[48.332s]   "/home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_driver/lib/x86_64-linux-gnu/USBCommLayerUbuntu.so":
+[48.332s]   No such file or directory.
+[48.332s] 
+[48.332s] [0m
+[48.333s] Invoked command in '/home/amma/Kinova_gen2_rl/build/kinova_driver' returned '1': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/kinova_ws/rl_v2-master/install/pymoveit2:/home/amma/kinova_ws/rl_v2-master/install/moveit_calibration_gui:/home/amma/kinova_ws/rl_v2-master/install/moveit_calibration_plugins:/home/amma/kinova_ws/rl_v2-master/install/kinova_demo:/home/amma/kinova_ws/rl_v2-master/install/kinova_driver:/home/amma/kinova_ws/rl_v2-master/install/kinova_msgs:/home/amma/kinova_ws/rl_v2-master/install/j2s6s200_moveit_config:/home/amma/kinova_ws/rl_v2-master/install/kinova_description:/home/amma/kinova_ws/rl_v2-master/install/kinova_bringup:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2_msgs:/home/amma/kinova_ws/rl_v2-master/install/click_pointer:/home/amma/kinova_ws/rl_v2-master/install/point_goal_test:/home/amma/kinova_ws/rl_v2-master/install/mouth_tracking:/home/amma/kinova_ws/rl_v2-master/install/kinova_rl:/home/amma/kinova_ws/rl_v2-master/install/easy_handeye2:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib:${LD_LIBRARY_PATH} PYTHONPATH=/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/kinova_driver

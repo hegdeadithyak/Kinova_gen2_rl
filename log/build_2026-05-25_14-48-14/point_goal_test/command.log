@@ -1,0 +1,2 @@
+Invoking command in '/home/amma/Kinova_gen2_rl/build/point_goal_test': /usr/bin/cmake /home/amma/Kinova_gen2_rl/src/kinova-ros2/point_goal_test -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/point_goal_test
+Invoked command in '/home/amma/Kinova_gen2_rl/build/point_goal_test' returned '1': /usr/bin/cmake /home/amma/Kinova_gen2_rl/src/kinova-ros2/point_goal_test -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/point_goal_test

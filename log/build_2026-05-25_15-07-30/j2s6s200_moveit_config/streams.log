@@ -1,0 +1,56 @@
+[0.005s] Invoking command in '/home/amma/Kinova_gen2_rl/build/j2s6s200_moveit_config': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/point_goal_test:/opt/ros/humble /usr/bin/cmake /home/amma/Kinova_gen2_rl/src/kinova-ros2/j2s6s200_moveit_config -DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config
+[0.041s] -- The C compiler identification is GNU 11.4.0
+[0.078s] -- The CXX compiler identification is GNU 11.4.0
+[0.082s] -- Detecting C compiler ABI info
+[0.130s] -- Detecting C compiler ABI info - done
+[0.135s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.135s] -- Detecting C compile features
+[0.136s] -- Detecting C compile features - done
+[0.138s] -- Detecting CXX compiler ABI info
+[0.188s] -- Detecting CXX compiler ABI info - done
+[0.194s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.194s] -- Detecting CXX compile features
+[0.195s] -- Detecting CXX compile features - done
+[0.196s] -- Found ament_cmake: 1.3.13 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.324s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.443s] -- Configuring done
+[0.444s] -- Generating done
+[0.445s] -- Build files have been written to: /home/amma/Kinova_gen2_rl/build/j2s6s200_moveit_config
+[0.448s] Invoked command in '/home/amma/Kinova_gen2_rl/build/j2s6s200_moveit_config' returned '0': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/point_goal_test:/opt/ros/humble /usr/bin/cmake /home/amma/Kinova_gen2_rl/src/kinova-ros2/j2s6s200_moveit_config -DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config
+[0.449s] Invoking command in '/home/amma/Kinova_gen2_rl/build/j2s6s200_moveit_config': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/point_goal_test:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/j2s6s200_moveit_config -- -j16 -l16
+[0.482s] Invoked command in '/home/amma/Kinova_gen2_rl/build/j2s6s200_moveit_config' returned '0': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/point_goal_test:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/j2s6s200_moveit_config -- -j16 -l16
+[0.483s] Invoking command in '/home/amma/Kinova_gen2_rl/build/j2s6s200_moveit_config': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/point_goal_test:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/j2s6s200_moveit_config
+[0.488s] -- Install configuration: ""
+[0.488s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/config
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/config/ompl_planning.yaml
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/config/kinematics.yaml
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/config/moveit_controllers.yaml
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/config/ros2_controllers.yaml
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/config/joint_limits.yaml
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/config/j2s6s200.srdf
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/launch
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/launch/real_moveit_launch.py
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/launch/j2s6s200_moveit.launch.py
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/urdf
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/urdf/j2s6s200.urdf.xacro
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/lib/j2s6s200_moveit_config/kinova_sdk_node
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/lib/j2s6s200_moveit_config/trajectory_executor
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/lib/j2s6s200_moveit_config/kinova_trajectory_bridge
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/lib/j2s6s200_moveit_config/joint_state_relay
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/lib/j2s6s200_moveit_config/scoop_action
+[0.489s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/ament_index/resource_index/package_run_dependencies/j2s6s200_moveit_config
+[0.490s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/ament_index/resource_index/parent_prefix_path/j2s6s200_moveit_config
+[0.490s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/environment/ament_prefix_path.sh
+[0.490s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/environment/ament_prefix_path.dsv
+[0.490s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/environment/path.sh
+[0.490s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/environment/path.dsv
+[0.490s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/local_setup.bash
+[0.490s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/local_setup.sh
+[0.490s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/local_setup.zsh
+[0.490s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/local_setup.dsv
+[0.490s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/package.dsv
+[0.490s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/ament_index/resource_index/packages/j2s6s200_moveit_config
+[0.490s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/cmake/j2s6s200_moveit_configConfig.cmake
+[0.490s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/cmake/j2s6s200_moveit_configConfig-version.cmake
+[0.490s] -- Installing: /home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config/share/j2s6s200_moveit_config/package.xml
+[0.492s] Invoked command in '/home/amma/Kinova_gen2_rl/build/j2s6s200_moveit_config' returned '0': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_description:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/point_goal_test:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/j2s6s200_moveit_config

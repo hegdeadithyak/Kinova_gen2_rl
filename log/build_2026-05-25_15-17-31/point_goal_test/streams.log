@@ -1,0 +1,57 @@
+[0.243s] Invoking command in '/home/amma/Kinova_gen2_rl/build/point_goal_test': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/point_goal_test -- -j16 -l16
+[0.284s] [  0%] Built target ament_cmake_python_copy_point_goal_test_setup
+[0.284s] [  0%] Built target ament_cmake_python_copy_point_goal_test
+[0.285s] [100%] Built target feeding_safe_mover
+[0.490s] running egg_info
+[0.490s] writing point_goal_test.egg-info/PKG-INFO
+[0.491s] writing dependency_links to point_goal_test.egg-info/dependency_links.txt
+[0.491s] writing top-level names to point_goal_test.egg-info/top_level.txt
+[0.494s] reading manifest file 'point_goal_test.egg-info/SOURCES.txt'
+[0.494s] writing manifest file 'point_goal_test.egg-info/SOURCES.txt'
+[0.515s] [100%] Built target ament_cmake_python_build_point_goal_test_egg
+[0.526s] Invoked command in '/home/amma/Kinova_gen2_rl/build/point_goal_test' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/point_goal_test -- -j16 -l16
+[0.527s] Invoking command in '/home/amma/Kinova_gen2_rl/build/point_goal_test': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/point_goal_test
+[0.533s] -- Install configuration: "Release"
+[0.533s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/lib/point_goal_test/feeding_safe_mover
+[0.533s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/pythonpath.sh
+[0.534s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/pythonpath.dsv
+[0.535s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test-0.0.1-py3.10.egg-info
+[0.535s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test-0.0.1-py3.10.egg-info/top_level.txt
+[0.535s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test-0.0.1-py3.10.egg-info/SOURCES.txt
+[0.535s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test-0.0.1-py3.10.egg-info/dependency_links.txt
+[0.535s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test-0.0.1-py3.10.egg-info/PKG-INFO
+[0.535s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test
+[0.535s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/arm_mover_node.py
+[0.535s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/point_selector_node.py
+[0.535s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/test_scoop_gazebo.py
+[0.535s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/__init__.py
+[0.556s] Listing '/home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test'...
+[0.559s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/lib/point_goal_test/point_selector_node
+[0.559s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/lib/point_goal_test/arm_mover_node
+[0.559s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/lib/point_goal_test/test_scoop_gazebo
+[0.559s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/launch
+[0.560s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/launch/point_goal_gazebo.launch.py
+[0.560s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/launch/feeding_safe.launch.py
+[0.560s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/launch/point_goal.launch.py
+[0.560s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/config
+[0.560s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/config/gz_controllers.yaml
+[0.560s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/worlds
+[0.560s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/worlds/point_goal_scene.sdf
+[0.560s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/ament_index/resource_index/packages/point_goal_test
+[0.560s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/package.xml
+[0.560s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/ament_index/resource_index/package_run_dependencies/point_goal_test
+[0.560s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/ament_index/resource_index/parent_prefix_path/point_goal_test
+[0.560s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/ament_prefix_path.sh
+[0.560s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/ament_prefix_path.dsv
+[0.560s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/path.sh
+[0.560s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/path.dsv
+[0.560s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/local_setup.bash
+[0.561s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/local_setup.sh
+[0.561s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/local_setup.zsh
+[0.561s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/local_setup.dsv
+[0.561s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/package.dsv
+[0.561s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/ament_index/resource_index/packages/point_goal_test
+[0.561s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/cmake/point_goal_testConfig.cmake
+[0.561s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/cmake/point_goal_testConfig-version.cmake
+[0.561s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/package.xml
+[0.562s] Invoked command in '/home/amma/Kinova_gen2_rl/build/point_goal_test' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/point_goal_test

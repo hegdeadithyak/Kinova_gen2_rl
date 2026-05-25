@@ -1,0 +1,43 @@
+running egg_info
+creating ../../build/mouth_tracking/mouth_tracking.egg-info
+writing ../../build/mouth_tracking/mouth_tracking.egg-info/PKG-INFO
+writing dependency_links to ../../build/mouth_tracking/mouth_tracking.egg-info/dependency_links.txt
+writing entry points to ../../build/mouth_tracking/mouth_tracking.egg-info/entry_points.txt
+writing requirements to ../../build/mouth_tracking/mouth_tracking.egg-info/requires.txt
+writing top-level names to ../../build/mouth_tracking/mouth_tracking.egg-info/top_level.txt
+writing manifest file '../../build/mouth_tracking/mouth_tracking.egg-info/SOURCES.txt'
+reading manifest file '../../build/mouth_tracking/mouth_tracking.egg-info/SOURCES.txt'
+writing manifest file '../../build/mouth_tracking/mouth_tracking.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/amma/Kinova_gen2_rl/build/mouth_tracking/build
+creating /home/amma/Kinova_gen2_rl/build/mouth_tracking/build/lib
+creating /home/amma/Kinova_gen2_rl/build/mouth_tracking/build/lib/mouth_tracking
+copying mouth_tracking/room_mapper.py -> /home/amma/Kinova_gen2_rl/build/mouth_tracking/build/lib/mouth_tracking
+copying mouth_tracking/mouth_tracker.py -> /home/amma/Kinova_gen2_rl/build/mouth_tracking/build/lib/mouth_tracking
+copying mouth_tracking/static_pointcloud.py -> /home/amma/Kinova_gen2_rl/build/mouth_tracking/build/lib/mouth_tracking
+copying mouth_tracking/__init__.py -> /home/amma/Kinova_gen2_rl/build/mouth_tracking/build/lib/mouth_tracking
+running install
+running install_lib
+creating /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/python3.10/site-packages/mouth_tracking
+copying /home/amma/Kinova_gen2_rl/build/mouth_tracking/build/lib/mouth_tracking/room_mapper.py -> /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/python3.10/site-packages/mouth_tracking
+copying /home/amma/Kinova_gen2_rl/build/mouth_tracking/build/lib/mouth_tracking/mouth_tracker.py -> /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/python3.10/site-packages/mouth_tracking
+copying /home/amma/Kinova_gen2_rl/build/mouth_tracking/build/lib/mouth_tracking/static_pointcloud.py -> /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/python3.10/site-packages/mouth_tracking
+copying /home/amma/Kinova_gen2_rl/build/mouth_tracking/build/lib/mouth_tracking/__init__.py -> /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/python3.10/site-packages/mouth_tracking
+byte-compiling /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/python3.10/site-packages/mouth_tracking/room_mapper.py to room_mapper.cpython-310.pyc
+byte-compiling /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/python3.10/site-packages/mouth_tracking/mouth_tracker.py to mouth_tracker.cpython-310.pyc
+byte-compiling /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/python3.10/site-packages/mouth_tracking/static_pointcloud.py to static_pointcloud.cpython-310.pyc
+byte-compiling /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/python3.10/site-packages/mouth_tracking/__init__.py to __init__.cpython-310.pyc
+running install_data
+creating /home/amma/Kinova_gen2_rl/install/mouth_tracking/share/ament_index
+creating /home/amma/Kinova_gen2_rl/install/mouth_tracking/share/ament_index/resource_index
+creating /home/amma/Kinova_gen2_rl/install/mouth_tracking/share/ament_index/resource_index/packages
+copying resource/mouth_tracking -> /home/amma/Kinova_gen2_rl/install/mouth_tracking/share/ament_index/resource_index/packages
+copying package.xml -> /home/amma/Kinova_gen2_rl/install/mouth_tracking/share/mouth_tracking
+running install_egg_info
+Copying ../../build/mouth_tracking/mouth_tracking.egg-info to /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/python3.10/site-packages/mouth_tracking-0.0.0-py3.10.egg-info
+running install_scripts
+Installing mouth_tracker script to /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/mouth_tracking
+Installing room_mapper script to /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/mouth_tracking
+Installing static_pointcloud script to /home/amma/Kinova_gen2_rl/install/mouth_tracking/lib/mouth_tracking
+writing list of installed files to '/home/amma/Kinova_gen2_rl/build/mouth_tracking/install.log'

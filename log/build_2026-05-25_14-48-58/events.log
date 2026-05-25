@@ -1,0 +1,265 @@
+[0.000000] (-) TimerEvent: {}
+[0.000652] (-) JobUnselected: {'identifier': 'click_pointer'}
+[0.000798] (-) JobUnselected: {'identifier': 'j2s6s200_moveit_config'}
+[0.000810] (-) JobUnselected: {'identifier': 'kinova_bringup'}
+[0.000820] (-) JobUnselected: {'identifier': 'kinova_demo'}
+[0.000828] (-) JobUnselected: {'identifier': 'kinova_description'}
+[0.000842] (-) JobUnselected: {'identifier': 'kinova_driver'}
+[0.000850] (-) JobUnselected: {'identifier': 'kinova_msgs'}
+[0.000858] (-) JobUnselected: {'identifier': 'mouth_tracking'}
+[0.000868] (point_goal_test) JobQueued: {'identifier': 'point_goal_test', 'dependencies': OrderedDict()}
+[0.000879] (point_goal_test) JobStarted: {'identifier': 'point_goal_test'}
+[0.005109] (point_goal_test) JobProgress: {'identifier': 'point_goal_test', 'progress': 'cmake'}
+[0.005499] (point_goal_test) Command: {'cmd': ['/usr/bin/cmake', '/home/amma/Kinova_gen2_rl/src/kinova-ros2/point_goal_test', '-DCMAKE_BUILD_TYPE=Release', '-DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/point_goal_test'], 'cwd': '/home/amma/Kinova_gen2_rl/build/point_goal_test', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('LANGUAGE', 'en_IN:en'), ('USER', 'amma'), ('STARSHIP_SHELL', 'bash'), ('XDG_SESSION_TYPE', 'wayland'), ('SERPAPI_KEY', '0e2d204db305a2f0fb94dc6964dbc82412f5fe7a7837a17f44f3376709307217'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib::/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:'), ('HOME', '/home/amma'), ('OLDPWD', '/home/amma/Kinova_gen2_rl'), ('DESKTOP_SESSION', 'ubuntu'), ('NVM_BIN', '/home/amma/.nvm/versions/node/v20.20.1/bin'), ('NVM_INC', '/home/amma/.nvm/versions/node/v20.20.1/include/node'), ('GAZEBO_MASTER_URI', 'http://localhost:11345'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('MANAGERPID', '3220'), ('SYSTEMD_EXEC_PID', '4400'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('TERMINATOR_DBUS_NAME', 'net.tenshu.Terminator25ef4b219e3b005583550f2b0f9f990c3'), ('GIO_LAUNCHED_DESKTOP_FILE_PID', '85983'), ('NVM_DIR', '/home/amma/.nvm'), ('IM_CONFIG_PHASE', '1'), ('WAYLAND_DISPLAY', 'wayland-0'), ('COLCON_PREFIX_PATH', '/home/amma/Kinova_gen2_rl/install'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'amma'), ('JOURNAL_STREAM', '8:31837'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'amma'), ('TERM', 'xterm-256color'), ('GAZEBO_MODEL_PATH', '/usr/share/gazebo-11/models:'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('OGRE_RESOURCE_PATH', '/usr/lib/x86_64-linux-gnu/OGRE-1.9.0'), ('PATH', '/opt/ros/humble/bin:/home/amma/.nvm/versions/node/v20.20.1/bin:/home/amma/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin'), ('SESSION_MANAGER', 'local/amma-Precision-3650-Tower:@/tmp/.ICE-unix/3766,unix/amma-Precision-3650-Tower:/tmp/.ICE-unix/3766'), ('INVOCATION_ID', '580c9d476ff44b6894e6216debc23478'), ('XDG_MENU_PREFIX', 'gnome-'), ('GNOME_SETUP_DISPLAY', ':1'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('TERMINATOR_DBUS_PATH', '/net/tenshu/Terminator2'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('IBUS_DISABLE_SNOOPER', '1'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/.mutter-Xwaylandauth.0M35P3'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('ROS_DOMAIN_ID', '5'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('TERMINATOR_UUID', 'urn:uuid:df15991c-f629-4045-b5ad-465272515618'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('GAZEBO_RESOURCE_PATH', '/usr/share/gazebo-11:'), ('GAZEBO_MODEL_DATABASE_URI', 'http://models.gazebosim.org'), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/amma/Kinova_gen2_rl/build/point_goal_test'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('GAZEBO_PLUGIN_PATH', '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:'), ('NVM_CD_FLAGS', ''), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('STARSHIP_SESSION_KEY', '1580512971272692'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[0.017909] (point_goal_test) StdoutLine: {'line': b'-- Found ament_cmake: 1.3.13 (/opt/ros/humble/share/ament_cmake/cmake)\n'}
+[0.099863] (-) TimerEvent: {}
+[0.200108] (-) TimerEvent: {}
+[0.285873] (point_goal_test) StdoutLine: {'line': b'-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter \n'}
+[0.300235] (-) TimerEvent: {}
+[0.400511] (-) TimerEvent: {}
+[0.446698] (point_goal_test) StdoutLine: {'line': b'-- Found rclcpp: 16.0.18 (/opt/ros/humble/share/rclcpp/cmake)\n'}
+[0.500573] (-) TimerEvent: {}
+[0.538113] (point_goal_test) StdoutLine: {'line': b'-- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)\n'}
+[0.544328] (point_goal_test) StdoutLine: {'line': b'-- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)\n'}
+[0.555485] (point_goal_test) StdoutLine: {'line': b'-- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)\n'}
+[0.568342] (point_goal_test) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[0.585174] (point_goal_test) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[0.600700] (-) TimerEvent: {}
+[0.690229] (point_goal_test) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)\n'}
+[0.695203] (point_goal_test) StdoutLine: {'line': b'-- Found rmw_fastrtps_cpp: 6.2.10 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)\n'}
+[0.700794] (-) TimerEvent: {}
+[0.800155] (point_goal_test) StdoutLine: {'line': b'-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  \n'}
+[0.800873] (-) TimerEvent: {}
+[0.819644] (point_goal_test) StdoutLine: {'line': b'-- Found FastRTPS: /opt/ros/humble/include  \n'}
+[0.848791] (point_goal_test) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[0.893873] (point_goal_test) StdoutLine: {'line': b'-- Looking for pthread.h\n'}
+[0.900988] (-) TimerEvent: {}
+[0.955001] (point_goal_test) StdoutLine: {'line': b'-- Looking for pthread.h - found\n'}
+[0.955143] (point_goal_test) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n'}
+[1.001097] (-) TimerEvent: {}
+[1.018362] (point_goal_test) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success\n'}
+[1.019054] (point_goal_test) StdoutLine: {'line': b'-- Found Threads: TRUE  \n'}
+[1.080294] (point_goal_test) StdoutLine: {'line': b'-- Found geometry_msgs: 4.9.1 (/opt/ros/humble/share/geometry_msgs/cmake)\n'}
+[1.101218] (-) TimerEvent: {}
+[1.106595] (point_goal_test) StdoutLine: {'line': b'-- Found moveit_ros_planning_interface: 2.5.9 (/opt/ros/humble/share/moveit_ros_planning_interface/cmake)\n'}
+[1.193486] (point_goal_test) StdoutLine: {'line': b'-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: date_time filesystem program_options system thread \n'}
+[1.201434] (-) TimerEvent: {}
+[1.301723] (-) TimerEvent: {}
+[1.377744] (point_goal_test) StdoutLine: {'line': b'-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: chrono date_time filesystem iostreams program_options regex serialization system thread \n'}
+[1.401820] (-) TimerEvent: {}
+[1.477500] (point_goal_test) StdoutLine: {'line': b'-- Found parameter_traits: 0.6.0 (/opt/ros/humble/share/parameter_traits/cmake)\n'}
+[1.502083] (-) TimerEvent: {}
+[1.506771] (point_goal_test) StdoutLine: {'line': b'-- Found rclcpp_lifecycle: 16.0.18 (/opt/ros/humble/share/rclcpp_lifecycle/cmake)\n'}
+[1.553744] (point_goal_test) StdoutLine: {'line': b'-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: filesystem \n'}
+[1.602171] (-) TimerEvent: {}
+[1.678889] (point_goal_test) StdoutLine: {'line': b'-- library: /usr/lib/x86_64-linux-gnu/libcurl.so\n'}
+[1.702274] (-) TimerEvent: {}
+[1.735060] (point_goal_test) StdoutLine: {'line': b'-- Found Eigen3: TRUE (found version "3.4.0") \n'}
+[1.735179] (point_goal_test) StdoutLine: {'line': b'-- Ensuring Eigen3 include directory is part of orocos-kdl CMake target\n'}
+[1.802376] (-) TimerEvent: {}
+[1.902607] (-) TimerEvent: {}
+[1.912540] (point_goal_test) StdoutLine: {'line': b'-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: system filesystem date_time program_options thread chrono \n'}
+[2.002697] (-) TimerEvent: {}
+[2.093086] (point_goal_test) StdoutLine: {'line': b'-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: thread system filesystem regex date_time program_options \n'}
+[2.102783] (-) TimerEvent: {}
+[2.182810] (point_goal_test) StdoutLine: {'line': b'-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: system filesystem date_time program_options thread \n'}
+[2.202912] (-) TimerEvent: {}
+[2.303156] (-) TimerEvent: {}
+[2.359200] (point_goal_test) StdoutLine: {'line': b'-- Configuring done\n'}
+[2.403502] (-) TimerEvent: {}
+[2.503792] (-) TimerEvent: {}
+[2.604135] (-) TimerEvent: {}
+[2.614287] (point_goal_test) StdoutLine: {'line': b'-- Generating done\n'}
+[2.619377] (point_goal_test) StdoutLine: {'line': b'-- Build files have been written to: /home/amma/Kinova_gen2_rl/build/point_goal_test\n'}
+[2.626579] (point_goal_test) CommandEnded: {'returncode': 0}
+[2.627070] (point_goal_test) JobProgress: {'identifier': 'point_goal_test', 'progress': 'build'}
+[2.627602] (point_goal_test) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/amma/Kinova_gen2_rl/build/point_goal_test', '--', '-j16', '-l16'], 'cwd': '/home/amma/Kinova_gen2_rl/build/point_goal_test', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('LANGUAGE', 'en_IN:en'), ('USER', 'amma'), ('STARSHIP_SHELL', 'bash'), ('XDG_SESSION_TYPE', 'wayland'), ('SERPAPI_KEY', '0e2d204db305a2f0fb94dc6964dbc82412f5fe7a7837a17f44f3376709307217'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib::/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:'), ('HOME', '/home/amma'), ('OLDPWD', '/home/amma/Kinova_gen2_rl'), ('DESKTOP_SESSION', 'ubuntu'), ('NVM_BIN', '/home/amma/.nvm/versions/node/v20.20.1/bin'), ('NVM_INC', '/home/amma/.nvm/versions/node/v20.20.1/include/node'), ('GAZEBO_MASTER_URI', 'http://localhost:11345'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('MANAGERPID', '3220'), ('SYSTEMD_EXEC_PID', '4400'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('TERMINATOR_DBUS_NAME', 'net.tenshu.Terminator25ef4b219e3b005583550f2b0f9f990c3'), ('GIO_LAUNCHED_DESKTOP_FILE_PID', '85983'), ('NVM_DIR', '/home/amma/.nvm'), ('IM_CONFIG_PHASE', '1'), ('WAYLAND_DISPLAY', 'wayland-0'), ('COLCON_PREFIX_PATH', '/home/amma/Kinova_gen2_rl/install'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'amma'), ('JOURNAL_STREAM', '8:31837'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'amma'), ('TERM', 'xterm-256color'), ('GAZEBO_MODEL_PATH', '/usr/share/gazebo-11/models:'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('OGRE_RESOURCE_PATH', '/usr/lib/x86_64-linux-gnu/OGRE-1.9.0'), ('PATH', '/opt/ros/humble/bin:/home/amma/.nvm/versions/node/v20.20.1/bin:/home/amma/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin'), ('SESSION_MANAGER', 'local/amma-Precision-3650-Tower:@/tmp/.ICE-unix/3766,unix/amma-Precision-3650-Tower:/tmp/.ICE-unix/3766'), ('INVOCATION_ID', '580c9d476ff44b6894e6216debc23478'), ('XDG_MENU_PREFIX', 'gnome-'), ('GNOME_SETUP_DISPLAY', ':1'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('TERMINATOR_DBUS_PATH', '/net/tenshu/Terminator2'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('IBUS_DISABLE_SNOOPER', '1'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/.mutter-Xwaylandauth.0M35P3'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('ROS_DOMAIN_ID', '5'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('TERMINATOR_UUID', 'urn:uuid:df15991c-f629-4045-b5ad-465272515618'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('GAZEBO_RESOURCE_PATH', '/usr/share/gazebo-11:'), ('GAZEBO_MODEL_DATABASE_URI', 'http://models.gazebosim.org'), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/amma/Kinova_gen2_rl/build/point_goal_test'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('GAZEBO_PLUGIN_PATH', '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:'), ('NVM_CD_FLAGS', ''), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('STARSHIP_SESSION_KEY', '1580512971272692'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[2.661186] (point_goal_test) StdoutLine: {'line': b'[ 50%] \x1b[32mBuilding CXX object CMakeFiles/feeding_safe_mover.dir/src/feeding_safe_mover.cpp.o\x1b[0m\n'}
+[2.666540] (point_goal_test) StdoutLine: {'line': b'[ 50%] Built target ament_cmake_python_copy_point_goal_test\n'}
+[2.666677] (point_goal_test) StdoutLine: {'line': b'[ 50%] Built target ament_cmake_python_copy_point_goal_test_setup\n'}
+[2.704225] (-) TimerEvent: {}
+[2.804495] (-) TimerEvent: {}
+[2.904843] (-) TimerEvent: {}
+[2.950963] (point_goal_test) StdoutLine: {'line': b'running egg_info\n'}
+[2.951403] (point_goal_test) StdoutLine: {'line': b'creating point_goal_test.egg-info\n'}
+[2.951690] (point_goal_test) StdoutLine: {'line': b'writing point_goal_test.egg-info/PKG-INFO\n'}
+[2.951898] (point_goal_test) StdoutLine: {'line': b'writing dependency_links to point_goal_test.egg-info/dependency_links.txt\n'}
+[2.952059] (point_goal_test) StdoutLine: {'line': b'writing top-level names to point_goal_test.egg-info/top_level.txt\n'}
+[2.952341] (point_goal_test) StdoutLine: {'line': b"writing manifest file 'point_goal_test.egg-info/SOURCES.txt'\n"}
+[2.985233] (point_goal_test) StdoutLine: {'line': b"reading manifest file 'point_goal_test.egg-info/SOURCES.txt'\n"}
+[2.985789] (point_goal_test) StdoutLine: {'line': b"writing manifest file 'point_goal_test.egg-info/SOURCES.txt'\n"}
+[3.002257] (point_goal_test) StdoutLine: {'line': b'[ 50%] Built target ament_cmake_python_build_point_goal_test_egg\n'}
+[3.004907] (-) TimerEvent: {}
+[3.105140] (-) TimerEvent: {}
+[3.205465] (-) TimerEvent: {}
+[3.305725] (-) TimerEvent: {}
+[3.406157] (-) TimerEvent: {}
+[3.506520] (-) TimerEvent: {}
+[3.606918] (-) TimerEvent: {}
+[3.707243] (-) TimerEvent: {}
+[3.807610] (-) TimerEvent: {}
+[3.907818] (-) TimerEvent: {}
+[4.008076] (-) TimerEvent: {}
+[4.108347] (-) TimerEvent: {}
+[4.208610] (-) TimerEvent: {}
+[4.308916] (-) TimerEvent: {}
+[4.409309] (-) TimerEvent: {}
+[4.509594] (-) TimerEvent: {}
+[4.609843] (-) TimerEvent: {}
+[4.710110] (-) TimerEvent: {}
+[4.810351] (-) TimerEvent: {}
+[4.910717] (-) TimerEvent: {}
+[5.010961] (-) TimerEvent: {}
+[5.111226] (-) TimerEvent: {}
+[5.211530] (-) TimerEvent: {}
+[5.311784] (-) TimerEvent: {}
+[5.412059] (-) TimerEvent: {}
+[5.512321] (-) TimerEvent: {}
+[5.612587] (-) TimerEvent: {}
+[5.712858] (-) TimerEvent: {}
+[5.813120] (-) TimerEvent: {}
+[5.913388] (-) TimerEvent: {}
+[6.013601] (-) TimerEvent: {}
+[6.113851] (-) TimerEvent: {}
+[6.214099] (-) TimerEvent: {}
+[6.314368] (-) TimerEvent: {}
+[6.414641] (-) TimerEvent: {}
+[6.514891] (-) TimerEvent: {}
+[6.615144] (-) TimerEvent: {}
+[6.715419] (-) TimerEvent: {}
+[6.815700] (-) TimerEvent: {}
+[6.915996] (-) TimerEvent: {}
+[7.016294] (-) TimerEvent: {}
+[7.116562] (-) TimerEvent: {}
+[7.216955] (-) TimerEvent: {}
+[7.317194] (-) TimerEvent: {}
+[7.417429] (-) TimerEvent: {}
+[7.517661] (-) TimerEvent: {}
+[7.617900] (-) TimerEvent: {}
+[7.718132] (-) TimerEvent: {}
+[7.818425] (-) TimerEvent: {}
+[7.918681] (-) TimerEvent: {}
+[8.018935] (-) TimerEvent: {}
+[8.119181] (-) TimerEvent: {}
+[8.219571] (-) TimerEvent: {}
+[8.319966] (-) TimerEvent: {}
+[8.420273] (-) TimerEvent: {}
+[8.520567] (-) TimerEvent: {}
+[8.620830] (-) TimerEvent: {}
+[8.721090] (-) TimerEvent: {}
+[8.821391] (-) TimerEvent: {}
+[8.921664] (-) TimerEvent: {}
+[9.021942] (-) TimerEvent: {}
+[9.122200] (-) TimerEvent: {}
+[9.222482] (-) TimerEvent: {}
+[9.322740] (-) TimerEvent: {}
+[9.422986] (-) TimerEvent: {}
+[9.523233] (-) TimerEvent: {}
+[9.623489] (-) TimerEvent: {}
+[9.723735] (-) TimerEvent: {}
+[9.824047] (-) TimerEvent: {}
+[9.924319] (-) TimerEvent: {}
+[10.024586] (-) TimerEvent: {}
+[10.124901] (-) TimerEvent: {}
+[10.225151] (-) TimerEvent: {}
+[10.325418] (-) TimerEvent: {}
+[10.425762] (-) TimerEvent: {}
+[10.526001] (-) TimerEvent: {}
+[10.626254] (-) TimerEvent: {}
+[10.726509] (-) TimerEvent: {}
+[10.826798] (-) TimerEvent: {}
+[10.927047] (-) TimerEvent: {}
+[11.027295] (-) TimerEvent: {}
+[11.127584] (-) TimerEvent: {}
+[11.227865] (-) TimerEvent: {}
+[11.328102] (-) TimerEvent: {}
+[11.428353] (-) TimerEvent: {}
+[11.528597] (-) TimerEvent: {}
+[11.628941] (-) TimerEvent: {}
+[11.729189] (-) TimerEvent: {}
+[11.829531] (-) TimerEvent: {}
+[11.929782] (-) TimerEvent: {}
+[12.030108] (-) TimerEvent: {}
+[12.130406] (-) TimerEvent: {}
+[12.230703] (-) TimerEvent: {}
+[12.330985] (-) TimerEvent: {}
+[12.431236] (-) TimerEvent: {}
+[12.531480] (-) TimerEvent: {}
+[12.631758] (-) TimerEvent: {}
+[12.732016] (-) TimerEvent: {}
+[12.832264] (-) TimerEvent: {}
+[12.932536] (-) TimerEvent: {}
+[13.032793] (-) TimerEvent: {}
+[13.133041] (-) TimerEvent: {}
+[13.233270] (-) TimerEvent: {}
+[13.333580] (-) TimerEvent: {}
+[13.433834] (-) TimerEvent: {}
+[13.534080] (-) TimerEvent: {}
+[13.634361] (-) TimerEvent: {}
+[13.734747] (-) TimerEvent: {}
+[13.835062] (-) TimerEvent: {}
+[13.935317] (-) TimerEvent: {}
+[14.035613] (-) TimerEvent: {}
+[14.082347] (point_goal_test) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking CXX executable feeding_safe_mover\x1b[0m\n'}
+[14.135745] (-) TimerEvent: {}
+[14.235984] (-) TimerEvent: {}
+[14.336239] (-) TimerEvent: {}
+[14.436497] (-) TimerEvent: {}
+[14.536744] (-) TimerEvent: {}
+[14.637215] (-) TimerEvent: {}
+[14.737502] (-) TimerEvent: {}
+[14.837974] (-) TimerEvent: {}
+[14.938234] (-) TimerEvent: {}
+[15.038455] (-) TimerEvent: {}
+[15.138754] (-) TimerEvent: {}
+[15.239044] (-) TimerEvent: {}
+[15.339402] (-) TimerEvent: {}
+[15.439668] (-) TimerEvent: {}
+[15.493585] (point_goal_test) StdoutLine: {'line': b'[100%] Built target feeding_safe_mover\n'}
+[15.505641] (point_goal_test) CommandEnded: {'returncode': 0}
+[15.506110] (point_goal_test) JobProgress: {'identifier': 'point_goal_test', 'progress': 'install'}
+[15.511515] (point_goal_test) Command: {'cmd': ['/usr/bin/cmake', '--install', '/home/amma/Kinova_gen2_rl/build/point_goal_test'], 'cwd': '/home/amma/Kinova_gen2_rl/build/point_goal_test', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('LANGUAGE', 'en_IN:en'), ('USER', 'amma'), ('STARSHIP_SHELL', 'bash'), ('XDG_SESSION_TYPE', 'wayland'), ('SERPAPI_KEY', '0e2d204db305a2f0fb94dc6964dbc82412f5fe7a7837a17f44f3376709307217'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib::/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:'), ('HOME', '/home/amma'), ('OLDPWD', '/home/amma/Kinova_gen2_rl'), ('DESKTOP_SESSION', 'ubuntu'), ('NVM_BIN', '/home/amma/.nvm/versions/node/v20.20.1/bin'), ('NVM_INC', '/home/amma/.nvm/versions/node/v20.20.1/include/node'), ('GAZEBO_MASTER_URI', 'http://localhost:11345'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('MANAGERPID', '3220'), ('SYSTEMD_EXEC_PID', '4400'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('TERMINATOR_DBUS_NAME', 'net.tenshu.Terminator25ef4b219e3b005583550f2b0f9f990c3'), ('GIO_LAUNCHED_DESKTOP_FILE_PID', '85983'), ('NVM_DIR', '/home/amma/.nvm'), ('IM_CONFIG_PHASE', '1'), ('WAYLAND_DISPLAY', 'wayland-0'), ('COLCON_PREFIX_PATH', '/home/amma/Kinova_gen2_rl/install'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'amma'), ('JOURNAL_STREAM', '8:31837'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'amma'), ('TERM', 'xterm-256color'), ('GAZEBO_MODEL_PATH', '/usr/share/gazebo-11/models:'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('OGRE_RESOURCE_PATH', '/usr/lib/x86_64-linux-gnu/OGRE-1.9.0'), ('PATH', '/opt/ros/humble/bin:/home/amma/.nvm/versions/node/v20.20.1/bin:/home/amma/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin'), ('SESSION_MANAGER', 'local/amma-Precision-3650-Tower:@/tmp/.ICE-unix/3766,unix/amma-Precision-3650-Tower:/tmp/.ICE-unix/3766'), ('INVOCATION_ID', '580c9d476ff44b6894e6216debc23478'), ('XDG_MENU_PREFIX', 'gnome-'), ('GNOME_SETUP_DISPLAY', ':1'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('TERMINATOR_DBUS_PATH', '/net/tenshu/Terminator2'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('IBUS_DISABLE_SNOOPER', '1'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/.mutter-Xwaylandauth.0M35P3'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('ROS_DOMAIN_ID', '5'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('SHELL', '/bin/bash'), ('TERMINATOR_UUID', 'urn:uuid:df15991c-f629-4045-b5ad-465272515618'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('GAZEBO_RESOURCE_PATH', '/usr/share/gazebo-11:'), ('GAZEBO_MODEL_DATABASE_URI', 'http://models.gazebosim.org'), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/amma/Kinova_gen2_rl/build/point_goal_test'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('GAZEBO_PLUGIN_PATH', '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:'), ('NVM_CD_FLAGS', ''), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('STARSHIP_SESSION_KEY', '1580512971272692'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[15.516639] (point_goal_test) StdoutLine: {'line': b'-- Install configuration: "Release"\n'}
+[15.516758] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/lib/point_goal_test/feeding_safe_mover\n'}
+[15.517292] (point_goal_test) StdoutLine: {'line': b'-- Set runtime path of "/home/amma/Kinova_gen2_rl/install/point_goal_test/lib/point_goal_test/feeding_safe_mover" to ""\n'}
+[15.517359] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/pythonpath.sh\n'}
+[15.517458] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/pythonpath.dsv\n'}
+[15.517548] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test-0.0.1-py3.10.egg-info\n'}
+[15.517630] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test-0.0.1-py3.10.egg-info/top_level.txt\n'}
+[15.517685] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test-0.0.1-py3.10.egg-info/SOURCES.txt\n'}
+[15.517734] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test-0.0.1-py3.10.egg-info/dependency_links.txt\n'}
+[15.517856] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test-0.0.1-py3.10.egg-info/PKG-INFO\n'}
+[15.517934] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test\n'}
+[15.517994] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/arm_mover_node.py\n'}
+[15.518142] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/point_selector_node.py\n'}
+[15.518203] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/__init__.py\n'}
+[15.539807] (-) TimerEvent: {}
+[15.561423] (point_goal_test) StdoutLine: {'line': b"Listing '/home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test'...\n"}
+[15.561561] (point_goal_test) StdoutLine: {'line': b"Compiling '/home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/__init__.py'...\n"}
+[15.561599] (point_goal_test) StdoutLine: {'line': b"Compiling '/home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/arm_mover_node.py'...\n"}
+[15.561632] (point_goal_test) StdoutLine: {'line': b"Compiling '/home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/point_selector_node.py'...\n"}
+[15.564544] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/lib/point_goal_test/point_selector_node\n'}
+[15.564751] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/lib/point_goal_test/arm_mover_node\n'}
+[15.564804] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/launch\n'}
+[15.564842] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/launch/feeding_safe.launch.py\n'}
+[15.564886] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/launch/point_goal.launch.py\n'}
+[15.564922] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/ament_index/resource_index/packages/point_goal_test\n'}
+[15.564976] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/package.xml\n'}
+[15.565012] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/ament_index/resource_index/package_run_dependencies/point_goal_test\n'}
+[15.565056] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/ament_index/resource_index/parent_prefix_path/point_goal_test\n'}
+[15.565119] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/ament_prefix_path.sh\n'}
+[15.565178] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/ament_prefix_path.dsv\n'}
+[15.565238] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/path.sh\n'}
+[15.565296] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/path.dsv\n'}
+[15.565380] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/local_setup.bash\n'}
+[15.565458] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/local_setup.sh\n'}
+[15.565519] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/local_setup.zsh\n'}
+[15.565583] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/local_setup.dsv\n'}
+[15.565649] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/package.dsv\n'}
+[15.565773] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/ament_index/resource_index/packages/point_goal_test\n'}
+[15.565885] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/cmake/point_goal_testConfig.cmake\n'}
+[15.565966] (point_goal_test) StdoutLine: {'line': b'-- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/cmake/point_goal_testConfig-version.cmake\n'}
+[15.566015] (point_goal_test) StdoutLine: {'line': b'-- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/package.xml\n'}
+[15.568100] (point_goal_test) CommandEnded: {'returncode': 0}
+[15.591336] (point_goal_test) JobEnded: {'identifier': 'point_goal_test', 'rc': 0}
+[15.591824] (-) EventReactorShutdown: {}

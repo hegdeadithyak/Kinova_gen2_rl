@@ -1,0 +1,4 @@
+Invoking command in '/home/amma/Kinova_gen2_rl/build/kinova_description': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/kinova_description -- -j16 -l16
+Invoked command in '/home/amma/Kinova_gen2_rl/build/kinova_description' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/kinova_description -- -j16 -l16
+Invoking command in '/home/amma/Kinova_gen2_rl/build/kinova_description': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/kinova_description
+Invoked command in '/home/amma/Kinova_gen2_rl/build/kinova_description' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/kinova_description

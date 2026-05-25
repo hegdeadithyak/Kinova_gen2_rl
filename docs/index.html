@@ -183,6 +183,7 @@
         </div>
         <ul class="nav-links">
             <li><a href="#overview" class="active">Overview</a></li>
+            <li><a href="#software-sim">Software Simulation (Gazebo)</a></li>
             <li><a href="#hardware-launch">Hardware Deployment</a></li>
             <li><a href="#calibration">Hand-Eye Calibration</a></li>
             <li><a href="#intrinsic-calibration">Intrinsic Calibration</a></li>
@@ -205,23 +206,47 @@
                 Porting legacy robotics drivers and simulation environments involves bridging gaps between old build systems (catkin to ament), updated physics engines (Gazebo Classic to Ignition/Gazebo), and entirely rewritten motion planning frameworks (MoveIt to MoveIt 2).
             </p>
 
+            <!-- SECTION: Software Sim -->
+            <h2 id="software-sim">1. Software Simulation (Software Version)</h2>
+            <p>The "Software Version" provides a high-fidelity Gazebo environment that mirrors the hardware setup, including an arm-mounted depth camera and MoveIt 2 integration.</p>
+            
+            <h3>1.1 Launching the Simulation</h3>
+            <p>Use the following command to bring up the full simulation environment:</p>
+            <pre>ros2 launch point_goal_test point_goal_gazebo.launch.py</pre>
+            <p>This single command launches Gazebo, RViz, MoveIt 2, and the point selection nodes.</p>
+
+            <h3>1.2 The PointSelector GUI</h3>
+            <p>A window titled <strong>"PointSelector"</strong> will appear automatically. This is the primary interface for providing goal points in simulation:</p>
+            <ul>
+                <li><strong>Clicking:</strong> Click any pixel in the live feed. The node will project that pixel into 3D space using the current arm pose and depth data.</li>
+                <li><strong>Automatic Depth Detection:</strong> The system automatically detects if it is receiving <code>32FC1</code> (simulation meters) or <code>16UC1</code> (hardware millimeters) and scales the data correctly.</li>
+                <li><strong>Verification:</strong> A red circle appears on the clicked pixel, and the target is published to <code>/goal_point</code>.</li>
+            </ul>
+
+            <h3>1.3 CLI Goal Submission</h3>
+            <p>Alternatively, you can send coordinates directly via the terminal:</p>
+            <pre>ros2 topic pub --once /goal_point geometry_msgs/msg/PointStamped "{
+  header: { frame_id: 'root' },
+  point: {x: 0.45, y: -0.20, z: 0.82}
+}"</pre>
+
             <!-- SECTION: Hardware -->
-            <h2 id="hardware-launch">0. Hardware Deployment</h2>
+            <h2 id="hardware-launch">2. Hardware Deployment</h2>
             <p>To launch the physical Kinova Gen2 arm in the ROS 2 environment, follow this sequence:</p>
             
-            <h3>0.1 Launch the Driver</h3>
+            <h3>2.1 Launch the Driver</h3>
             <p>The driver handles communication with the arm via USB or Ethernet.</p>
             <pre>ros2 launch kinova_bringup kinova_robot_launch.py kinova_robotType:=j2s6s200</pre>
             
-            <h3>0.2 Launch MoveIt 2 & Perception</h3>
+            <h3>2.2 Launch MoveIt 2 & Perception</h3>
             <p>This brings up the planning scene, RViz visualization, and the RealSense depth camera.</p>
             <pre>ros2 launch kinova_bringup sample.launch.py</pre>
 
             <!-- SECTION: Calibration -->
-            <h2 id="calibration">1. Hand-Eye Calibration (Extremely Important)</h2>
+            <h2 id="calibration">3. Hand-Eye Calibration (Extremely Important)</h2>
             <p>Accuracy in 3D clicking and autonomous scooping depends entirely on the quality of the calibration between the camera and the robot's end-effector.</p>
             
-            <h3>1.1 Calibration Tools</h3>
+            <h3>3.1 Calibration Tools</h3>
             <p>You can use either of the following tools integrated into this port:</p>
             <ul>
                 <li><strong>easy_handeye2</strong>: Recommended for a straightforward GUI-based workflow.</li>
@@ -229,13 +254,13 @@
             </ul>
             <pre>ros2 launch kinova_bringup easy_handeye.launch.py</pre>
 
-            <h3>1.2 Physical Stability</h3>
+            <h3>3.2 Physical Stability</h3>
             <div class="callout callout-error">
                 <h4>Hardware Warning</h4>
                 <p>Ensure the depth camera (RealSense) is securely mounted to the end-effector. Even a tiny shake or "wobble" due to a missing screw will invalidate the calibration transform. If the camera moves by 1mm, your 3D target will be off by several centimeters at distance.</p>
             </div>
 
-            <h3>1.3 Calibration Target Selection</h3>
+            <h3>3.3 Calibration Target Selection</h3>
             <p><strong>Prefer ArUco boards</strong> over ChArUco boards for this specific arm. ChArUco boards can sometimes suffer from corner detection ambiguity at high angles with this camera's resolution.</p>
             <p><strong>Printing Instructions:</strong></p>
             <ul>
@@ -244,7 +269,7 @@
                 <li><strong>Manual Entry:</strong> Enter this measured value (in meters) manually into the calibration GUI. Do not trust the default values in the scripts.</li>
             </ul>
 
-            <h3>1.4 Sampling Strategy ($AX = XB$)</h3>
+            <h3>3.4 Sampling Strategy ($AX = XB$)</h3>
             <p>Solving the hand-eye equation ($AX = XB$) requires high diversity in the samples taken.</p>
             <ul>
                 <li><strong>Take at least 20 samples:</strong> Do not stop early.</li>
@@ -254,10 +279,10 @@
 
 
             <!-- SECTION: Intrinsic Calibration -->
-            <h2 id="intrinsic-calibration">2. Intrinsic Camera Calibration</h2>
+            <h2 id="intrinsic-calibration">4. Intrinsic Camera Calibration</h2>
             <p>While the RealSense driver provides factory intrinsics via the <code>camera_info</code> topic, these are "mostly correct" but may require custom calibration for high-precision tasks.</p>
             
-            <h3>2.1 Using Factory Intrinsics</h3>
+            <h3>4.1 Using Factory Intrinsics</h3>
             <p>The <code>point_selector_node</code> automatically listens to the <code>/camera/camera/color/camera_info</code> topic. It extracts the focal lengths (<code>fx, fy</code>) and optical centers (<code>cx, cy</code>) to project 2D clicks into 3D space.</p>
             <div class="callout callout-solution">
                 <h4>Verification</h4>
@@ -265,23 +290,16 @@
                 <pre>[point_selector_node]: Camera intrinsics received: fx=615.4, fy=615.8</pre>
             </div>
 
-            <h3>2.2 Custom Checkerboard Calibration</h3>
+            <h3>4.2 Custom Checkerboard Calibration</h3>
             <p>If you notice a systematic "shift" in your 3D points (especially towards the edges of the image), the factory intrinsics may be slightly off due to lens wear or temperature changes.</p>
-            <p><strong>When to recalibrate:</strong></p>
-            <ul>
-                <li>3D points are accurate in the center but drift at the corners.</li>
-                <li>The camera has been dropped or subject to vibration.</li>
-                <li>You are using a non-standard resolution.</li>
-            </ul>
-            <p><strong>Tools:</strong> Use the standard <code>camera_calibration</code> tool from the ROS 2 image pipeline:</p>
+            <p>Recalibrate if drift occurs at corners or if using non-standard resolutions.</p>
             <pre>ros2 run camera_calibration cameracalibrator --size 8x6 --square 0.024 --ros-args -r image:=/camera/camera/color/image_raw</pre>
-            <p>After calibration, the new parameters should be uploaded to the RealSense hardware using the <code>realsense-viewer</code> tool or saved into a local <code>camera_info</code> YAML file for the driver to load.</p>
 
 
-            <!-- SECTION 3 -->
-            <h2 id="build-errors">3. Build Errors & Missing Files</h2>
+            <!-- SECTION 5 -->
+            <h2 id="build-errors">5. Build Errors & Missing Files</h2>
             
-            <h3>3.1 Missing Vendor Binary Blobs (<code>.so</code> files)</h3>
+            <h3>5.1 Missing Vendor Binary Blobs (<code>.so</code> files)</h3>
             <div class="callout callout-error">
                 <h4>Error Output</h4>
                 <pre>CMake Error at cmake_install.cmake:46 (file):
@@ -289,179 +307,93 @@ file INSTALL cannot find
 "/home/user/workspace/src/kinova-ros2/kinova_driver/lib/x86_64-linux-gnu/USBCommLayerUbuntu.so":
 No such file or directory.</pre>
             </div>
-            <p><strong>The Mistake:</strong> The Kinova ROS 1 driver relies on proprietary, pre-compiled C++ binaries provided by Kinova (e.g., <code>USBCommLayerUbuntu.so</code>). When transferring the source code to a new ROS 2 workspace, these binary folders (<code>i386-linux-gnu</code> and <code>x86_64-linux-gnu</code>) were not tracked by git or were accidentally omitted from the <code>lib</code> folder.</p>
             <div class="callout callout-solution">
                 <h4>The Solution</h4>
-                <p>Locate the original binary blobs from the vendor SDK or the old ROS 1 workspace and copy them into the correct directory structure before building.</p>
-                <pre>cp -r /old_workspace/src/kinova-ros/kinova_driver/lib/* src/kinova-ros2/kinova_driver/lib/</pre>
-                <p>Ensure <code>CMakeLists.txt</code> uses the <code>install(FILES ...)</code> directive to copy these into the ROS 2 <code>install/lib</code> directory.</p>
+                <p>Locate binary blobs from vendor SDK and copy to: <code>src/kinova-ros2/kinova_driver/lib/</code>.</p>
             </div>
 
 
-            <!-- SECTION 4 -->
-            <h2 id="gazebo-issues">4. Gazebo Simulation Issues</h2>
+            <!-- SECTION 6 -->
+            <h2 id="gazebo-issues">6. Gazebo Simulation Issues</h2>
 
-            <h3>4.1 Meshes Failing to Load in Gazebo (Invisible Robot)</h3>
+            <h3>6.1 Meshes Failing to Load in Gazebo (Invisible Robot)</h3>
             <div class="callout callout-error">
                 <h4>Error Output</h4>
-                <pre>[GUI] [Err] [SystemPaths.cc:474] Could not resolve file [model://kinova_description/meshes/wrist_spherical_1.STL]
-[GUI] [Err] [SceneManager.cc:404] Failed to load geometry for visual</pre>
+                <pre>[GUI] [Err] [SystemPaths.cc:474] Could not resolve file [model://kinova_description/meshes/wrist_spherical_1.STL]</pre>
             </div>
-            <p><strong>The Mistake:</strong> In ROS 1 + Gazebo Classic, the <code>package://</code> or <code>model://</code> URIs resolved magically via the <code>ROS_PACKAGE_PATH</code>. In ROS 2 + Ignition/New Gazebo, the physics engine operates independently of ROS packages unless explicitly told where to look. The launch files did not export the correct resource paths.</p>
             <div class="callout callout-solution">
                 <h4>The Solution</h4>
-                <p>Pass the explicit ROS 2 <code>share</code> directory paths to Gazebo using environment variables within the Python Launch file. Both <code>IGN_GAZEBO_RESOURCE_PATH</code> and <code>GZ_SIM_RESOURCE_PATH</code> must be set.</p>
-                <pre><code class="language-python">pkg_share_path = os.path.dirname(get_package_share_directory('kinova_description'))
-gazebo = ExecuteProcess(
-    cmd=['ign', 'gazebo', '-r', world_file],
-    additional_env={
-        'IGN_GAZEBO_RESOURCE_PATH': pkg_share_path + ':/opt/ros/humble/share',
-        'GZ_SIM_RESOURCE_PATH': pkg_share_path + ':/opt/ros/humble/share',
-    }
-)</code></pre>
+                <p>Pass explicit <code>share</code> directory paths to <code>IGN_GAZEBO_RESOURCE_PATH</code> in the launch file.</p>
             </div>
 
-            <h3>4.2 Controller Manager Fails to Start</h3>
+            <h3>6.2 Controller Manager Fails to Start</h3>
+            <div class="callout callout-solution">
+                <h4>The Solution</h4>
+                <p>Ensure the <code>ros_gz_sim</code> spawner targets the correct world name (e.g., <code>point_goal_scene</code>).</p>
+            </div>
+
+
+            <!-- SECTION 7 -->
+            <h2 id="moveit-issues">7. MoveIt 2 & Planning</h2>
+
+            <h3>7.1 Pilz Planner Missing Cartesian Limits</h3>
             <div class="callout callout-error">
                 <h4>Error Output</h4>
-                <pre>[spawner] [WARN]: Could not contact service /controller_manager/list_controllers
-[spawner] [INFO]: waiting for service /controller_manager/list_controllers to become available...</pre>
+                <pre>[move_group]: Parameter 'robot_description_planning.cartesian_limits.max_trans_vel', is not set.</pre>
             </div>
-            <p><strong>The Mistake:</strong> This happens when the <code>ros_gz_sim</code> spawner node attempts to inject the URDF into the simulation, but it spawns the robot into the wrong "world" internally, or the URDF lacks the <code>gz_ros2_control</code> plugin. If the robot isn't spawned, the simulated controller manager is never instantiated.</p>
             <div class="callout callout-solution">
                 <h4>The Solution</h4>
-                <p>Add the <code>-world</code> argument to the <code>ros_gz_sim</code> create node, ensuring it targets the exact name defined inside the <code>.sdf</code> file (e.g., <code>&lt;world name="point_goal_scene"&gt;</code>).</p>
-            </div>
-
-
-            <!-- SECTION 5 -->
-            <h2 id="moveit-issues">5. MoveIt 2 & Planning</h2>
-
-            <h3>5.1 Pilz Planner Missing Cartesian Limits</h3>
-            <div class="callout callout-error">
-                <h4>Error Output</h4>
-                <pre>[move_group]: Parameter 'robot_description_planning.cartesian_limits.max_trans_vel', is not set in the config file.</pre>
-            </div>
-            <p><strong>The Mistake:</strong> MoveIt 2 introduces the Pilz Industrial Motion Planner for deterministic Cartesian movements (LIN, PTP, CIRC). Unlike the default OMPL planner, Pilz strictly requires Cartesian velocity and acceleration limits to be defined. The ported ROS 1 <code>joint_limits.yaml</code> only contained angular limits.</p>
-            <div class="callout callout-solution">
-                <h4>The Solution</h4>
-                <p>Append a <code>cartesian_limits</code> block to the end of your <code>joint_limits.yaml</code> file.</p>
-                <pre><code class="language-yaml">cartesian_limits:
-  max_trans_vel: 0.1
-  max_trans_acc: 0.1
-  max_trans_dec: 0.1
-  max_rot_vel: 0.1</code></pre>
+                <p>Add <code>cartesian_limits</code> velocity/acceleration block to <code>joint_limits.yaml</code>.</p>
             </div>
 
             <!-- SECTION: Error Codes -->
-            <h2 id="error-codes">6. Kinova API Error Codes</h2>
-            <p>When working with hardware, the Kinova API may return specific numeric error codes. Below are the most common ones encountered during development:</p>
-
+            <h2 id="error-codes">8. Kinova API Error Codes</h2>
             <table>
                 <thead>
-                    <tr>
-                        <th>Code</th>
-                        <th>Meaning</th>
-                        <th>Common Root Cause</th>
-                    </tr>
+                    <tr><th>Code</th><th>Meaning</th><th>Common Root Cause</th></tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><code>1015</code></td>
-                        <td>Device Not Found</td>
-                        <td>Loose USB/Ethernet cable, insufficient power supply to the arm, or USB passthrough issues in Virtual Machines.</td>
-                    </tr>
-                    <tr>
-                        <td><code>1001</code></td>
-                        <td>RS485 Error</td>
-                        <td>Internal communication failure between joints. Often requires a power cycle.</td>
-                    </tr>
-                    <tr>
-                        <td><code>1014</code></td>
-                        <td>Init Connection Error</td>
-                        <td>The API failed to initialize the communication layer. Check udev rules.</td>
-                    </tr>
+                    <tr><td><code>1015</code></td><td>Device Not Found</td><td>Loose cable, power supply, or VM USB passthrough.</td></tr>
+                    <tr><td><code>1001</code></td><td>RS485 Error</td><td>Internal joint communication failure. Power cycle needed.</td></tr>
+                    <tr><td><code>1014</code></td><td>Init Connection Error</td><td>API failed to initialize communication layer. Check udev rules.</td></tr>
                 </tbody>
             </table>
 
 
             <!-- SECTION: File Manifest -->
-            <h2 id="file-manifest">7. File Manifest & Logic Meanings</h2>
-            <p>The root directory contains several utility and orchestration scripts. Here is what they do:</p>
-
+            <h2 id="file-manifest">9. File Manifest & Logic Meanings</h2>
             <ul>
-                <li><strong><code>robot.py</code></strong>: The core orchestrator. Contains the <code>FeedingOrchestrator</code> class which manages the state machine for the entire scooping cycle.</li>
-                <li><strong><code>run_scoop.py</code></strong>: The main entry point for the feeding task. It uses the joint sequences defined at the top of the file to move between <code>pre_scoop</code>, <code>scoop</code>, and <code>feed</code>.</li>
-                <li><strong><code>food_segmenter.py</code></strong>: Uses OpenCV to isolate food in the camera feed. Mistakes here usually involve incorrect HSV color bounds for the food being used.</li>
-                <li><strong><code>click_pointer.py</code></strong>: Translates a 2D pixel click from the user into a 3D goal point in the robot's base frame (<code>root</code>).</li>
-                <li><strong><code>record.py</code></strong>: A utility script to save the robot's current joint states into a YAML file for later playback.</li>
-                <li><strong><code>*.yaml</code></strong>: These files (e.g., <code>working_joints.yaml</code>) store precise joint positions that have been verified to work on the hardware.</li>
+                <li><strong><code>robot.py</code></strong>: Core FeedingOrchestrator state machine.</li>
+                <li><strong><code>run_scoop.py</code></strong>: Main entry point for hardware scooping cycles.</li>
+                <li><strong><code>food_segmenter.py</code></strong>: OpenCV-based food isolation logic.</li>
+                <li><strong><code>click_pointer.py</code></strong>: Manual 2D pixel to 3D goal translation.</li>
+                <li><strong><code>record.py</code></strong>: Utility to save current joint states to YAML.</li>
             </ul>
 
 
-            <!-- SECTION 8 -->
-            <h2 id="runtime-stability">8. Runtime Stability & Hangs</h2>
+            <!-- SECTION 10 -->
+            <h2 id="runtime-stability">10. Runtime Stability & Hangs</h2>
 
-            <h3>8.1 Python Nodes Exiting Silently / GUI Freezing</h3>
-            <div class="callout callout-error">
-                <h4>Symptom</h4>
-                <p>Nodes like <code>point_selector_node</code> exit with <code>process has finished cleanly</code> immediately on boot, or the Ubuntu desktop prompts to "Wait / Force Quit" the Gazebo application.</p>
-            </div>
-            <p><strong>The Mistake:</strong> 
-               1. <b>Silent Exits:</b> The node relied on OpenCV (<code>cv2.namedWindow</code>) to render a UI. In headless environments or environments with X11 forwarding issues, OpenCV throws a fatal exception. Because it wasn't caught, the node died silently.
-               <br>2. <b>GUI Hangs:</b> The Gazebo <code>.sdf</code> file was running the ODE physics engine with a <code>max_step_size</code> of 0.005 and an update rate of 200Hz. This maxed out the CPU threads on standard hardware, starving the GUI thread.
-            </p>
+            <h3>10.1 Python Nodes Exiting Silently / GUI Freezing</h3>
             <div class="callout callout-solution">
                 <h4>The Solution</h4>
-                <p><strong>Fixing Silent Exits:</strong> Wrap OpenCV initialization in a <code>try/except</code> block and implement a "headless mode" fallback. Add <code>traceback.print_exc()</code> to the main loop to ensure fatal errors are always logged.</p>
-                <p><strong>Fixing Physics Overload:</strong> Edit the <code>.sdf</code> world file to reduce the physics load:</p>
-                <pre><code class="language-xml">&lt;physics name="default_physics" default="true" type="ode"&gt;
-  &lt;max_step_size&gt;0.01&lt;/max_step_size&gt;
-  &lt;real_time_update_rate&gt;100&lt;/real_time_update_rate&gt;
-&lt;/physics&gt;</code></pre>
+                <p><strong>Silent Exits:</strong> Catch OpenCV initialization errors and fallback to headless mode. 
+                <br><strong>GUI Hangs:</strong> Increase <code>max_step_size</code> (to 0.01) and reduce <code>real_time_update_rate</code> (to 100) in SDF world.</p>
             </div>
 
-            <!-- SECTION 9 -->
-            <h2 id="legacy-code">9. Legacy C++ Warnings & Bugs</h2>
+            <!-- SECTION 11 -->
+            <h2 id="legacy-code">11. Legacy C++ Warnings & Bugs</h2>
 
-            <h3>9.1 Compilation Warnings Treated as Errors</h3>
-            <div class="callout callout-error">
-                <h4>Error Output</h4>
-                <pre>warning: unused parameter ‘result’ [-Wunused-parameter]
-warning: ‘bool setsEqual(const std::vector&lt;std::string&gt;&, ...)’ defined but not used</pre>
-            </div>
-            <p><strong>The Mistake:</strong> The ROS 2 `ament_cmake` environment enforces strict compiler flags (often treating warnings as errors) to enforce modern C++ standards. Legacy ROS 1 code frequently left helper functions unused or ignored actionlib callback parameters.</p>
+            <h3>11.1 Logical Bug: Assignment in Conditional</h3>
             <div class="callout callout-solution">
                 <h4>The Solution</h4>
-                <p>Explicitly cast unused parameters to <code>void</code> to silence the warning, or simply remove unused helper functions from the source files.</p>
-                <pre><code class="language-cpp">void result_callback(const WrappedResult & result) {
-    (void)result; // Silences the unused parameter warning
-    is_client_active = false;
-}</code></pre>
-            </div>
-
-            <h3>9.2 Logical Bug: Assignment in Conditional</h3>
-            <div class="callout callout-error">
-                <h4>Error Output</h4>
-                <pre>warning: suggest parentheses around assignment used as truth value [-Wparentheses]
-if(mouse_was_up=true)</pre>
-            </div>
-            <p><strong>The Mistake:</strong> A classic C++ typo in <code>kinova_interactive_control.cpp</code>. Using a single equals sign <code>=</code> performs an assignment instead of a comparison <code>==</code>. This means the condition always evaluates to true, overriding the intended state machine logic.</p>
-            <div class="callout callout-solution">
-                <h4>The Solution</h4>
-                <p>Change the assignment to an evaluation of the boolean variable itself.</p>
-                <pre><code class="language-cpp">// Old: if(mouse_was_up=true)
-// New:
-if(mouse_was_up) {
-    // Execute state logic...
-}</code></pre>
+                <p>Fix <code>if(mouse_was_up=true)</code> by changing to <code>if(mouse_was_up)</code>.</p>
             </div>
 
         </div>
     </div>
 
     <script>
-        // Simple script to highlight active section in sidebar
         const sections = document.querySelectorAll('h2');
         const navLinks = document.querySelectorAll('.nav-links a');
 

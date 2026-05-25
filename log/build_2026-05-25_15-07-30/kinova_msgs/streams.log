@@ -1,0 +1,982 @@
+[0.018s] Invoking command in '/home/amma/Kinova_gen2_rl/build/kinova_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_msgs -DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/kinova_msgs
+[0.308s] -- The C compiler identification is GNU 11.4.0
+[0.309s] -- The CXX compiler identification is GNU 11.4.0
+[0.309s] -- Detecting C compiler ABI info
+[0.309s] -- Detecting C compiler ABI info - done
+[0.309s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.309s] -- Detecting C compile features
+[0.310s] -- Detecting C compile features - done
+[0.310s] -- Detecting CXX compiler ABI info
+[0.310s] -- Detecting CXX compiler ABI info - done
+[0.310s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.311s] -- Detecting CXX compile features
+[0.311s] -- Detecting CXX compile features - done
+[0.312s] -- Found ament_cmake: 1.3.13 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.361s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.426s] -- Found action_msgs: 1.2.2 (/opt/ros/humble/share/action_msgs/cmake)
+[0.458s] -- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.461s] -- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.468s] -- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.476s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.487s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.513s] -- Found geometry_msgs: 4.9.1 (/opt/ros/humble/share/geometry_msgs/cmake)
+[0.533s] -- Found rosidl_default_generators: 1.2.0 (/opt/ros/humble/share/rosidl_default_generators/cmake)
+[0.983s] -- Found ament_cmake_ros: 0.10.0 (/opt/ros/humble/share/ament_cmake_ros/cmake)
+[1.395s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[1.535s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.584s] -- Found PythonInterp: /usr/bin/python3 (found suitable version "3.10.12", minimum required is "3.6") 
+[1.592s] -- Found python_cmake_module: 0.10.0 (/opt/ros/humble/share/python_cmake_module/cmake)
+[1.643s] -- Found PythonLibs: /usr/lib/x86_64-linux-gnu/libpython3.10.so (found suitable version "3.10.12", minimum required is "3.5") 
+[1.643s] -- Using PYTHON_EXECUTABLE: /usr/bin/python3
+[1.643s] -- Using PYTHON_INCLUDE_DIRS: /usr/include/python3.10
+[1.643s] -- Using PYTHON_LIBRARIES: /usr/lib/x86_64-linux-gnu/libpython3.10.so
+[1.668s] -- Found PythonExtra: .so  
+[1.752s] -- Configuring done
+[1.805s] -- Generating done
+[1.816s] -- Build files have been written to: /home/amma/Kinova_gen2_rl/build/kinova_msgs
+[1.822s] Invoked command in '/home/amma/Kinova_gen2_rl/build/kinova_msgs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_msgs -DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/kinova_msgs
+[1.823s] Invoking command in '/home/amma/Kinova_gen2_rl/build/kinova_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/kinova_msgs -- -j16 -l16
+[1.855s] [  1%] [34m[1mGenerating C code for ROS interfaces[0m
+[1.862s] [  1%] [34m[1mGenerating C++ code for ROS interfaces[0m
+[1.866s] [  1%] Built target ament_cmake_python_copy_kinova_msgs
+[2.061s] running egg_info
+[2.061s] creating kinova_msgs.egg-info
+[2.061s] writing kinova_msgs.egg-info/PKG-INFO
+[2.061s] writing dependency_links to kinova_msgs.egg-info/dependency_links.txt
+[2.062s] writing top-level names to kinova_msgs.egg-info/top_level.txt
+[2.062s] writing manifest file 'kinova_msgs.egg-info/SOURCES.txt'
+[2.063s] reading manifest file 'kinova_msgs.egg-info/SOURCES.txt'
+[2.063s] writing manifest file 'kinova_msgs.egg-info/SOURCES.txt'
+[2.081s] [  1%] Built target ament_cmake_python_build_kinova_msgs_egg
+[3.564s] [  1%] Built target kinova_msgs__cpp
+[3.583s] [  3%] [34m[1mGenerating C++ type support for eProsima Fast-RTPS[0m
+[3.584s] [  3%] [34m[1mGenerating C++ type support dispatch for ROS interfaces[0m
+[3.587s] [  4%] [34m[1mGenerating C++ introspection for ROS interfaces[0m
+[3.633s] [  5%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/msg/detail/kinova_pose__functions.c.o[0m
+[3.633s] [  5%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/msg/detail/joint_velocity__functions.c.o[0m
+[3.634s] [  5%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/msg/detail/joint_angles__functions.c.o[0m
+[3.634s] [  5%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/msg/detail/finger_position__functions.c.o[0m
+[3.634s] [  7%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/msg/detail/pose_velocity__functions.c.o[0m
+[3.634s] [  7%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/msg/detail/joint_torque__functions.c.o[0m
+[3.634s] [  7%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/msg/detail/pose_velocity_with_fingers__functions.c.o[0m
+[3.634s] [  8%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/msg/detail/cartesian_force__functions.c.o[0m
+[3.634s] [  8%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/srv/detail/start__functions.c.o[0m
+[3.634s] [  8%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__functions.c.o[0m
+[3.634s] [  9%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/srv/detail/stop__functions.c.o[0m
+[3.636s] [ 10%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/srv/detail/set_force_control_params__functions.c.o[0m
+[3.636s] [ 10%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/srv/detail/home_arm__functions.c.o[0m
+[3.791s] [ 10%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/srv/detail/set_end_effector_offset__functions.c.o[0m
+[3.791s] [ 10%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/srv/detail/set_torque_control_mode__functions.c.o[0m
+[3.791s] [ 11%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/srv/detail/set_null_space_mode_state__functions.c.o[0m
+[3.791s] [ 12%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/srv/detail/clear_trajectories__functions.c.o[0m
+[3.791s] [ 11%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/srv/detail/set_torque_control_parameters__functions.c.o[0m
+[3.792s] [ 13%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__functions.c.o[0m
+[3.793s] [ 13%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/srv/detail/zero_torques__functions.c.o[0m
+[3.798s] [ 13%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/srv/detail/run_com_parameters_estimation__functions.c.o[0m
+[3.801s] [ 14%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/action/detail/arm_joint_angles__functions.c.o[0m
+[3.817s] [ 14%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/action/detail/set_fingers_position__functions.c.o[0m
+[3.818s] [ 14%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/action/detail/arm_kinova_pose__functions.c.o[0m
+[3.828s] [ 15%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_c.dir/rosidl_generator_c/kinova_msgs/action/detail/arm_pose__functions.c.o[0m
+[3.983s] [ 16%] [32m[1mLinking C shared library libkinova_msgs__rosidl_generator_c.so[0m
+[4.021s] [ 16%] Built target kinova_msgs__rosidl_generator_c
+[4.031s] [ 19%] [34m[1mGenerating C type support for eProsima Fast-RTPS[0m
+[4.031s] [ 19%] [34m[1mGenerating C type support dispatch for ROS interfaces[0m
+[4.031s] [ 19%] [34m[1mGenerating C introspection for ROS interfaces[0m
+[5.884s] [ 19%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/msg/finger_position__type_support.cpp.o[0m
+[5.884s] [ 20%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/msg/joint_angles__type_support.cpp.o[0m
+[5.885s] [ 21%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/msg/joint_velocity__type_support.cpp.o[0m
+[5.885s] [ 21%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/msg/kinova_pose__type_support.cpp.o[0m
+[5.886s] [ 22%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/msg/pose_velocity_with_fingers__type_support.cpp.o[0m
+[5.886s] [ 21%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/msg/pose_velocity__type_support.cpp.o[0m
+[5.886s] [ 23%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/msg/cartesian_force__type_support.cpp.o[0m
+[5.887s] [ 23%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/msg/pose_velocity_with_finger_velocity__type_support.cpp.o[0m
+[5.887s] [ 23%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/srv/start__type_support.cpp.o[0m
+[5.888s] [ 23%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/msg/joint_torque__type_support.cpp.o[0m
+[5.890s] [ 24%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/srv/stop__type_support.cpp.o[0m
+[6.339s] [ 24%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/srv/home_arm__type_support.cpp.o[0m
+[6.350s] [ 24%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/srv/set_force_control_params__type_support.cpp.o[0m
+[6.350s] [ 25%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/srv/set_end_effector_offset__type_support.cpp.o[0m
+[6.351s] [ 25%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/srv/set_null_space_mode_state__type_support.cpp.o[0m
+[6.353s] [ 26%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/srv/set_torque_control_mode__type_support.cpp.o[0m
+[6.366s] [ 26%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/srv/set_torque_control_parameters__type_support.cpp.o[0m
+[6.381s] [ 26%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/srv/zero_torques__type_support.cpp.o[0m
+[6.389s] [ 27%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/srv/clear_trajectories__type_support.cpp.o[0m
+[6.391s] [ 28%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/srv/add_pose_to_cartesian_trajectory__type_support.cpp.o[0m
+[6.399s] [ 28%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/srv/run_com_parameters_estimation__type_support.cpp.o[0m
+[6.413s] [ 28%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/action/arm_joint_angles__type_support.cpp.o[0m
+[6.788s] [ 29%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/action/arm_pose__type_support.cpp.o[0m
+[6.789s] [ 29%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/action/arm_kinova_pose__type_support.cpp.o[0m
+[6.790s] [ 30%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_cpp.dir/rosidl_typesupport_cpp/kinova_msgs/action/set_fingers_position__type_support.cpp.o[0m
+[6.882s] [ 31%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/msg/joint_angles__type_support.cpp.o[0m
+[6.885s] [ 31%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/msg/finger_position__type_support.cpp.o[0m
+[6.885s] [ 31%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/msg/joint_velocity__type_support.cpp.o[0m
+[6.902s] [ 31%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/msg/joint_torque__type_support.cpp.o[0m
+[6.909s] [ 32%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/msg/kinova_pose__type_support.cpp.o[0m
+[6.909s] [ 32%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/msg/pose_velocity__type_support.cpp.o[0m
+[6.923s] [ 33%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/msg/pose_velocity_with_fingers__type_support.cpp.o[0m
+[6.929s] [ 33%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/msg/pose_velocity_with_finger_velocity__type_support.cpp.o[0m
+[6.938s] [ 34%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/msg/cartesian_force__type_support.cpp.o[0m
+[6.944s] [ 34%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/srv/start__type_support.cpp.o[0m
+[6.948s] [ 34%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/srv/home_arm__type_support.cpp.o[0m
+[6.948s] [ 35%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/srv/stop__type_support.cpp.o[0m
+[6.951s] [ 35%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/srv/set_force_control_params__type_support.cpp.o[0m
+[6.956s] [ 36%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/srv/set_end_effector_offset__type_support.cpp.o[0m
+[6.964s] [ 36%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/msg/detail/finger_position__type_support.cpp.o[0m
+[6.969s] [ 36%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/srv/set_null_space_mode_state__type_support.cpp.o[0m
+[6.982s] [ 37%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/srv/set_torque_control_mode__type_support.cpp.o[0m
+[6.993s] [ 37%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/srv/set_torque_control_parameters__type_support.cpp.o[0m
+[6.993s] [ 38%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/srv/clear_trajectories__type_support.cpp.o[0m
+[6.996s] [ 39%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/msg/detail/joint_angles__type_support.cpp.o[0m
+[7.000s] [ 39%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/srv/zero_torques__type_support.cpp.o[0m
+[7.004s] [ 39%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/msg/detail/joint_velocity__type_support.cpp.o[0m
+[7.005s] [ 40%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/msg/detail/joint_torque__type_support.cpp.o[0m
+[7.019s] [ 41%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/srv/add_pose_to_cartesian_trajectory__type_support.cpp.o[0m
+[7.028s] [ 41%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/msg/detail/kinova_pose__type_support.cpp.o[0m
+[7.046s] [ 42%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/msg/detail/pose_velocity__type_support.cpp.o[0m
+[7.046s] [ 42%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/srv/run_com_parameters_estimation__type_support.cpp.o[0m
+[7.051s] [ 42%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/msg/detail/pose_velocity_with_fingers__type_support.cpp.o[0m
+[7.069s] [ 42%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__type_support.cpp.o[0m
+[7.094s] [ 42%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/action/arm_joint_angles__type_support.cpp.o[0m
+[7.169s] [ 43%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/action/arm_kinova_pose__type_support.cpp.o[0m
+[7.235s] [ 43%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/action/arm_pose__type_support.cpp.o[0m
+[7.244s] [ 44%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/msg/detail/cartesian_force__type_support.cpp.o[0m
+[7.381s] [ 45%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_c.dir/rosidl_typesupport_c/kinova_msgs/action/set_fingers_position__type_support.cpp.o[0m
+[7.461s] [ 45%] [32m[1mLinking CXX shared library libkinova_msgs__rosidl_typesupport_c.so[0m
+[7.515s] [ 45%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/srv/detail/start__type_support.cpp.o[0m
+[7.522s] [ 46%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/srv/detail/stop__type_support.cpp.o[0m
+[7.541s] [ 46%] Built target kinova_msgs__rosidl_typesupport_c
+[7.544s] [ 46%] [32m[1mLinking CXX shared library libkinova_msgs__rosidl_typesupport_cpp.so[0m
+[7.562s] [ 46%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/srv/detail/home_arm__type_support.cpp.o[0m
+[7.596s] [ 47%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/srv/detail/set_force_control_params__type_support.cpp.o[0m
+[7.614s] [ 47%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/srv/detail/set_end_effector_offset__type_support.cpp.o[0m
+[7.617s] [ 47%] Built target kinova_msgs__rosidl_typesupport_cpp
+[7.631s] [ 48%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/srv/detail/set_null_space_mode_state__type_support.cpp.o[0m
+[7.640s] [ 48%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/srv/detail/set_torque_control_mode__type_support.cpp.o[0m
+[7.646s] [ 48%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/srv/detail/set_torque_control_parameters__type_support.cpp.o[0m
+[7.662s] [ 49%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/srv/detail/clear_trajectories__type_support.cpp.o[0m
+[7.686s] [ 49%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/srv/detail/zero_torques__type_support.cpp.o[0m
+[7.694s] [ 50%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__type_support.cpp.o[0m
+[7.759s] [ 50%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/srv/detail/run_com_parameters_estimation__type_support.cpp.o[0m
+[7.899s] [ 51%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/action/detail/arm_joint_angles__type_support.cpp.o[0m
+[8.177s] [ 51%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/action/detail/arm_kinova_pose__type_support.cpp.o[0m
+[8.185s] [ 52%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/action/detail/arm_pose__type_support.cpp.o[0m
+[8.206s] [ 52%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_cpp.dir/rosidl_typesupport_introspection_cpp/kinova_msgs/action/detail/set_fingers_position__type_support.cpp.o[0m
+[8.341s] [ 53%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/msg/detail/dds_fastrtps/finger_position__type_support.cpp.o[0m
+[8.341s] [ 53%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/msg/detail/dds_fastrtps/joint_angles__type_support.cpp.o[0m
+[8.347s] [ 53%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/msg/detail/dds_fastrtps/joint_velocity__type_support.cpp.o[0m
+[8.348s] [ 54%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/msg/detail/dds_fastrtps/joint_torque__type_support.cpp.o[0m
+[8.352s] [ 54%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/msg/detail/dds_fastrtps/kinova_pose__type_support.cpp.o[0m
+[8.354s] [ 54%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/msg/detail/dds_fastrtps/pose_velocity__type_support.cpp.o[0m
+[8.366s] [ 55%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/msg/detail/dds_fastrtps/pose_velocity_with_fingers__type_support.cpp.o[0m
+[8.366s] [ 55%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/msg/detail/dds_fastrtps/pose_velocity_with_finger_velocity__type_support.cpp.o[0m
+[8.373s] [ 56%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/msg/detail/dds_fastrtps/cartesian_force__type_support.cpp.o[0m
+[8.373s] [ 56%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/msg/detail/finger_position__type_support.c.o[0m
+[8.379s] [ 57%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/msg/detail/joint_angles__type_support.c.o[0m
+[8.428s] [ 57%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/msg/detail/joint_velocity__type_support.c.o[0m
+[8.435s] [ 58%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/msg/detail/joint_torque__type_support.c.o[0m
+[8.496s] [ 58%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/srv/detail/dds_fastrtps/start__type_support.cpp.o[0m
+[8.500s] [ 58%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/msg/detail/kinova_pose__type_support.c.o[0m
+[8.556s] [ 59%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/msg/detail/pose_velocity__type_support.c.o[0m
+[8.613s] [ 59%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/msg/detail/pose_velocity_with_fingers__type_support.c.o[0m
+[8.666s] [ 59%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__type_support.c.o[0m
+[8.722s] [ 60%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/msg/detail/cartesian_force__type_support.c.o[0m
+[8.782s] [ 60%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/srv/detail/start__type_support.c.o[0m
+[8.839s] [ 61%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/srv/detail/stop__type_support.c.o[0m
+[8.868s] [ 62%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/srv/detail/dds_fastrtps/stop__type_support.cpp.o[0m
+[8.897s] [ 62%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/srv/detail/home_arm__type_support.c.o[0m
+[8.897s] [ 62%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/msg/detail/finger_position__type_support_c.cpp.o[0m
+[8.951s] [ 63%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/srv/detail/set_force_control_params__type_support.c.o[0m
+[8.980s] [ 63%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/srv/detail/set_end_effector_offset__type_support.c.o[0m
+[8.980s] [ 64%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/msg/detail/joint_angles__type_support_c.cpp.o[0m
+[8.997s] [ 64%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/msg/detail/joint_velocity__type_support_c.cpp.o[0m
+[9.005s] [ 65%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/msg/detail/joint_torque__type_support_c.cpp.o[0m
+[9.005s] [ 66%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/srv/detail/set_null_space_mode_state__type_support.c.o[0m
+[9.007s] [ 66%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/srv/detail/dds_fastrtps/home_arm__type_support.cpp.o[0m
+[9.009s] [ 66%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/msg/detail/kinova_pose__type_support_c.cpp.o[0m
+[9.026s] [ 66%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/msg/detail/pose_velocity__type_support_c.cpp.o[0m
+[9.037s] [ 67%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/msg/detail/pose_velocity_with_fingers__type_support_c.cpp.o[0m
+[9.037s] [ 67%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__type_support_c.cpp.o[0m
+[9.037s] [ 67%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/srv/detail/set_torque_control_mode__type_support.c.o[0m
+[9.078s] [ 67%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/srv/detail/set_torque_control_parameters__type_support.c.o[0m
+[9.123s] [ 69%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/srv/detail/dds_fastrtps/set_force_control_params__type_support.cpp.o[0m
+[9.125s] [ 69%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/msg/detail/cartesian_force__type_support_c.cpp.o[0m
+[9.139s] [ 70%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/srv/detail/clear_trajectories__type_support.c.o[0m
+[9.195s] [ 70%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/srv/detail/zero_torques__type_support.c.o[0m
+[9.197s] [ 70%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/srv/detail/dds_fastrtps/set_end_effector_offset__type_support.cpp.o[0m
+[9.201s] [ 71%] [32m[1mLinking CXX shared library libkinova_msgs__rosidl_typesupport_introspection_cpp.so[0m
+[9.230s] [ 71%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/srv/detail/start__type_support_c.cpp.o[0m
+[9.253s] [ 72%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__type_support.c.o[0m
+[9.329s] [ 72%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/srv/detail/run_com_parameters_estimation__type_support.c.o[0m
+[9.343s] [ 72%] Built target kinova_msgs__rosidl_typesupport_introspection_cpp
+[9.360s] [ 72%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/srv/detail/dds_fastrtps/set_null_space_mode_state__type_support.cpp.o[0m
+[9.449s] [ 73%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/srv/detail/dds_fastrtps/set_torque_control_mode__type_support.cpp.o[0m
+[9.449s] [ 74%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/action/detail/arm_joint_angles__type_support.c.o[0m
+[9.512s] [ 74%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/srv/detail/dds_fastrtps/set_torque_control_parameters__type_support.cpp.o[0m
+[9.552s] [ 74%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/action/detail/arm_kinova_pose__type_support.c.o[0m
+[9.578s] [ 75%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/srv/detail/dds_fastrtps/clear_trajectories__type_support.cpp.o[0m
+[9.600s] [ 76%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/srv/detail/stop__type_support_c.cpp.o[0m
+[9.608s] [ 76%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/srv/detail/home_arm__type_support_c.cpp.o[0m
+[9.621s] [ 77%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/action/detail/arm_pose__type_support.c.o[0m
+[9.630s] [ 77%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/srv/detail/dds_fastrtps/zero_torques__type_support.cpp.o[0m
+[9.642s] [ 78%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/srv/detail/dds_fastrtps/add_pose_to_cartesian_trajectory__type_support.cpp.o[0m
+[9.651s] [ 79%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c.dir/rosidl_typesupport_introspection_c/kinova_msgs/action/detail/set_fingers_position__type_support.c.o[0m
+[9.651s] [ 79%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/srv/detail/set_force_control_params__type_support_c.cpp.o[0m
+[9.688s] [ 79%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/srv/detail/set_end_effector_offset__type_support_c.cpp.o[0m
+[9.692s] [ 79%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/srv/detail/dds_fastrtps/run_com_parameters_estimation__type_support.cpp.o[0m
+[9.699s] [ 80%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/action/detail/dds_fastrtps/arm_joint_angles__type_support.cpp.o[0m
+[9.730s] [ 80%] [32m[1mLinking C shared library libkinova_msgs__rosidl_typesupport_introspection_c.so[0m
+[9.791s] [ 80%] Built target kinova_msgs__rosidl_typesupport_introspection_c
+[9.796s] [ 80%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/srv/detail/set_null_space_mode_state__type_support_c.cpp.o[0m
+[9.805s] [ 81%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/srv/detail/set_torque_control_mode__type_support_c.cpp.o[0m
+[9.814s] [ 81%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/action/detail/dds_fastrtps/arm_kinova_pose__type_support.cpp.o[0m
+[9.869s] [ 81%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/action/detail/dds_fastrtps/arm_pose__type_support.cpp.o[0m
+[10.034s] [ 81%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/srv/detail/set_torque_control_parameters__type_support_c.cpp.o[0m
+[10.152s] [ 82%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/srv/detail/clear_trajectories__type_support_c.cpp.o[0m
+[10.157s] [ 83%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_cpp.dir/rosidl_typesupport_fastrtps_cpp/kinova_msgs/action/detail/dds_fastrtps/set_fingers_position__type_support.cpp.o[0m
+[10.168s] [ 83%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/srv/detail/zero_torques__type_support_c.cpp.o[0m
+[10.171s] [ 84%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__type_support_c.cpp.o[0m
+[10.218s] [ 84%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/srv/detail/run_com_parameters_estimation__type_support_c.cpp.o[0m
+[10.301s] [ 85%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/action/detail/arm_joint_angles__type_support_c.cpp.o[0m
+[10.310s] [ 85%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/action/detail/arm_kinova_pose__type_support_c.cpp.o[0m
+[10.324s] [ 85%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/action/detail/arm_pose__type_support_c.cpp.o[0m
+[10.365s] [ 86%] [32mBuilding CXX object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c.dir/rosidl_typesupport_fastrtps_c/kinova_msgs/action/detail/set_fingers_position__type_support_c.cpp.o[0m
+[10.853s] [ 86%] [32m[1mLinking CXX shared library libkinova_msgs__rosidl_typesupport_fastrtps_cpp.so[0m
+[10.856s] [ 86%] [32m[1mLinking CXX shared library libkinova_msgs__rosidl_typesupport_fastrtps_c.so[0m
+[10.919s] [ 86%] Built target kinova_msgs__rosidl_typesupport_fastrtps_cpp
+[10.920s] [ 86%] Built target kinova_msgs__rosidl_typesupport_fastrtps_c
+[10.935s] [ 86%] Built target kinova_msgs
+[10.950s] [ 86%] [34m[1mGenerating Python code for ROS interfaces[0m
+[14.255s] [ 86%] Built target kinova_msgs__py
+[14.276s] [ 87%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/msg/_joint_torque_s.c.o[0m
+[14.276s] [ 87%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/msg/_joint_velocity_s.c.o[0m
+[14.276s] [ 87%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/msg/_joint_angles_s.c.o[0m
+[14.276s] [ 87%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/msg/_finger_position_s.c.o[0m
+[14.276s] [ 88%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/msg/_kinova_pose_s.c.o[0m
+[14.277s] [ 88%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/msg/_pose_velocity_s.c.o[0m
+[14.277s] [ 88%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/msg/_pose_velocity_with_finger_velocity_s.c.o[0m
+[14.277s] [ 89%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/srv/_start_s.c.o[0m
+[14.277s] [ 89%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/msg/_cartesian_force_s.c.o[0m
+[14.277s] [ 90%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/msg/_pose_velocity_with_fingers_s.c.o[0m
+[14.277s] [ 90%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/srv/_stop_s.c.o[0m
+[14.278s] [ 90%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/srv/_set_force_control_params_s.c.o[0m
+[14.278s] [ 91%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/srv/_home_arm_s.c.o[0m
+[14.278s] [ 91%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/srv/_set_null_space_mode_state_s.c.o[0m
+[14.281s] [ 92%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/srv/_set_end_effector_offset_s.c.o[0m
+[14.282s] [ 93%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/srv/_set_torque_control_mode_s.c.o[0m
+[14.621s] [ 94%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/srv/_set_torque_control_parameters_s.c.o[0m
+[14.621s] [ 94%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/srv/_zero_torques_s.c.o[0m
+[14.621s] [ 94%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/srv/_clear_trajectories_s.c.o[0m
+[14.621s] [ 94%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/srv/_add_pose_to_cartesian_trajectory_s.c.o[0m
+[14.626s] [ 94%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/action/_arm_joint_angles_s.c.o[0m
+[14.626s] [ 95%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/srv/_run_com_parameters_estimation_s.c.o[0m
+[14.626s] [ 96%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/action/_arm_kinova_pose_s.c.o[0m
+[14.644s] [ 97%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/action/_set_fingers_position_s.c.o[0m
+[14.644s] [ 97%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_generator_py.dir/rosidl_generator_py/kinova_msgs/action/_arm_pose_s.c.o[0m
+[14.767s] [ 97%] [32m[1mLinking C shared library rosidl_generator_py/kinova_msgs/libkinova_msgs__rosidl_generator_py.so[0m
+[14.799s] [ 97%] Built target kinova_msgs__rosidl_generator_py
+[14.813s] [100%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_c__pyext.dir/rosidl_generator_py/kinova_msgs/_kinova_msgs_s.ep.rosidl_typesupport_c.c.o[0m
+[14.813s] [100%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_fastrtps_c__pyext.dir/rosidl_generator_py/kinova_msgs/_kinova_msgs_s.ep.rosidl_typesupport_fastrtps_c.c.o[0m
+[14.813s] [100%] [32mBuilding C object CMakeFiles/kinova_msgs__rosidl_typesupport_introspection_c__pyext.dir/rosidl_generator_py/kinova_msgs/_kinova_msgs_s.ep.rosidl_typesupport_introspection_c.c.o[0m
+[15.014s] [100%] [32m[1mLinking C shared library rosidl_generator_py/kinova_msgs/kinova_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so[0m
+[15.014s] [100%] [32m[1mLinking C shared library rosidl_generator_py/kinova_msgs/kinova_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so[0m
+[15.014s] [100%] [32m[1mLinking C shared library rosidl_generator_py/kinova_msgs/kinova_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so[0m
+[15.049s] [100%] Built target kinova_msgs__rosidl_typesupport_c__pyext
+[15.049s] [100%] Built target kinova_msgs__rosidl_typesupport_fastrtps_c__pyext
+[15.049s] [100%] Built target kinova_msgs__rosidl_typesupport_introspection_c__pyext
+[15.060s] Invoked command in '/home/amma/Kinova_gen2_rl/build/kinova_msgs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/kinova_msgs -- -j16 -l16
+[15.061s] Invoking command in '/home/amma/Kinova_gen2_rl/build/kinova_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/kinova_msgs
+[15.067s] -- Install configuration: ""
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/ament_index/resource_index/rosidl_interfaces/kinova_msgs
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/kinova_pose.h
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/joint_angles.h
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/finger_position.h
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/cartesian_force.h
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/pose_velocity.h
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/pose_velocity_with_finger_velocity.h
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/joint_torque.h
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/joint_velocity.h
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/pose_velocity_with_fingers.h
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_torque__functions.h
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/cartesian_force__struct.h
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/cartesian_force__functions.c
+[15.068s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/kinova_pose__functions.h
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_torque__type_support.h
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity__type_support.h
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_torque__functions.c
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_angles__functions.c
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_fingers__struct.h
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/finger_position__functions.c
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/cartesian_force__type_support.h
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/cartesian_force__functions.h
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_velocity__functions.c
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_fingers__functions.h
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/finger_position__type_support.h
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_velocity__struct.h
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity__functions.h
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/kinova_pose__type_support.h
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_angles__functions.h
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_torque__struct.h
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__functions.h
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_angles__struct.h
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/kinova_pose__struct.h
+[15.069s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_fingers__type_support.h
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity__functions.c
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/finger_position__struct.h
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity__struct.h
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_fingers__functions.c
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/kinova_pose__functions.c
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__functions.c
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__type_support.h
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_velocity__type_support.h
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__struct.h
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/finger_position__functions.h
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_velocity__functions.h
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_angles__type_support.h
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/rosidl_generator_c__visibility_control.h
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/arm_joint_angles.h
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/arm_pose.h
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/set_fingers_position.h
+[15.070s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail
+[15.071s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_joint_angles__type_support.h
+[15.071s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_pose__functions.c
+[15.071s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/set_fingers_position__functions.c
+[15.071s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_joint_angles__functions.h
+[15.071s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_pose__struct.h
+[15.071s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/set_fingers_position__struct.h
+[15.071s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_pose__type_support.h
+[15.071s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_kinova_pose__functions.c
+[15.071s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_pose__functions.h
+[15.071s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_joint_angles__functions.c
+[15.071s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_kinova_pose__struct.h
+[15.071s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/set_fingers_position__functions.h
+[15.071s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/set_fingers_position__type_support.h
+[15.071s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_kinova_pose__type_support.h
+[15.071s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_kinova_pose__functions.h
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_joint_angles__struct.h
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/arm_kinova_pose.h
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/start.h
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/add_pose_to_cartesian_trajectory.h
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/clear_trajectories.h
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/set_force_control_params.h
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/set_torque_control_parameters.h
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/zero_torques.h
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/set_null_space_mode_state.h
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/set_end_effector_offset.h
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/set_torque_control_mode.h
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/home_arm.h
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/stop.h
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/stop__struct.h
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_force_control_params__functions.h
+[15.072s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/run_com_parameters_estimation__functions.h
+[15.073s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/home_arm__struct.h
+[15.073s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_mode__struct.h
+[15.073s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/stop__functions.h
+[15.073s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_parameters__struct.h
+[15.073s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/start__struct.h
+[15.073s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/run_com_parameters_estimation__type_support.h
+[15.073s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_end_effector_offset__struct.h
+[15.073s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_parameters__functions.c
+[15.073s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/run_com_parameters_estimation__functions.c
+[15.073s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/zero_torques__struct.h
+[15.073s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_parameters__type_support.h
+[15.073s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/start__functions.h
+[15.073s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/stop__functions.c
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_null_space_mode_state__type_support.h
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/zero_torques__functions.h
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/clear_trajectories__functions.h
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_force_control_params__type_support.h
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_end_effector_offset__type_support.h
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/home_arm__functions.h
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__type_support.h
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__functions.h
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__functions.c
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/zero_torques__type_support.h
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/clear_trajectories__struct.h
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_null_space_mode_state__functions.h
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/home_arm__functions.c
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/zero_torques__functions.c
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/start__type_support.h
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_mode__type_support.h
+[15.074s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_mode__functions.h
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_mode__functions.c
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/start__functions.c
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_null_space_mode_state__struct.h
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/clear_trajectories__functions.c
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/stop__type_support.h
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_force_control_params__functions.c
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_parameters__functions.h
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/home_arm__type_support.h
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_end_effector_offset__functions.c
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/clear_trajectories__type_support.h
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_end_effector_offset__functions.h
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_null_space_mode_state__functions.c
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/run_com_parameters_estimation__struct.h
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_force_control_params__struct.h
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__struct.h
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/run_com_parameters_estimation.h
+[15.075s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/environment/library_path.sh
+[15.076s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/environment/library_path.dsv
+[15.076s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/lib/libkinova_msgs__rosidl_generator_c.so
+[15.076s] -- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib/libkinova_msgs__rosidl_generator_c.so" to ""
+[15.076s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs
+[15.076s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg
+[15.076s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/rosidl_typesupport_fastrtps_c__visibility_control.h
+[15.077s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail
+[15.077s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/finger_position__rosidl_typesupport_fastrtps_c.h
+[15.077s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity__rosidl_typesupport_fastrtps_c.h
+[15.077s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_fingers__rosidl_typesupport_fastrtps_c.h
+[15.077s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_torque__rosidl_typesupport_fastrtps_c.h
+[15.077s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__rosidl_typesupport_fastrtps_c.h
+[15.077s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_angles__rosidl_typesupport_fastrtps_c.h
+[15.077s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/cartesian_force__rosidl_typesupport_fastrtps_c.h
+[15.077s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/kinova_pose__rosidl_typesupport_fastrtps_c.h
+[15.077s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_velocity__rosidl_typesupport_fastrtps_c.h
+[15.077s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action
+[15.077s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail
+[15.077s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_pose__rosidl_typesupport_fastrtps_c.h
+[15.077s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/set_fingers_position__rosidl_typesupport_fastrtps_c.h
+[15.077s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_joint_angles__rosidl_typesupport_fastrtps_c.h
+[15.077s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_kinova_pose__rosidl_typesupport_fastrtps_c.h
+[15.077s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv
+[15.077s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail
+[15.077s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_parameters__rosidl_typesupport_fastrtps_c.h
+[15.078s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_null_space_mode_state__rosidl_typesupport_fastrtps_c.h
+[15.078s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/clear_trajectories__rosidl_typesupport_fastrtps_c.h
+[15.078s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_end_effector_offset__rosidl_typesupport_fastrtps_c.h
+[15.078s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_mode__rosidl_typesupport_fastrtps_c.h
+[15.078s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/start__rosidl_typesupport_fastrtps_c.h
+[15.078s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_force_control_params__rosidl_typesupport_fastrtps_c.h
+[15.078s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/home_arm__rosidl_typesupport_fastrtps_c.h
+[15.078s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/stop__rosidl_typesupport_fastrtps_c.h
+[15.078s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__rosidl_typesupport_fastrtps_c.h
+[15.078s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/run_com_parameters_estimation__rosidl_typesupport_fastrtps_c.h
+[15.078s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/zero_torques__rosidl_typesupport_fastrtps_c.h
+[15.078s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/lib/libkinova_msgs__rosidl_typesupport_fastrtps_c.so
+[15.079s] -- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib/libkinova_msgs__rosidl_typesupport_fastrtps_c.so" to ""
+[15.079s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs
+[15.079s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg
+[15.079s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/cartesian_force.hpp
+[15.079s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/pose_velocity_with_fingers.hpp
+[15.079s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/finger_position.hpp
+[15.079s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/joint_angles.hpp
+[15.079s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/joint_torque.hpp
+[15.079s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/rosidl_generator_cpp__visibility_control.hpp
+[15.079s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/kinova_pose.hpp
+[15.079s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/joint_velocity.hpp
+[15.079s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/pose_velocity_with_finger_velocity.hpp
+[15.079s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail
+[15.079s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/finger_position__traits.hpp
+[15.079s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity__builder.hpp
+[15.079s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/finger_position__type_support.hpp
+[15.079s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_angles__builder.hpp
+[15.079s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_velocity__builder.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/kinova_pose__builder.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__builder.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_velocity__struct.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity__traits.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_torque__type_support.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/finger_position__struct.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/finger_position__builder.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_fingers__builder.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_fingers__traits.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_fingers__type_support.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/kinova_pose__type_support.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/cartesian_force__struct.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/kinova_pose__traits.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity__struct.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/kinova_pose__struct.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__type_support.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity__type_support.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_torque__builder.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__struct.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__traits.hpp
+[15.080s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_torque__traits.hpp
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_velocity__type_support.hpp
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/cartesian_force__type_support.hpp
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/cartesian_force__traits.hpp
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_angles__traits.hpp
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_fingers__struct.hpp
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_angles__type_support.hpp
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_torque__struct.hpp
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_angles__struct.hpp
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/cartesian_force__builder.hpp
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_velocity__traits.hpp
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/pose_velocity.hpp
+[15.081s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/set_fingers_position.hpp
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/arm_pose.hpp
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/arm_kinova_pose.hpp
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/arm_joint_angles.hpp
+[15.081s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_pose__builder.hpp
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_joint_angles__builder.hpp
+[15.081s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_joint_angles__traits.hpp
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_joint_angles__struct.hpp
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_kinova_pose__traits.hpp
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/set_fingers_position__traits.hpp
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/set_fingers_position__type_support.hpp
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/set_fingers_position__builder.hpp
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_kinova_pose__struct.hpp
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_pose__type_support.hpp
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_pose__struct.hpp
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/set_fingers_position__struct.hpp
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_joint_angles__type_support.hpp
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_kinova_pose__type_support.hpp
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_pose__traits.hpp
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_kinova_pose__builder.hpp
+[15.082s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/clear_trajectories.hpp
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/set_force_control_params.hpp
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/zero_torques.hpp
+[15.082s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/set_end_effector_offset.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/add_pose_to_cartesian_trajectory.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/run_com_parameters_estimation.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/start.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/set_torque_control_parameters.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/set_null_space_mode_state.hpp
+[15.083s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_null_space_mode_state__type_support.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/zero_torques__traits.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/start__type_support.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__type_support.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/home_arm__builder.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_end_effector_offset__type_support.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/run_com_parameters_estimation__struct.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/home_arm__struct.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_parameters__struct.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/run_com_parameters_estimation__type_support.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_null_space_mode_state__builder.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/zero_torques__builder.hpp
+[15.083s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/home_arm__traits.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_mode__builder.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_end_effector_offset__traits.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/run_com_parameters_estimation__traits.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/stop__traits.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_mode__struct.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_mode__type_support.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__traits.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/clear_trajectories__traits.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_end_effector_offset__builder.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/clear_trajectories__type_support.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_force_control_params__builder.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_mode__traits.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_end_effector_offset__struct.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_parameters__type_support.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/home_arm__type_support.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/start__struct.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/zero_torques__struct.hpp
+[15.084s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/run_com_parameters_estimation__builder.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/stop__type_support.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/clear_trajectories__builder.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/zero_torques__type_support.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__struct.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_parameters__builder.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/stop__builder.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_null_space_mode_state__traits.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_force_control_params__struct.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/start__traits.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/clear_trajectories__struct.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/stop__struct.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/start__builder.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_parameters__traits.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_null_space_mode_state__struct.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_force_control_params__traits.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_force_control_params__type_support.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__builder.hpp
+[15.085s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/home_arm.hpp
+[15.086s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/set_torque_control_mode.hpp
+[15.086s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/stop.hpp
+[15.086s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs
+[15.086s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg
+[15.086s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/rosidl_typesupport_fastrtps_cpp__visibility_control.h
+[15.086s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail
+[15.086s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/finger_position__rosidl_typesupport_fastrtps_cpp.hpp
+[15.086s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/dds_fastrtps
+[15.086s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_fingers__rosidl_typesupport_fastrtps_cpp.hpp
+[15.086s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_torque__rosidl_typesupport_fastrtps_cpp.hpp
+[15.086s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity__rosidl_typesupport_fastrtps_cpp.hpp
+[15.086s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/cartesian_force__rosidl_typesupport_fastrtps_cpp.hpp
+[15.086s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/kinova_pose__rosidl_typesupport_fastrtps_cpp.hpp
+[15.086s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_velocity__rosidl_typesupport_fastrtps_cpp.hpp
+[15.086s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_angles__rosidl_typesupport_fastrtps_cpp.hpp
+[15.086s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__rosidl_typesupport_fastrtps_cpp.hpp
+[15.086s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action
+[15.086s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail
+[15.086s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_joint_angles__rosidl_typesupport_fastrtps_cpp.hpp
+[15.086s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/dds_fastrtps
+[15.087s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_pose__rosidl_typesupport_fastrtps_cpp.hpp
+[15.087s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_kinova_pose__rosidl_typesupport_fastrtps_cpp.hpp
+[15.087s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/set_fingers_position__rosidl_typesupport_fastrtps_cpp.hpp
+[15.087s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv
+[15.087s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail
+[15.087s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_mode__rosidl_typesupport_fastrtps_cpp.hpp
+[15.087s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_force_control_params__rosidl_typesupport_fastrtps_cpp.hpp
+[15.087s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/dds_fastrtps
+[15.087s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/clear_trajectories__rosidl_typesupport_fastrtps_cpp.hpp
+[15.087s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_end_effector_offset__rosidl_typesupport_fastrtps_cpp.hpp
+[15.087s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/run_com_parameters_estimation__rosidl_typesupport_fastrtps_cpp.hpp
+[15.087s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/zero_torques__rosidl_typesupport_fastrtps_cpp.hpp
+[15.087s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__rosidl_typesupport_fastrtps_cpp.hpp
+[15.087s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/stop__rosidl_typesupport_fastrtps_cpp.hpp
+[15.087s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_null_space_mode_state__rosidl_typesupport_fastrtps_cpp.hpp
+[15.087s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/start__rosidl_typesupport_fastrtps_cpp.hpp
+[15.087s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/home_arm__rosidl_typesupport_fastrtps_cpp.hpp
+[15.087s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_parameters__rosidl_typesupport_fastrtps_cpp.hpp
+[15.088s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/lib/libkinova_msgs__rosidl_typesupport_fastrtps_cpp.so
+[15.088s] -- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib/libkinova_msgs__rosidl_typesupport_fastrtps_cpp.so" to ""
+[15.088s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs
+[15.088s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg
+[15.088s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/rosidl_typesupport_introspection_c__visibility_control.h
+[15.088s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail
+[15.088s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/kinova_pose__type_support.c
+[15.088s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__rosidl_typesupport_introspection_c.h
+[15.088s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_angles__type_support.c
+[15.088s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_fingers__rosidl_typesupport_introspection_c.h
+[15.089s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_fingers__type_support.c
+[15.089s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/cartesian_force__rosidl_typesupport_introspection_c.h
+[15.089s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__type_support.c
+[15.089s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/finger_position__type_support.c
+[15.089s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_torque__rosidl_typesupport_introspection_c.h
+[15.089s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_velocity__rosidl_typesupport_introspection_c.h
+[15.089s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_velocity__type_support.c
+[15.089s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_torque__type_support.c
+[15.089s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity__rosidl_typesupport_introspection_c.h
+[15.089s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/finger_position__rosidl_typesupport_introspection_c.h
+[15.089s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_angles__rosidl_typesupport_introspection_c.h
+[15.089s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity__type_support.c
+[15.089s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/cartesian_force__type_support.c
+[15.089s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/kinova_pose__rosidl_typesupport_introspection_c.h
+[15.089s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action
+[15.089s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail
+[15.089s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/set_fingers_position__type_support.c
+[15.089s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_pose__type_support.c
+[15.090s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_kinova_pose__rosidl_typesupport_introspection_c.h
+[15.090s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_joint_angles__rosidl_typesupport_introspection_c.h
+[15.090s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_pose__rosidl_typesupport_introspection_c.h
+[15.090s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/set_fingers_position__rosidl_typesupport_introspection_c.h
+[15.090s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_kinova_pose__type_support.c
+[15.090s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_joint_angles__type_support.c
+[15.090s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv
+[15.090s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail
+[15.090s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/stop__rosidl_typesupport_introspection_c.h
+[15.090s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_force_control_params__rosidl_typesupport_introspection_c.h
+[15.090s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/run_com_parameters_estimation__type_support.c
+[15.090s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/start__type_support.c
+[15.090s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/home_arm__rosidl_typesupport_introspection_c.h
+[15.090s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__rosidl_typesupport_introspection_c.h
+[15.090s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__type_support.c
+[15.090s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/clear_trajectories__rosidl_typesupport_introspection_c.h
+[15.090s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_null_space_mode_state__type_support.c
+[15.090s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/zero_torques__type_support.c
+[15.091s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/start__rosidl_typesupport_introspection_c.h
+[15.091s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_end_effector_offset__rosidl_typesupport_introspection_c.h
+[15.091s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_mode__type_support.c
+[15.091s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_end_effector_offset__type_support.c
+[15.091s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_null_space_mode_state__rosidl_typesupport_introspection_c.h
+[15.091s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_parameters__rosidl_typesupport_introspection_c.h
+[15.091s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_force_control_params__type_support.c
+[15.091s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/clear_trajectories__type_support.c
+[15.091s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/home_arm__type_support.c
+[15.091s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/stop__type_support.c
+[15.091s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/zero_torques__rosidl_typesupport_introspection_c.h
+[15.091s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_mode__rosidl_typesupport_introspection_c.h
+[15.091s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/run_com_parameters_estimation__rosidl_typesupport_introspection_c.h
+[15.091s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_parameters__type_support.c
+[15.091s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/lib/libkinova_msgs__rosidl_typesupport_introspection_c.so
+[15.092s] -- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib/libkinova_msgs__rosidl_typesupport_introspection_c.so" to ""
+[15.092s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/lib/libkinova_msgs__rosidl_typesupport_c.so
+[15.092s] -- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib/libkinova_msgs__rosidl_typesupport_c.so" to ""
+[15.092s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs
+[15.092s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg
+[15.092s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail
+[15.092s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_angles__rosidl_typesupport_introspection_cpp.hpp
+[15.092s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_torque__type_support.cpp
+[15.092s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/finger_position__type_support.cpp
+[15.092s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_angles__type_support.cpp
+[15.092s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_velocity__type_support.cpp
+[15.092s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_torque__rosidl_typesupport_introspection_cpp.hpp
+[15.092s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/cartesian_force__rosidl_typesupport_introspection_cpp.hpp
+[15.092s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/kinova_pose__type_support.cpp
+[15.093s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity__rosidl_typesupport_introspection_cpp.hpp
+[15.093s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/joint_velocity__rosidl_typesupport_introspection_cpp.hpp
+[15.093s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_fingers__type_support.cpp
+[15.093s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_fingers__rosidl_typesupport_introspection_cpp.hpp
+[15.093s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/cartesian_force__type_support.cpp
+[15.093s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity__type_support.cpp
+[15.093s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/finger_position__rosidl_typesupport_introspection_cpp.hpp
+[15.093s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__rosidl_typesupport_introspection_cpp.hpp
+[15.093s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/kinova_pose__rosidl_typesupport_introspection_cpp.hpp
+[15.093s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/msg/detail/pose_velocity_with_finger_velocity__type_support.cpp
+[15.093s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action
+[15.093s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail
+[15.093s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_pose__type_support.cpp
+[15.093s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_kinova_pose__type_support.cpp
+[15.093s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_joint_angles__rosidl_typesupport_introspection_cpp.hpp
+[15.093s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_pose__rosidl_typesupport_introspection_cpp.hpp
+[15.093s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_joint_angles__type_support.cpp
+[15.093s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/set_fingers_position__type_support.cpp
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/set_fingers_position__rosidl_typesupport_introspection_cpp.hpp
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/action/detail/arm_kinova_pose__rosidl_typesupport_introspection_cpp.hpp
+[15.094s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv
+[15.094s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_force_control_params__type_support.cpp
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/clear_trajectories__rosidl_typesupport_introspection_cpp.hpp
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_force_control_params__rosidl_typesupport_introspection_cpp.hpp
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/zero_torques__rosidl_typesupport_introspection_cpp.hpp
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__type_support.cpp
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_null_space_mode_state__rosidl_typesupport_introspection_cpp.hpp
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_mode__type_support.cpp
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/home_arm__rosidl_typesupport_introspection_cpp.hpp
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/clear_trajectories__type_support.cpp
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/run_com_parameters_estimation__type_support.cpp
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/stop__rosidl_typesupport_introspection_cpp.hpp
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_end_effector_offset__rosidl_typesupport_introspection_cpp.hpp
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/zero_torques__type_support.cpp
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_mode__rosidl_typesupport_introspection_cpp.hpp
+[15.094s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/stop__type_support.cpp
+[15.095s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_parameters__rosidl_typesupport_introspection_cpp.hpp
+[15.095s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_torque_control_parameters__type_support.cpp
+[15.095s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/start__rosidl_typesupport_introspection_cpp.hpp
+[15.095s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/home_arm__type_support.cpp
+[15.095s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/add_pose_to_cartesian_trajectory__rosidl_typesupport_introspection_cpp.hpp
+[15.095s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_end_effector_offset__type_support.cpp
+[15.095s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/run_com_parameters_estimation__rosidl_typesupport_introspection_cpp.hpp
+[15.095s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/set_null_space_mode_state__type_support.cpp
+[15.095s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/include/kinova_msgs/kinova_msgs/srv/detail/start__type_support.cpp
+[15.095s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/lib/libkinova_msgs__rosidl_typesupport_introspection_cpp.so
+[15.096s] -- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib/libkinova_msgs__rosidl_typesupport_introspection_cpp.so" to ""
+[15.096s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/lib/libkinova_msgs__rosidl_typesupport_cpp.so
+[15.096s] -- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib/libkinova_msgs__rosidl_typesupport_cpp.so" to ""
+[15.096s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/environment/pythonpath.sh
+[15.096s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/environment/pythonpath.dsv
+[15.096s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs-0.0.1-py3.10.egg-info
+[15.096s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs-0.0.1-py3.10.egg-info/top_level.txt
+[15.096s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs-0.0.1-py3.10.egg-info/SOURCES.txt
+[15.096s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs-0.0.1-py3.10.egg-info/dependency_links.txt
+[15.096s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs-0.0.1-py3.10.egg-info/PKG-INFO
+[15.096s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs
+[15.096s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_kinova_pose.py
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_joint_torque.py
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_pose_velocity_with_finger_velocity_s.c
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_finger_position_s.c
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_joint_velocity.py
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_pose_velocity.py
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_joint_torque_s.c
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_joint_velocity_s.c
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_pose_velocity_s.c
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_finger_position.py
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_cartesian_force.py
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_kinova_pose_s.c
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_pose_velocity_with_fingers.py
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/__init__.py
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_pose_velocity_with_fingers_s.c
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_joint_angles_s.c
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_pose_velocity_with_finger_velocity.py
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_cartesian_force_s.c
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_joint_angles.py
+[15.097s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/_kinova_msgs_s.ep.rosidl_typesupport_introspection_c.c
+[15.098s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/action
+[15.098s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/action/_arm_joint_angles_s.c
+[15.098s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/action/_arm_kinova_pose_s.c
+[15.098s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/action/_set_fingers_position_s.c
+[15.098s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/action/_arm_pose_s.c
+[15.098s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/action/_arm_kinova_pose.py
+[15.098s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/action/__init__.py
+[15.098s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/action/_set_fingers_position.py
+[15.098s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/action/_arm_joint_angles.py
+[15.098s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/action/_arm_pose.py
+[15.098s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/libkinova_msgs__rosidl_generator_py.so
+[15.098s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_add_pose_to_cartesian_trajectory.py
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_set_end_effector_offset.py
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_set_force_control_params.py
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_set_torque_control_mode_s.c
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_set_end_effector_offset_s.c
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_stop.py
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_set_torque_control_parameters.py
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_start.py
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_zero_torques_s.c
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_clear_trajectories.py
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_set_torque_control_mode.py
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_start_s.c
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_home_arm.py
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_set_force_control_params_s.c
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_stop_s.c
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_run_com_parameters_estimation_s.c
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_set_null_space_mode_state_s.c
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_zero_torques.py
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_run_com_parameters_estimation.py
+[15.099s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_add_pose_to_cartesian_trajectory_s.c
+[15.100s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/__init__.py
+[15.100s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_clear_trajectories_s.c
+[15.100s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_home_arm_s.c
+[15.100s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_set_torque_control_parameters_s.c
+[15.100s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_set_null_space_mode_state.py
+[15.100s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/kinova_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[15.100s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/_kinova_msgs_s.ep.rosidl_typesupport_c.c
+[15.100s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/__init__.py
+[15.100s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/kinova_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[15.100s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/kinova_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[15.100s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/_kinova_msgs_s.ep.rosidl_typesupport_fastrtps_c.c
+[15.155s] Listing '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs'...
+[15.155s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/__init__.py'...
+[15.155s] Listing '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/action'...
+[15.155s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/action/__init__.py'...
+[15.155s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/action/_arm_joint_angles.py'...
+[15.155s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/action/_arm_kinova_pose.py'...
+[15.155s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/action/_arm_pose.py'...
+[15.155s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/action/_set_fingers_position.py'...
+[15.155s] Listing '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg'...
+[15.155s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/__init__.py'...
+[15.155s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_cartesian_force.py'...
+[15.155s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_finger_position.py'...
+[15.155s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_joint_angles.py'...
+[15.155s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_joint_torque.py'...
+[15.155s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_joint_velocity.py'...
+[15.155s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_kinova_pose.py'...
+[15.155s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_pose_velocity.py'...
+[15.155s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_pose_velocity_with_finger_velocity.py'...
+[15.155s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/msg/_pose_velocity_with_fingers.py'...
+[15.156s] Listing '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv'...
+[15.156s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/__init__.py'...
+[15.156s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_add_pose_to_cartesian_trajectory.py'...
+[15.156s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_clear_trajectories.py'...
+[15.156s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_home_arm.py'...
+[15.156s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_run_com_parameters_estimation.py'...
+[15.156s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_set_end_effector_offset.py'...
+[15.156s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_set_force_control_params.py'...
+[15.156s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_set_null_space_mode_state.py'...
+[15.156s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_set_torque_control_mode.py'...
+[15.156s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_set_torque_control_parameters.py'...
+[15.156s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_start.py'...
+[15.156s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_stop.py'...
+[15.156s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/srv/_zero_torques.py'...
+[15.159s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/kinova_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so
+[15.159s] -- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/kinova_msgs_s__rosidl_typesupport_fastrtps_c.cpython-310-x86_64-linux-gnu.so" to ""
+[15.159s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/kinova_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so
+[15.159s] -- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/kinova_msgs_s__rosidl_typesupport_introspection_c.cpython-310-x86_64-linux-gnu.so" to ""
+[15.159s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/kinova_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so
+[15.160s] -- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_msgs/local/lib/python3.10/dist-packages/kinova_msgs/kinova_msgs_s__rosidl_typesupport_c.cpython-310-x86_64-linux-gnu.so" to ""
+[15.160s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/lib/libkinova_msgs__rosidl_generator_py.so
+[15.160s] -- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib/libkinova_msgs__rosidl_generator_py.so" to ""
+[15.160s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/FingerPosition.idl
+[15.160s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/JointAngles.idl
+[15.160s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/JointVelocity.idl
+[15.161s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/JointTorque.idl
+[15.161s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/KinovaPose.idl
+[15.161s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/PoseVelocity.idl
+[15.161s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/PoseVelocityWithFingers.idl
+[15.161s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/PoseVelocityWithFingerVelocity.idl
+[15.161s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/CartesianForce.idl
+[15.161s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/Start.idl
+[15.161s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/Stop.idl
+[15.161s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/HomeArm.idl
+[15.161s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetForceControlParams.idl
+[15.161s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetEndEffectorOffset.idl
+[15.162s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetNullSpaceModeState.idl
+[15.162s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetTorqueControlMode.idl
+[15.162s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetTorqueControlParameters.idl
+[15.162s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/ClearTrajectories.idl
+[15.162s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/ZeroTorques.idl
+[15.162s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/AddPoseToCartesianTrajectory.idl
+[15.162s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/RunCOMParametersEstimation.idl
+[15.162s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/action/ArmJointAngles.idl
+[15.162s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/action/ArmKinovaPose.idl
+[15.163s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/action/ArmPose.idl
+[15.163s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/action/SetFingersPosition.idl
+[15.163s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/FingerPosition.msg
+[15.163s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/JointAngles.msg
+[15.163s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/JointVelocity.msg
+[15.163s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/JointTorque.msg
+[15.163s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/KinovaPose.msg
+[15.163s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/PoseVelocity.msg
+[15.163s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/PoseVelocityWithFingers.msg
+[15.163s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/PoseVelocityWithFingerVelocity.msg
+[15.163s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/msg/CartesianForce.msg
+[15.163s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/Start.srv
+[15.164s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/Start_Request.msg
+[15.164s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/Start_Response.msg
+[15.164s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/Stop.srv
+[15.164s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/Stop_Request.msg
+[15.164s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/Stop_Response.msg
+[15.164s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/HomeArm.srv
+[15.164s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/HomeArm_Request.msg
+[15.164s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/HomeArm_Response.msg
+[15.164s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetForceControlParams.srv
+[15.164s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetForceControlParams_Request.msg
+[15.164s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetForceControlParams_Response.msg
+[15.165s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetEndEffectorOffset.srv
+[15.165s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetEndEffectorOffset_Request.msg
+[15.165s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetEndEffectorOffset_Response.msg
+[15.165s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetNullSpaceModeState.srv
+[15.165s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetNullSpaceModeState_Request.msg
+[15.165s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetNullSpaceModeState_Response.msg
+[15.165s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetTorqueControlMode.srv
+[15.165s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetTorqueControlMode_Request.msg
+[15.165s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetTorqueControlMode_Response.msg
+[15.165s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetTorqueControlParameters.srv
+[15.165s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetTorqueControlParameters_Request.msg
+[15.166s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/SetTorqueControlParameters_Response.msg
+[15.166s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/ClearTrajectories.srv
+[15.166s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/ClearTrajectories_Request.msg
+[15.166s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/ClearTrajectories_Response.msg
+[15.166s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/ZeroTorques.srv
+[15.166s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/ZeroTorques_Request.msg
+[15.166s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/ZeroTorques_Response.msg
+[15.166s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/AddPoseToCartesianTrajectory.srv
+[15.166s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/AddPoseToCartesianTrajectory_Request.msg
+[15.166s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/AddPoseToCartesianTrajectory_Response.msg
+[15.167s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/RunCOMParametersEstimation.srv
+[15.167s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/RunCOMParametersEstimation_Request.msg
+[15.167s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/srv/RunCOMParametersEstimation_Response.msg
+[15.167s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/action/ArmJointAngles.action
+[15.167s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/action/ArmKinovaPose.action
+[15.167s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/action/ArmPose.action
+[15.167s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/action/SetFingersPosition.action
+[15.167s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/ament_index/resource_index/package_run_dependencies/kinova_msgs
+[15.167s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/ament_index/resource_index/parent_prefix_path/kinova_msgs
+[15.167s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/environment/ament_prefix_path.sh
+[15.167s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/environment/ament_prefix_path.dsv
+[15.168s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/environment/path.sh
+[15.168s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/environment/path.dsv
+[15.168s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/local_setup.bash
+[15.168s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/local_setup.sh
+[15.168s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/local_setup.zsh
+[15.168s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/local_setup.dsv
+[15.168s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/package.dsv
+[15.168s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/ament_index/resource_index/packages/kinova_msgs
+[15.168s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/export_kinova_msgs__rosidl_generator_cExport.cmake
+[15.168s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/export_kinova_msgs__rosidl_generator_cExport-noconfig.cmake
+[15.169s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/export_kinova_msgs__rosidl_typesupport_fastrtps_cExport.cmake
+[15.169s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/export_kinova_msgs__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+[15.169s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/export_kinova_msgs__rosidl_generator_cppExport.cmake
+[15.169s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/export_kinova_msgs__rosidl_typesupport_fastrtps_cppExport.cmake
+[15.169s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/export_kinova_msgs__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+[15.169s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/kinova_msgs__rosidl_typesupport_introspection_cExport.cmake
+[15.169s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/kinova_msgs__rosidl_typesupport_introspection_cExport-noconfig.cmake
+[15.169s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/kinova_msgs__rosidl_typesupport_cExport.cmake
+[15.169s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/kinova_msgs__rosidl_typesupport_cExport-noconfig.cmake
+[15.169s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/kinova_msgs__rosidl_typesupport_introspection_cppExport.cmake
+[15.170s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/kinova_msgs__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+[15.170s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/kinova_msgs__rosidl_typesupport_cppExport.cmake
+[15.170s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/kinova_msgs__rosidl_typesupport_cppExport-noconfig.cmake
+[15.170s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/export_kinova_msgs__rosidl_generator_pyExport.cmake
+[15.170s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/export_kinova_msgs__rosidl_generator_pyExport-noconfig.cmake
+[15.170s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/rosidl_cmake-extras.cmake
+[15.170s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/ament_cmake_export_dependencies-extras.cmake
+[15.170s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/ament_cmake_export_include_directories-extras.cmake
+[15.170s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/ament_cmake_export_libraries-extras.cmake
+[15.170s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/ament_cmake_export_targets-extras.cmake
+[15.170s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/rosidl_cmake_export_typesupport_targets-extras.cmake
+[15.171s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/rosidl_cmake_export_typesupport_libraries-extras.cmake
+[15.171s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/kinova_msgsConfig.cmake
+[15.171s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake/kinova_msgsConfig-version.cmake
+[15.171s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/package.xml
+[15.173s] Invoked command in '/home/amma/Kinova_gen2_rl/build/kinova_msgs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/kinova_msgs

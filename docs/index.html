@@ -185,6 +185,7 @@
             <li><a href="#overview" class="active">Overview</a></li>
             <li><a href="#hardware-launch">Hardware Deployment</a></li>
             <li><a href="#calibration">Hand-Eye Calibration</a></li>
+            <li><a href="#intrinsic-calibration">Intrinsic Calibration</a></li>
             <li><a href="#build-errors">Build Errors & Missing Files</a></li>
             <li><a href="#gazebo-issues">Gazebo Simulation Issues</a></li>
             <li><a href="#moveit-issues">MoveIt 2 & Planning</a></li>
@@ -252,10 +253,35 @@
             </ul>
 
 
-            <!-- SECTION 2 -->
-            <h2 id="build-errors">2. Build Errors & Missing Files</h2>
+            <!-- SECTION: Intrinsic Calibration -->
+            <h2 id="intrinsic-calibration">2. Intrinsic Camera Calibration</h2>
+            <p>While the RealSense driver provides factory intrinsics via the <code>camera_info</code> topic, these are "mostly correct" but may require custom calibration for high-precision tasks.</p>
             
-            <h3>2.1 Missing Vendor Binary Blobs (<code>.so</code> files)</h3>
+            <h3>2.1 Using Factory Intrinsics</h3>
+            <p>The <code>point_selector_node</code> automatically listens to the <code>/camera/camera/color/camera_info</code> topic. It extracts the focal lengths (<code>fx, fy</code>) and optical centers (<code>cx, cy</code>) to project 2D clicks into 3D space.</p>
+            <div class="callout callout-solution">
+                <h4>Verification</h4>
+                <p>Always check the node logs on startup to ensure the values match your expectations:</p>
+                <pre>[point_selector_node]: Camera intrinsics received: fx=615.4, fy=615.8</pre>
+            </div>
+
+            <h3>2.2 Custom Checkerboard Calibration</h3>
+            <p>If you notice a systematic "shift" in your 3D points (especially towards the edges of the image), the factory intrinsics may be slightly off due to lens wear or temperature changes.</p>
+            <p><strong>When to recalibrate:</strong></p>
+            <ul>
+                <li>3D points are accurate in the center but drift at the corners.</li>
+                <li>The camera has been dropped or subject to vibration.</li>
+                <li>You are using a non-standard resolution.</li>
+            </ul>
+            <p><strong>Tools:</strong> Use the standard <code>camera_calibration</code> tool from the ROS 2 image pipeline:</p>
+            <pre>ros2 run camera_calibration cameracalibrator --size 8x6 --square 0.024 --ros-args -r image:=/camera/camera/color/image_raw</pre>
+            <p>After calibration, the new parameters should be uploaded to the RealSense hardware using the <code>realsense-viewer</code> tool or saved into a local <code>camera_info</code> YAML file for the driver to load.</p>
+
+
+            <!-- SECTION 3 -->
+            <h2 id="build-errors">3. Build Errors & Missing Files</h2>
+            
+            <h3>3.1 Missing Vendor Binary Blobs (<code>.so</code> files)</h3>
             <div class="callout callout-error">
                 <h4>Error Output</h4>
                 <pre>CMake Error at cmake_install.cmake:46 (file):
@@ -272,10 +298,10 @@ No such file or directory.</pre>
             </div>
 
 
-            <!-- SECTION 3 -->
-            <h2 id="gazebo-issues">3. Gazebo Simulation Issues</h2>
+            <!-- SECTION 4 -->
+            <h2 id="gazebo-issues">4. Gazebo Simulation Issues</h2>
 
-            <h3>3.1 Meshes Failing to Load in Gazebo (Invisible Robot)</h3>
+            <h3>4.1 Meshes Failing to Load in Gazebo (Invisible Robot)</h3>
             <div class="callout callout-error">
                 <h4>Error Output</h4>
                 <pre>[GUI] [Err] [SystemPaths.cc:474] Could not resolve file [model://kinova_description/meshes/wrist_spherical_1.STL]
@@ -295,7 +321,7 @@ gazebo = ExecuteProcess(
 )</code></pre>
             </div>
 
-            <h3>3.2 Controller Manager Fails to Start</h3>
+            <h3>4.2 Controller Manager Fails to Start</h3>
             <div class="callout callout-error">
                 <h4>Error Output</h4>
                 <pre>[spawner] [WARN]: Could not contact service /controller_manager/list_controllers
@@ -308,10 +334,10 @@ gazebo = ExecuteProcess(
             </div>
 
 
-            <!-- SECTION 4 -->
-            <h2 id="moveit-issues">4. MoveIt 2 & Planning</h2>
+            <!-- SECTION 5 -->
+            <h2 id="moveit-issues">5. MoveIt 2 & Planning</h2>
 
-            <h3>4.1 Pilz Planner Missing Cartesian Limits</h3>
+            <h3>5.1 Pilz Planner Missing Cartesian Limits</h3>
             <div class="callout callout-error">
                 <h4>Error Output</h4>
                 <pre>[move_group]: Parameter 'robot_description_planning.cartesian_limits.max_trans_vel', is not set in the config file.</pre>
@@ -328,7 +354,7 @@ gazebo = ExecuteProcess(
             </div>
 
             <!-- SECTION: Error Codes -->
-            <h2 id="error-codes">5. Kinova API Error Codes</h2>
+            <h2 id="error-codes">6. Kinova API Error Codes</h2>
             <p>When working with hardware, the Kinova API may return specific numeric error codes. Below are the most common ones encountered during development:</p>
 
             <table>
@@ -360,7 +386,7 @@ gazebo = ExecuteProcess(
 
 
             <!-- SECTION: File Manifest -->
-            <h2 id="file-manifest">6. File Manifest & Logic Meanings</h2>
+            <h2 id="file-manifest">7. File Manifest & Logic Meanings</h2>
             <p>The root directory contains several utility and orchestration scripts. Here is what they do:</p>
 
             <ul>
@@ -373,10 +399,10 @@ gazebo = ExecuteProcess(
             </ul>
 
 
-            <!-- SECTION 7 -->
-            <h2 id="runtime-stability">7. Runtime Stability & Hangs</h2>
+            <!-- SECTION 8 -->
+            <h2 id="runtime-stability">8. Runtime Stability & Hangs</h2>
 
-            <h3>7.1 Python Nodes Exiting Silently / GUI Freezing</h3>
+            <h3>8.1 Python Nodes Exiting Silently / GUI Freezing</h3>
             <div class="callout callout-error">
                 <h4>Symptom</h4>
                 <p>Nodes like <code>point_selector_node</code> exit with <code>process has finished cleanly</code> immediately on boot, or the Ubuntu desktop prompts to "Wait / Force Quit" the Gazebo application.</p>
@@ -395,10 +421,10 @@ gazebo = ExecuteProcess(
 &lt;/physics&gt;</code></pre>
             </div>
 
-            <!-- SECTION 8 -->
-            <h2 id="legacy-code">8. Legacy C++ Warnings & Bugs</h2>
+            <!-- SECTION 9 -->
+            <h2 id="legacy-code">9. Legacy C++ Warnings & Bugs</h2>
 
-            <h3>8.1 Compilation Warnings Treated as Errors</h3>
+            <h3>9.1 Compilation Warnings Treated as Errors</h3>
             <div class="callout callout-error">
                 <h4>Error Output</h4>
                 <pre>warning: unused parameter ‘result’ [-Wunused-parameter]
@@ -414,7 +440,7 @@ warning: ‘bool setsEqual(const std::vector&lt;std::string&gt;&, ...)’ define
 }</code></pre>
             </div>
 
-            <h3>8.2 Logical Bug: Assignment in Conditional</h3>
+            <h3>9.2 Logical Bug: Assignment in Conditional</h3>
             <div class="callout callout-error">
                 <h4>Error Output</h4>
                 <pre>warning: suggest parentheses around assignment used as truth value [-Wparentheses]

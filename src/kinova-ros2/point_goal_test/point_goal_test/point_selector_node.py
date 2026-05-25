@@ -67,7 +67,14 @@ class PointSelectorNode(Node):
     def _info_cb(self, msg):
         if self._K is None:
             self._K = np.array(msg.k, dtype=np.float64).reshape(3, 3)
-            self.get_logger().info(f'Camera intrinsics received: fx={self._K[0,0]:.1f}')
+            self._D = np.array(msg.d, dtype=np.float64)
+            self.get_logger().info(f'Camera intrinsics received from {msg.header.frame_id}')
+            self.get_logger().info(f'  fx={self._K[0,0]:.2f}, fy={self._K[1,1]:.2f}')
+            self.get_logger().info(f'  cx={self._K[0,2]:.2f}, cy={self._K[1,2]:.2f}')
+            if np.any(self._D != 0):
+                self.get_logger().info(f'  Distortion: {self._D.tolist()}')
+            else:
+                self.get_logger().info('  Distortion: None (Image is assumed undistorted)')
 
     def _color_cb(self, msg):
         try:

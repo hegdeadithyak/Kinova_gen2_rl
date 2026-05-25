@@ -32,6 +32,7 @@ arm:
     - ESTkConfigDefault
     - PRMkConfigDefault
   projection_evaluator: joints(j2s6s200_joint_1,j2s6s200_joint_2)
+  enforce_constrained_state_space: true
   longest_valid_segment_fraction: 0.005
 
 gripper:

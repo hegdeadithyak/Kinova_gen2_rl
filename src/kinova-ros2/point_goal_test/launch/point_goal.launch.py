@@ -4,7 +4,7 @@
 Mirrors sample.launch.py exactly, replacing demo_feed_planner with
 point_selector_node + arm_mover_node.
 
-Calibration values (EE → camera_color_optical_frame) can be overridden
+Calibration values (EE -> camera_color_optical_frame) can be overridden
 as launch args, same as sample.launch.py.
 """
 from __future__ import annotations
@@ -39,6 +39,16 @@ def _robot_urdf_xml():
     xacro_file = os.path.join(
         get_package_share_directory(DESC_PKG), "urdf", "j2s6s200_standalone.xacro")
     return xacro.process_file(xacro_file).toprettyxml(indent="  ")
+
+def _mode_offsets(context):
+    mode = str(context.perform_substitution(LaunchConfiguration("mode"))).strip().lower()
+    if mode == "picking":
+        return 0.0, 0.0, -0.06
+    return (
+        float(context.perform_substitution(LaunchConfiguration("offset_x"))),
+        float(context.perform_substitution(LaunchConfiguration("offset_y"))),
+        float(context.perform_substitution(LaunchConfiguration("offset_z"))),
+    )
 
 def _moveit_params():
     ompl_yaml = _load_yaml(MOVEIT_PKG, "config/ompl_planning.yaml")
@@ -93,6 +103,7 @@ def _launch_setup(context, *args, **kwargs):
         return [LogInfo(msg='WARNING: "moveit" not installed.')]
 
     params = _moveit_params()
+    offset_x, offset_y, offset_z = _mode_offsets(context)
     nodes = []
 
     nodes.append(Node(
@@ -115,7 +126,7 @@ def _launch_setup(context, *args, **kwargs):
                    "--roll", "0", "--pitch", "0", "--yaw", "0",
                    "--frame-id", "world", "--child-frame-id", "root"]))
 
-    # EE → camera_color_optical_frame hand-eye TF
+    # EE -> camera_color_optical_frame hand-eye TF
     nodes.append(Node(
         package="tf2_ros", executable="static_transform_publisher",
         name="ee_to_camera_optical", output="screen",
@@ -158,9 +169,9 @@ def _launch_setup(context, *args, **kwargs):
         package="point_goal_test", executable="arm_mover_node",
         name="arm_mover_node", output="screen",
         parameters=[{
-            'offset_x': float(context.perform_substitution(LaunchConfiguration("offset_x"))),
-            'offset_y': float(context.perform_substitution(LaunchConfiguration("offset_y"))),
-            'offset_z': float(context.perform_substitution(LaunchConfiguration("offset_z"))),
+            'offset_x': offset_x,
+            'offset_y': offset_y,
+            'offset_z': offset_z,
         }]))
 
     return nodes
@@ -168,6 +179,7 @@ def _launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
     return LaunchDescription([
+        DeclareLaunchArgument("mode",         default_value="feeding"),
         DeclareLaunchArgument("cam_x",     default_value="0.077"),
         DeclareLaunchArgument("cam_y",     default_value="0.073"),
         DeclareLaunchArgument("cam_z",     default_value="-0.0878"),
@@ -175,8 +187,8 @@ def generate_launch_description():
         DeclareLaunchArgument("cam_pitch", default_value="2.9800"),
         DeclareLaunchArgument("cam_yaw",   default_value="-1.0334"),
         DeclareLaunchArgument("offset_x",     default_value="0.0"),
-        DeclareLaunchArgument("offset_y",     default_value="0.0"),
-        DeclareLaunchArgument("offset_z",     default_value="0.0"),
+        DeclareLaunchArgument("offset_y",     default_value="-0.035"),
+        DeclareLaunchArgument("offset_z",     default_value="-0.05"),
         DeclareLaunchArgument("cam_offset_x", default_value="-0.14"),
         DeclareLaunchArgument("cam_offset_y", default_value="-0.14"),
         OpaqueFunction(function=_launch_setup),

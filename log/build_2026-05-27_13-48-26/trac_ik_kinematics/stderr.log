@@ -1,0 +1,33 @@
+[0mtrac_ik_kinematics: You did not request a specific build type: Choosing 'Release' for maximum performance[0m
+In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/logging.hpp:24[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155[m[K,
+                 from [01m[K/home/amma/Kinova_gen2_rl/src/trac_ik/trac_ik_kinematics/trac_ik_kinematics_plugin/src/trac_ik_kinematics_plugin.cpp:32[m[K:
+[01m[K/home/amma/Kinova_gen2_rl/src/trac_ik/trac_ik_kinematics/trac_ik_kinematics_plugin/src/trac_ik_kinematics_plugin.cpp:[m[K In member function ‘[01m[Kbool trac_ik_kinematics_plugin::TRAC_IKKinematicsPlugin::searchPositionIK(const Pose&, const std::vector<double, std::allocator<double> >&, double, std::vector<double, std::allocator<double> >&, const IKCallbackFn&, moveit_msgs::msg::MoveItErrorCodes&, const std::vector<double, std::allocator<double> >&, const kinematics::KinematicsQueryOptions&) const[m[K’:
+[01m[K/home/amma/Kinova_gen2_rl/src/trac_ik/trac_ik_kinematics/trac_ik_kinematics_plugin/src/trac_ik_kinematics_plugin.cpp:397:32:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%i[m[K’ expects argument of type ‘[01m[Kint[m[K’, but argument 5 has type ‘[01m[Kmoveit_msgs::msg::MoveItErrorCodes[m[K’ {aka ‘[01m[Kmoveit_msgs::msg::MoveItErrorCodes_<std::allocator<void> >[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wformat=-Wformat=]8;;[m[K]
+  397 |           RCLCPP_DEBUG(LOGGER, [01;35m[K"Solution has error code %i"[m[K, [32m[Kerror_code[m[K);
+      |                                [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K  [32m[K~~~~~~~~~~[m[K
+      |                                                              [32m[K|[m[K
+      |                                                              [32m[Kmoveit_msgs::msg::MoveItErrorCodes {aka moveit_msgs::msg::MoveItErrorCodes_<std::allocator<void> >}[m[K
+[01m[K/home/amma/Kinova_gen2_rl/src/trac_ik/trac_ik_kinematics/trac_ik_kinematics_plugin/src/trac_ik_kinematics_plugin.cpp:397:58:[m[K [01;36m[Knote: [m[Kformat string is defined here
+  397 | LCPP_DEBUG(LOGGER, "Solution has error code [01;36m[K%i[m[K", error_code);
+      |                                             [01;36m[K~^[m[K
+      |                                              [01;36m[K|[m[K
+      |                                              [01;36m[Kint[m[K
+
+[01m[K/home/amma/Kinova_gen2_rl/src/trac_ik/trac_ik_kinematics/trac_ik_kinematics_plugin/src/trac_ik_kinematics_plugin.cpp:320:77:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kconsistency_limits[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  320 |                   [01;35m[Kconst std::vector<double> &consistency_limits[m[K,
+      |                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~[m[K
+
+[01m[K/home/amma/Kinova_gen2_rl/src/trac_ik/trac_ik_kinematics/trac_ik_kinematics_plugin/src/trac_ik_kinematics_plugin.cpp:321:92:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Koptions[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  321 |    [01;35m[Kconst kinematics::KinematicsQueryOptions &options[m[K) const
+      |    [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~[m[K
+

@@ -1,0 +1,123 @@
+[0.013s] Invoking command in '/home/amma/Kinova_gen2_rl/build/trac_ik_kinematics': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib:/home/amma/Kinova_gen2_rl/install/point_goal_test:/home/amma/Kinova_gen2_rl/install/kinova_demo:/home/amma/Kinova_gen2_rl/install/kinova_driver:/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config:/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/kinova_bringup:/home/amma/Kinova_gen2_rl/install/click_pointer:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib/lib:${LD_LIBRARY_PATH} /usr/bin/cmake /home/amma/Kinova_gen2_rl/src/trac_ik/trac_ik_kinematics -DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/trac_ik_kinematics
+[0.084s] -- The C compiler identification is GNU 11.4.0
+[0.148s] -- The CXX compiler identification is GNU 11.4.0
+[0.159s] -- Detecting C compiler ABI info
+[0.253s] -- Detecting C compiler ABI info - done
+[0.266s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.266s] -- Detecting C compile features
+[0.267s] -- Detecting C compile features - done
+[0.271s] -- Detecting CXX compiler ABI info
+[0.371s] -- Detecting CXX compiler ABI info - done
+[0.384s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.384s] -- Detecting CXX compile features
+[0.385s] -- Detecting CXX compile features - done
+[0.389s] -- Found moveit_common: 2.5.9 (/opt/ros/humble/share/moveit_common/cmake)
+[0.393s] -- Found ament_cmake: 1.3.14 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.627s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.865s] [0mtrac_ik_kinematics: You did not request a specific build type: Choosing 'Release' for maximum performance[0m
+[0.882s] -- Found tf2_kdl: 0.25.20 (/opt/ros/humble/share/tf2_kdl/cmake)
+[0.943s] -- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.953s] -- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.967s] -- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.988s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[1.016s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.097s] -- Found eigen3_cmake_module: 0.1.1 (/opt/ros/humble/share/eigen3_cmake_module/cmake)
+[1.099s] -- Found Eigen3: TRUE (found version "3.4.0") 
+[1.099s] -- Ensuring Eigen3 include directory is part of orocos-kdl CMake target
+[1.230s] -- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[1.236s] -- Found rmw_fastrtps_cpp: 6.2.10 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[1.360s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+[1.402s] -- Found FastRTPS: /opt/ros/humble/include  
+[1.464s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[1.480s] -- Looking for pthread.h
+[1.599s] -- Looking for pthread.h - found
+[1.600s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[1.745s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[1.747s] -- Found Threads: TRUE  
+[1.927s] -- Found kdl_parser: 2.6.4 (/opt/ros/humble/share/kdl_parser/cmake)
+[1.935s] -- Found random_numbers: 2.0.1 (/opt/ros/humble/share/random_numbers/cmake)
+[1.954s] -- Found pluginlib: 5.1.3 (/opt/ros/humble/share/pluginlib/cmake)
+[1.980s] -- Found moveit_core: 2.5.9 (/opt/ros/humble/share/moveit_core/cmake)
+[2.033s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: chrono date_time filesystem iostreams program_options regex serialization system thread 
+[2.103s] -- Found parameter_traits: 0.7.1 (/opt/ros/humble/share/parameter_traits/cmake)
+[2.130s] -- Found rclcpp_lifecycle: 16.0.19 (/opt/ros/humble/share/rclcpp_lifecycle/cmake)
+[2.174s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: filesystem 
+[2.294s] -- library: /usr/lib/x86_64-linux-gnu/libcurl.so
+[2.616s] -- Found moveit_ros_planning: 2.5.9 (/opt/ros/humble/share/moveit_ros_planning/cmake)
+[2.625s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: system filesystem date_time program_options thread chrono 
+[2.667s] -- Found trac_ik_lib: 0.1.0 (/home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/cmake)
+[2.681s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: program_options system 
+[2.700s] -- Found ament_lint_auto: 0.12.15 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[2.708s] -- Configuring done
+[2.747s] -- Generating done
+[2.759s] -- Build files have been written to: /home/amma/Kinova_gen2_rl/build/trac_ik_kinematics
+[2.783s] Invoked command in '/home/amma/Kinova_gen2_rl/build/trac_ik_kinematics' returned '0': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib:/home/amma/Kinova_gen2_rl/install/point_goal_test:/home/amma/Kinova_gen2_rl/install/kinova_demo:/home/amma/Kinova_gen2_rl/install/kinova_driver:/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config:/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/kinova_bringup:/home/amma/Kinova_gen2_rl/install/click_pointer:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib/lib:${LD_LIBRARY_PATH} /usr/bin/cmake /home/amma/Kinova_gen2_rl/src/trac_ik/trac_ik_kinematics -DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/trac_ik_kinematics
+[2.785s] Invoking command in '/home/amma/Kinova_gen2_rl/build/trac_ik_kinematics': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib:/home/amma/Kinova_gen2_rl/install/point_goal_test:/home/amma/Kinova_gen2_rl/install/kinova_demo:/home/amma/Kinova_gen2_rl/install/kinova_driver:/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config:/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/kinova_bringup:/home/amma/Kinova_gen2_rl/install/click_pointer:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/trac_ik_kinematics -- -j12 -l12
+[2.867s] [ 50%] [32mBuilding CXX object trac_ik_kinematics_plugin/CMakeFiles/moveit_trac_ik_kinematics_plugin.dir/src/trac_ik_kinematics_plugin.cpp.o[0m
+[8.757s] In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/logging.hpp:24[m[K,
+[8.757s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40[m[K,
+[8.757s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+[8.757s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20[m[K,
+[8.758s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25[m[K,
+[8.758s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18[m[K,
+[8.758s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20[m[K,
+[8.758s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37[m[K,
+[8.758s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25[m[K,
+[8.758s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21[m[K,
+[8.758s]                  from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155[m[K,
+[8.759s]                  from [01m[K/home/amma/Kinova_gen2_rl/src/trac_ik/trac_ik_kinematics/trac_ik_kinematics_plugin/src/trac_ik_kinematics_plugin.cpp:32[m[K:
+[8.759s] [01m[K/home/amma/Kinova_gen2_rl/src/trac_ik/trac_ik_kinematics/trac_ik_kinematics_plugin/src/trac_ik_kinematics_plugin.cpp:[m[K In member function ‘[01m[Kbool trac_ik_kinematics_plugin::TRAC_IKKinematicsPlugin::searchPositionIK(const Pose&, const std::vector<double, std::allocator<double> >&, double, std::vector<double, std::allocator<double> >&, const IKCallbackFn&, moveit_msgs::msg::MoveItErrorCodes&, const std::vector<double, std::allocator<double> >&, const kinematics::KinematicsQueryOptions&) const[m[K’:
+[8.759s] [01m[K/home/amma/Kinova_gen2_rl/src/trac_ik/trac_ik_kinematics/trac_ik_kinematics_plugin/src/trac_ik_kinematics_plugin.cpp:397:32:[m[K [01;35m[Kwarning: [m[Kformat ‘[01m[K%i[m[K’ expects argument of type ‘[01m[Kint[m[K’, but argument 5 has type ‘[01m[Kmoveit_msgs::msg::MoveItErrorCodes[m[K’ {aka ‘[01m[Kmoveit_msgs::msg::MoveItErrorCodes_<std::allocator<void> >[m[K’} [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wformat=-Wformat=]8;;[m[K]
+[8.759s]   397 |           RCLCPP_DEBUG(LOGGER, [01;35m[K"Solution has error code %i"[m[K, [32m[Kerror_code[m[K);
+[8.759s]       |                                [01;35m[K^~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K  [32m[K~~~~~~~~~~[m[K
+[8.759s]       |                                                              [32m[K|[m[K
+[8.759s]       |                                                              [32m[Kmoveit_msgs::msg::MoveItErrorCodes {aka moveit_msgs::msg::MoveItErrorCodes_<std::allocator<void> >}[m[K
+[8.760s] [01m[K/home/amma/Kinova_gen2_rl/src/trac_ik/trac_ik_kinematics/trac_ik_kinematics_plugin/src/trac_ik_kinematics_plugin.cpp:397:58:[m[K [01;36m[Knote: [m[Kformat string is defined here
+[8.760s]   397 | LCPP_DEBUG(LOGGER, "Solution has error code [01;36m[K%i[m[K", error_code);
+[8.760s]       |                                             [01;36m[K~^[m[K
+[8.760s]       |                                              [01;36m[K|[m[K
+[8.760s]       |                                              [01;36m[Kint[m[K
+[8.765s] 
+[8.766s] [01m[K/home/amma/Kinova_gen2_rl/src/trac_ik/trac_ik_kinematics/trac_ik_kinematics_plugin/src/trac_ik_kinematics_plugin.cpp:320:77:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kconsistency_limits[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[8.766s]   320 |                   [01;35m[Kconst std::vector<double> &consistency_limits[m[K,
+[8.766s]       |                   [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~[m[K
+[8.766s] 
+[8.766s] [01m[K/home/amma/Kinova_gen2_rl/src/trac_ik/trac_ik_kinematics/trac_ik_kinematics_plugin/src/trac_ik_kinematics_plugin.cpp:321:92:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Koptions[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[8.767s]   321 |    [01;35m[Kconst kinematics::KinematicsQueryOptions &options[m[K) const
+[8.767s]       |    [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~[m[K
+[8.767s] 
+[16.669s] [100%] [32m[1mLinking CXX shared library libmoveit_trac_ik_kinematics_plugin.so[0m
+[17.108s] [100%] Built target moveit_trac_ik_kinematics_plugin
+[17.122s] Invoked command in '/home/amma/Kinova_gen2_rl/build/trac_ik_kinematics' returned '0': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib:/home/amma/Kinova_gen2_rl/install/point_goal_test:/home/amma/Kinova_gen2_rl/install/kinova_demo:/home/amma/Kinova_gen2_rl/install/kinova_driver:/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config:/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/kinova_bringup:/home/amma/Kinova_gen2_rl/install/click_pointer:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/trac_ik_kinematics -- -j12 -l12
+[17.124s] Invoking command in '/home/amma/Kinova_gen2_rl/build/trac_ik_kinematics': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib:/home/amma/Kinova_gen2_rl/install/point_goal_test:/home/amma/Kinova_gen2_rl/install/kinova_demo:/home/amma/Kinova_gen2_rl/install/kinova_driver:/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config:/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/kinova_bringup:/home/amma/Kinova_gen2_rl/install/click_pointer:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/trac_ik_kinematics
+[17.139s] -- Install configuration: "Release"
+[17.139s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/trac_ik_kinematics_plugin_description.xml
+[17.139s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/lib/libmoveit_trac_ik_kinematics_plugin.so
+[17.141s] -- Set runtime path of "/home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/lib/libmoveit_trac_ik_kinematics_plugin.so" to ""
+[17.141s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/environment/library_path.sh
+[17.141s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/environment/library_path.dsv
+[17.142s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/ament_index/resource_index/package_run_dependencies/trac_ik_kinematics
+[17.142s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/ament_index/resource_index/parent_prefix_path/trac_ik_kinematics
+[17.142s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/environment/ament_prefix_path.sh
+[17.142s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/environment/ament_prefix_path.dsv
+[17.143s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/environment/path.sh
+[17.143s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/environment/path.dsv
+[17.143s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/local_setup.bash
+[17.143s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/local_setup.sh
+[17.144s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/local_setup.zsh
+[17.144s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/local_setup.dsv
+[17.144s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/package.dsv
+[17.144s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/ament_index/resource_index/packages/trac_ik_kinematics
+[17.145s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/ament_index/resource_index/moveit_core__pluginlib__plugin/trac_ik_kinematics
+[17.145s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/cmake/export_trac_ik_kinematicsExport.cmake
+[17.145s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/cmake/export_trac_ik_kinematicsExport-release.cmake
+[17.146s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/cmake/ConfigExtras.cmake
+[17.146s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/cmake/ament_cmake_export_targets-extras.cmake
+[17.146s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/cmake/ament_cmake_export_dependencies-extras.cmake
+[17.146s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/cmake/trac_ik_kinematicsConfig.cmake
+[17.147s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/cmake/trac_ik_kinematicsConfig-version.cmake
+[17.147s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/share/trac_ik_kinematics/package.xml
+[17.147s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/include
+[17.148s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/include/trac_ik_kinematics_plugin
+[17.148s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/include/trac_ik_kinematics_plugin/trac_ik_kinematics_plugin.h
+[17.151s] Invoked command in '/home/amma/Kinova_gen2_rl/build/trac_ik_kinematics' returned '0': AMENT_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib:/home/amma/Kinova_gen2_rl/install/point_goal_test:/home/amma/Kinova_gen2_rl/install/kinova_demo:/home/amma/Kinova_gen2_rl/install/kinova_driver:/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config:/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/kinova_bringup:/home/amma/Kinova_gen2_rl/install/click_pointer:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/trac_ik_lib/lib:${LD_LIBRARY_PATH} /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/trac_ik_kinematics

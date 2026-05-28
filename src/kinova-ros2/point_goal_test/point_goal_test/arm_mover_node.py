@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Subscribe to /goal_point → straight Cartesian path to target.
+"""Subscribe to /goal_point -> straight Cartesian path to target.
 
 Uses /compute_cartesian_path with:
   - start_state populated (fixes "empty JointState" MoveIt error)
@@ -39,9 +39,9 @@ JOINT_NAMES = [
 
 APPROACH_RETRACT = 0.05    # stop 5 cm short of clicked point
 CART_SPEED       = 0.04    # m/s
-MIN_FRACTION     = 0.90    # require ≥90% of straight path
+MIN_FRACTION     = 0.90    # require >=90% of straight path
 
-# Progressive orientation tolerances (rad) — try tightest first, relax if needed
+# Progressive orientation tolerances (rad) - try tightest first, relax if needed
 ORI_TOLERANCES = [0.05, 0.1, 0.2, 0.35]
 
 
@@ -72,14 +72,14 @@ class ArmMoverNode(Node):
         self.create_subscription(
             PointStamped, '/goal_point', self._goal_cb, 10, callback_group=cb)
 
-        self.get_logger().info('ArmMover ready — waiting for /goal_point')
+        self.get_logger().info('ArmMover ready - waiting for /goal_point')
 
     def _js_cb(self, msg: JointState):
         self._joint_state = msg
 
     def _goal_cb(self, msg: PointStamped):
         if self._busy:
-            self.get_logger().warn('Still executing — ignoring new goal')
+            self.get_logger().warn('Still executing - ignoring new goal')
             return
         self._busy = True
         try:
@@ -95,7 +95,7 @@ class ArmMoverNode(Node):
         ty = msg.point.y + oy
         tz = msg.point.z + oz
 
-        # Current EE pose — orientation locked throughout motion
+        # Current EE pose - orientation locked throughout motion
         try:
             tf = self._tf_buffer.lookup_transform(
                 'root', EE_LINK, Time(), timeout=Duration(seconds=2.0))
@@ -111,7 +111,7 @@ class ArmMoverNode(Node):
         dist = math.sqrt(dx**2 + dy**2 + dz**2)
         if dist <= APPROACH_RETRACT:
             self.get_logger().warn(
-                f'Target too close ({dist*100:.1f} cm ≤ 5 cm) — not moving')
+                f'Target too close ({dist*100:.1f} cm <= 5 cm) - not moving')
             return
         factor = (dist - APPROACH_RETRACT) / dist
         tx = ex + dx * factor
@@ -120,7 +120,7 @@ class ArmMoverNode(Node):
 
         self.get_logger().info(
             f'Clicked: ({msg.point.x:.3f}, {msg.point.y:.3f}, {msg.point.z:.3f})'
-            f'  →  goal (−5 cm): ({tx:.3f}, {ty:.3f}, {tz:.3f})')
+            f'  ->  goal (-5 cm): ({tx:.3f}, {ty:.3f}, {tz:.3f})')
 
         # Build start_state from current joint positions (fixes "empty JointState" error)
         start_state = RobotState()
@@ -137,7 +137,7 @@ class ArmMoverNode(Node):
                     start_js.position.append(js.position[idx])
             start_state.joint_state = start_js
         else:
-            self.get_logger().warn('No joint state yet — start_state will be empty')
+            self.get_logger().warn('No joint state yet - start_state will be empty')
 
         # Target pose: keep current EE orientation
         target_pose = Pose(
@@ -149,7 +149,7 @@ class ArmMoverNode(Node):
             self.get_logger().error('compute_cartesian_path service not available')
             return
 
-        # Try progressively looser orientation tolerances until ≥90% coverage
+        # Try progressively looser orientation tolerances until >=90% coverage
         traj = None
         for tol in ORI_TOLERANCES:
             path_constraints = self._make_ori_constraint(q, tol)
@@ -175,7 +175,7 @@ class ArmMoverNode(Node):
             frac = res.fraction
             self.get_logger().info(
                 f'Cartesian path coverage: {frac*100:.1f}%  '
-                f'(orientation tolerance ±{math.degrees(tol):.1f}°)')
+                f'(orientation tolerance +/-{math.degrees(tol):.1f} deg)')
 
             if frac >= MIN_FRACTION:
                 traj = res.solution
@@ -183,14 +183,14 @@ class ArmMoverNode(Node):
             else:
                 self.get_logger().warn(
                     f'Coverage {frac*100:.1f}% < {MIN_FRACTION*100:.0f}% '
-                    f'— relaxing orientation tolerance to ±{math.degrees(ORI_TOLERANCES[ORI_TOLERANCES.index(tol)+1]):.1f}°'
+                    f'- relaxing orientation tolerance to +/-{math.degrees(ORI_TOLERANCES[ORI_TOLERANCES.index(tol)+1]):.1f} deg'
                     if tol != ORI_TOLERANCES[-1] else
-                    f'Coverage {frac*100:.1f}% — all tolerances exhausted, using best effort')
+                    f'Coverage {frac*100:.1f}% - all tolerances exhausted, using best effort')
                 if tol == ORI_TOLERANCES[-1]:
                     traj = res.solution  # use whatever we got
 
         if traj is None or not traj.joint_trajectory.points:
-            self.get_logger().error('No trajectory returned — goal unreachable')
+            self.get_logger().error('No trajectory returned - goal unreachable')
             return
 
         traj = self._stamp_trajectory(traj)
@@ -222,7 +222,7 @@ class ArmMoverNode(Node):
         oc.absolute_y_axis_tolerance = tolerance
         oc.absolute_z_axis_tolerance = tolerance
         oc.weight                    = 1.0
-        oc.parameterization          = 1   # ROTATION_VECTOR — avoids gimbal-lock
+        oc.parameterization          = 1   # ROTATION_VECTOR - avoids gimbal-lock
         c = Constraints()
         c.name = 'keep_ee_orientation'
         c.orientation_constraints.append(oc)

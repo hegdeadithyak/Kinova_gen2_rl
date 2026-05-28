@@ -1,4 +1,0 @@
-Invoking command in '/home/amma/Kinova_gen2_rl/build/click_pointer': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/click_pointer -- -j16 -l16
-Invoked command in '/home/amma/Kinova_gen2_rl/build/click_pointer' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/click_pointer -- -j16 -l16
-Invoking command in '/home/amma/Kinova_gen2_rl/build/click_pointer': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/click_pointer
-Invoked command in '/home/amma/Kinova_gen2_rl/build/click_pointer' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/click_pointer

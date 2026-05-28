@@ -135,11 +135,21 @@ class FeedingOrchestrator(Node):
             self.get_logger().error('Trajectory action server not available')
             return False
 
+        if self._wait_for_state():
+            TWO_PI = 2.0 * math.pi
+            positions = [
+                t - round((t - c) / TWO_PI) * TWO_PI
+                for c, t in zip(self._latest_q, target_rad)
+            ]
+        else:
+            self.get_logger().warn(f'[{label}] no joint state; using target angles as-is')
+            positions = list(target_rad)
+
         goal = FollowJointTrajectory.Goal()
         goal.trajectory.joint_names = JOINT_NAMES
 
         pt = JointTrajectoryPoint()
-        pt.positions = list(target_rad)
+        pt.positions = positions
         pt.velocities = [0.0] * NJ
 
         sec = int(duration_s)

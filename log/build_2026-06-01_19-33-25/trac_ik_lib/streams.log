@@ -1,0 +1,37 @@
+[0.023s] Invoking command in '/home/amma/Kinova_gen2_rl/build/trac_ik_lib': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/trac_ik_lib -- -j12 -l12
+[0.374s] [35m[1mConsolidate compiler generated dependencies of target trac_ik_lib[0m
+[0.376s] [100%] Built target trac_ik_lib
+[0.401s] Invoked command in '/home/amma/Kinova_gen2_rl/build/trac_ik_lib' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/trac_ik_lib -- -j12 -l12
+[0.404s] Invoking command in '/home/amma/Kinova_gen2_rl/build/trac_ik_lib': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/trac_ik_lib
+[0.486s] -- Install configuration: ""
+[0.486s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/environment/library_path.sh
+[0.486s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/environment/library_path.dsv
+[0.487s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/include
+[0.487s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/include/trac_ik
+[0.488s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/include/trac_ik/trac_ik.hpp
+[0.488s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/include/trac_ik/nlopt_ik.hpp
+[0.488s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/include/trac_ik/kdl_tl.hpp
+[0.489s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/include/trac_ik/dual_quaternion.h
+[0.489s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/include/trac_ik/math3d.h
+[0.490s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/include/trac_ik/visibility_control.hpp
+[0.492s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/lib/libtrac_ik_lib.so
+[0.493s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/ament_index/resource_index/package_run_dependencies/trac_ik_lib
+[0.493s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/ament_index/resource_index/parent_prefix_path/trac_ik_lib
+[0.493s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/environment/ament_prefix_path.sh
+[0.493s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/environment/ament_prefix_path.dsv
+[0.493s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/environment/path.sh
+[0.493s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/environment/path.dsv
+[0.493s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/local_setup.bash
+[0.493s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/local_setup.sh
+[0.493s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/local_setup.zsh
+[0.493s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/local_setup.dsv
+[0.493s] -- Installing: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/package.dsv
+[0.493s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/ament_index/resource_index/packages/trac_ik_lib
+[0.494s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/cmake/export_trac_ik_libExport.cmake
+[0.494s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/cmake/export_trac_ik_libExport-noconfig.cmake
+[0.494s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/cmake/ament_cmake_export_targets-extras.cmake
+[0.494s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/cmake/ament_cmake_export_dependencies-extras.cmake
+[0.494s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/cmake/trac_ik_libConfig.cmake
+[0.494s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/cmake/trac_ik_libConfig-version.cmake
+[0.494s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/trac_ik_lib/share/trac_ik_lib/package.xml
+[0.584s] Invoked command in '/home/amma/Kinova_gen2_rl/build/trac_ik_lib' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/trac_ik_lib

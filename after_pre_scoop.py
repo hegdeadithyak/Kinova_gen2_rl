@@ -3,13 +3,13 @@ import sys
 import rclpy
 from robot import FeedingOrchestrator, DUR_TO_FEEDING
 
-FEEDING_RAD = [
-      2.503284605622947
-, 4.1830481631600716
-, 1.3273229494049092
-, 1.7916721165452887
-, 3.9988194673799864
-, 5.487007732953933
+AFTER_PRE_SCOOP_RAD = [
+      2.5326994861789816
+, 4.036655263302851
+, 1.2444419141722265
+, 1.6899869003297199
+, 3.9285500978054824
+, 5.4910413567409675
 ]
 
 
@@ -18,7 +18,7 @@ def main():
     node = FeedingOrchestrator()
 
     try:
-        ok = node.move_joint_space(FEEDING_RAD, DUR_TO_FEEDING, 'TO_FEEDING')
+        ok = node.move_joint_space(AFTER_PRE_SCOOP_RAD, DUR_TO_FEEDING, 'TO_AFTER_PRE_SCOOP')
         sys.exit(0 if ok else 1)
 
     except KeyboardInterrupt:

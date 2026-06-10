@@ -1,0 +1,133 @@
+-- The C compiler identification is GNU 11.4.0
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 1.3.14 (/opt/ros/humble/share/ament_cmake/cmake)
+-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+-- Found action_msgs: 1.2.2 (/opt/ros/humble/share/action_msgs/cmake)
+-- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+-- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)
+-- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found geometry_msgs: 4.9.1 (/opt/ros/humble/share/geometry_msgs/cmake)
+-- Found kinova_msgs: 0.0.1 (/home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake)
+-- Found rclcpp: 16.0.19 (/opt/ros/humble/share/rclcpp/cmake)
+-- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+-- Found rmw_fastrtps_cpp: 6.2.10 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+-- Found FastRTPS: /opt/ros/humble/include  
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Found rclcpp_action: 16.0.19 (/opt/ros/humble/share/rclcpp_action/cmake)
+-- Found rclpy: 3.3.21 (/opt/ros/humble/share/rclpy/cmake)
+-- Found sensor_msgs: 4.9.1 (/opt/ros/humble/share/sensor_msgs/cmake)
+-- Found tf2: 0.25.20 (/opt/ros/humble/share/tf2/cmake)
+-- Found tf2_ros: 0.25.20 (/opt/ros/humble/share/tf2_ros/cmake)
+-- Found interactive_markers: 2.3.2 (/opt/ros/humble/share/interactive_markers/cmake)
+-- Found angles: 1.15.0 (/opt/ros/humble/share/angles/cmake)
+-- Found control_msgs: 4.8.0 (/opt/ros/humble/share/control_msgs/cmake)
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/amma/Kinova_gen2_rl/build/kinova_driver
+[  8%] [32mBuilding CXX object CMakeFiles/kinova_driver.dir/src/kinova_comm.cpp.o[0m
+[  8%] [32mBuilding CXX object CMakeFiles/kinova_driver.dir/src/kinova_arm.cpp.o[0m
+[ 13%] [32mBuilding CXX object CMakeFiles/kinova_driver.dir/src/kinova_tool_pose_action.cpp.o[0m
+[ 21%] [32mBuilding CXX object CMakeFiles/kinova_tf_updater.dir/src/nodes/kinova_tf_updater.cpp.o[0m
+[ 21%] [32mBuilding CXX object CMakeFiles/kinova_tf_updater.dir/src/kinova_ros_types.cpp.o[0m
+[ 26%] [32mBuilding CXX object CMakeFiles/kinova_tf_updater.dir/src/kinova_arm_kinematics.cpp.o[0m
+[ 30%] [32mBuilding CXX object CMakeFiles/kinova_driver.dir/src/kinova_api.cpp.o[0m
+[ 34%] [32mBuilding CXX object CMakeFiles/kinova_driver.dir/src/kinova_joint_angles_action.cpp.o[0m
+[ 39%] [32mBuilding CXX object CMakeFiles/kinova_driver.dir/src/kinova_fingers_action.cpp.o[0m
+[ 43%] [32mBuilding CXX object CMakeFiles/kinova_driver.dir/src/kinova_joint_trajectory_controller.cpp.o[0m
+[ 47%] [32mBuilding CXX object CMakeFiles/kinova_driver.dir/src/kinova_ros_types.cpp.o[0m
+[ 52%] [32m[1mLinking CXX executable kinova_tf_updater[0m
+[ 52%] Built target kinova_tf_updater
+[ 56%] [32m[1mLinking CXX static library libkinova_driver.a[0m
+[ 56%] Built target kinova_driver
+[ 60%] [32mBuilding CXX object CMakeFiles/kinova_interactive_control.dir/src/nodes/kinova_interactive_control.cpp.o[0m
+[ 65%] [32mBuilding CXX object CMakeFiles/joint_trajectory_action_server.dir/src/joint_trajectory_action/joint_trajectory_action_server.cpp.o[0m
+[ 69%] [32mBuilding CXX object CMakeFiles/kinova_arm_driver.dir/src/nodes/kinova_arm_driver.cpp.o[0m
+[ 73%] [32mBuilding CXX object CMakeFiles/positional_action_server.dir/src/joint_trajectory_action/positional_action_server.cpp.o[0m
+[ 78%] [32mBuilding CXX object CMakeFiles/gripper_command_action_server.dir/src/joint_trajectory_action/gripper_command_action_server.cpp.o[0m
+[ 82%] [32m[1mLinking CXX executable positional_action_server[0m
+[ 82%] Built target positional_action_server
+[ 86%] [32m[1mLinking CXX executable kinova_arm_driver[0m
+[ 86%] Built target kinova_arm_driver
+[ 91%] [32m[1mLinking CXX executable gripper_command_action_server[0m
+[ 91%] Built target gripper_command_action_server
+[ 95%] [32m[1mLinking CXX executable joint_trajectory_action_server[0m
+[ 95%] Built target joint_trajectory_action_server
+[100%] [32m[1mLinking CXX executable kinova_interactive_control[0m
+[100%] Built target kinova_interactive_control
+-- Install configuration: ""
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/lib/USBCommLayerUbuntu.so
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/lib/USBCommandLayerUbuntu.so
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/lib/EthCommLayerUbuntu.so
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/lib/EthCommandLayerUbuntu.so
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/gripper_command_action_server.h
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/joint_trajectory_action_server.h
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_tf_updater.h
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_ros_types.h
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_joint_angles_action.h
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_comm.h
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_tool_pose_action.h
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_api.h
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_fingers_action.h
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_joint_trajectory_controller.h
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_arm_kinematics.h
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_arm.h
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/lib/kinova_driver/kinova_arm_driver
+-- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_driver/lib/kinova_driver/kinova_arm_driver" to ""
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/lib/kinova_driver/kinova_tf_updater
+-- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_driver/lib/kinova_driver/kinova_tf_updater" to ""
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/lib/kinova_driver/kinova_interactive_control
+-- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_driver/lib/kinova_driver/kinova_interactive_control" to ""
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/lib/kinova_driver/libkinova_driver.a
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/lib/kinova_driver/joint_trajectory_action_server
+-- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_driver/lib/kinova_driver/joint_trajectory_action_server" to ""
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/lib/kinova_driver/gripper_command_action_server
+-- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_driver/lib/kinova_driver/gripper_command_action_server" to ""
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/lib/kinova_driver/positional_action_server
+-- Set runtime path of "/home/amma/Kinova_gen2_rl/install/kinova_driver/lib/kinova_driver/positional_action_server" to ""
+-- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver
+-- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/gripper_command_action_server.h
+-- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/joint_trajectory_action_server.h
+-- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_tf_updater.h
+-- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_ros_types.h
+-- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_joint_angles_action.h
+-- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_comm.h
+-- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_tool_pose_action.h
+-- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_api.h
+-- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_fingers_action.h
+-- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_joint_trajectory_controller.h
+-- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_arm_kinematics.h
+-- Up-to-date: /home/amma/Kinova_gen2_rl/install/kinova_driver/include/kinova_driver/kinova_arm.h
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/share/ament_index/resource_index/package_run_dependencies/kinova_driver
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/share/ament_index/resource_index/parent_prefix_path/kinova_driver
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/share/kinova_driver/environment/ament_prefix_path.sh
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/share/kinova_driver/environment/ament_prefix_path.dsv
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/share/kinova_driver/environment/path.sh
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/share/kinova_driver/environment/path.dsv
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/share/kinova_driver/local_setup.bash
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/share/kinova_driver/local_setup.sh
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/share/kinova_driver/local_setup.zsh
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/share/kinova_driver/local_setup.dsv
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/share/kinova_driver/package.dsv
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/share/ament_index/resource_index/packages/kinova_driver
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/share/kinova_driver/cmake/kinova_driverConfig.cmake
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/share/kinova_driver/cmake/kinova_driverConfig-version.cmake
+-- Installing: /home/amma/Kinova_gen2_rl/install/kinova_driver/share/kinova_driver/package.xml

@@ -1,0 +1,82 @@
+[0.000s] Invoking command in '/home/amma/Kinova_gen2_rl/build/kinova_demo': CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_driver:/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/Kinova_gen2_rl/install/trac_ik:/home/amma/Kinova_gen2_rl/install/trac_ik_kinematics:/home/amma/Kinova_gen2_rl/install/trac_ik_examples:/home/amma/Kinova_gen2_rl/install/trac_ik_lib:/home/amma/Kinova_gen2_rl/install/point_goal_test:/home/amma/Kinova_gen2_rl/install/kinova_demo:/home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config:/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/kinova_bringup:/home/amma/Kinova_gen2_rl/install/click_pointer:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/kinova_driver/lib:/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib:/home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/lib:/home/amma/Kinova_gen2_rl/install/trac_ik_lib/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib /usr/bin/cmake /home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_demo -DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/kinova_demo
+[0.065s] -- The C compiler identification is GNU 11.4.0
+[0.121s] -- The CXX compiler identification is GNU 11.4.0
+[0.127s] -- Detecting C compiler ABI info
+[0.222s] -- Detecting C compiler ABI info - done
+[0.233s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.234s] -- Detecting C compile features
+[0.234s] -- Detecting C compile features - done
+[0.239s] -- Detecting CXX compiler ABI info
+[0.341s] -- Detecting CXX compiler ABI info - done
+[0.352s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.352s] -- Detecting CXX compile features
+[0.353s] -- Detecting CXX compile features - done
+[0.356s] -- Found ament_cmake: 1.3.14 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.494s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.562s] -- Found kinova_driver: 0.0.1 (/home/amma/Kinova_gen2_rl/install/kinova_driver/share/kinova_driver/cmake)
+[0.562s] -- Found kinova_msgs: 0.0.1 (/home/amma/Kinova_gen2_rl/install/kinova_msgs/share/kinova_msgs/cmake)
+[0.593s] -- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.598s] -- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.604s] -- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.613s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.624s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.682s] -- Found rclcpp: 16.0.19 (/opt/ros/humble/share/rclcpp/cmake)
+[0.711s] -- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.713s] -- Found rmw_fastrtps_cpp: 6.2.10 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.793s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+[0.818s] -- Found FastRTPS: /opt/ros/humble/include  
+[0.856s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.863s] -- Looking for pthread.h
+[0.942s] -- Looking for pthread.h - found
+[0.942s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[1.024s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[1.026s] -- Found Threads: TRUE  
+[1.058s] -- Found rclpy: 3.3.21 (/opt/ros/humble/share/rclpy/cmake)
+[1.178s] -- Configuring done
+[1.181s] -- Generating done
+[1.183s] -- Build files have been written to: /home/amma/Kinova_gen2_rl/build/kinova_demo
+[1.190s] Invoked command in '/home/amma/Kinova_gen2_rl/build/kinova_demo' returned '0': CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_driver:/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/Kinova_gen2_rl/install/trac_ik:/home/amma/Kinova_gen2_rl/install/trac_ik_kinematics:/home/amma/Kinova_gen2_rl/install/trac_ik_examples:/home/amma/Kinova_gen2_rl/install/trac_ik_lib:/home/amma/Kinova_gen2_rl/install/point_goal_test:/home/amma/Kinova_gen2_rl/install/kinova_demo:/home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config:/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/kinova_bringup:/home/amma/Kinova_gen2_rl/install/click_pointer:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/kinova_driver/lib:/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib:/home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/lib:/home/amma/Kinova_gen2_rl/install/trac_ik_lib/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib /usr/bin/cmake /home/amma/Kinova_gen2_rl/src/kinova-ros2/kinova_demo -DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/kinova_demo
+[1.191s] Invoking command in '/home/amma/Kinova_gen2_rl/build/kinova_demo': CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_driver:/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/Kinova_gen2_rl/install/trac_ik:/home/amma/Kinova_gen2_rl/install/trac_ik_kinematics:/home/amma/Kinova_gen2_rl/install/trac_ik_examples:/home/amma/Kinova_gen2_rl/install/trac_ik_lib:/home/amma/Kinova_gen2_rl/install/point_goal_test:/home/amma/Kinova_gen2_rl/install/kinova_demo:/home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config:/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/kinova_bringup:/home/amma/Kinova_gen2_rl/install/click_pointer:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/kinova_driver/lib:/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib:/home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/lib:/home/amma/Kinova_gen2_rl/install/trac_ik_lib/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/kinova_demo -- -j12 -l12
+[1.257s] Built target ament_cmake_python_copy_kinova_demo
+[1.434s] running egg_info
+[1.434s] creating kinova_demo.egg-info
+[1.434s] writing kinova_demo.egg-info/PKG-INFO
+[1.435s] writing dependency_links to kinova_demo.egg-info/dependency_links.txt
+[1.435s] writing top-level names to kinova_demo.egg-info/top_level.txt
+[1.435s] writing manifest file 'kinova_demo.egg-info/SOURCES.txt'
+[1.436s] reading manifest file 'kinova_demo.egg-info/SOURCES.txt'
+[1.436s] writing manifest file 'kinova_demo.egg-info/SOURCES.txt'
+[1.459s] Built target ament_cmake_python_build_kinova_demo_egg
+[1.469s] Invoked command in '/home/amma/Kinova_gen2_rl/build/kinova_demo' returned '0': CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_driver:/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/Kinova_gen2_rl/install/trac_ik:/home/amma/Kinova_gen2_rl/install/trac_ik_kinematics:/home/amma/Kinova_gen2_rl/install/trac_ik_examples:/home/amma/Kinova_gen2_rl/install/trac_ik_lib:/home/amma/Kinova_gen2_rl/install/point_goal_test:/home/amma/Kinova_gen2_rl/install/kinova_demo:/home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config:/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/kinova_bringup:/home/amma/Kinova_gen2_rl/install/click_pointer:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/kinova_driver/lib:/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib:/home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/lib:/home/amma/Kinova_gen2_rl/install/trac_ik_lib/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/kinova_demo -- -j12 -l12
+[1.471s] Invoking command in '/home/amma/Kinova_gen2_rl/build/kinova_demo': CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_driver:/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/Kinova_gen2_rl/install/trac_ik:/home/amma/Kinova_gen2_rl/install/trac_ik_kinematics:/home/amma/Kinova_gen2_rl/install/trac_ik_examples:/home/amma/Kinova_gen2_rl/install/trac_ik_lib:/home/amma/Kinova_gen2_rl/install/point_goal_test:/home/amma/Kinova_gen2_rl/install/kinova_demo:/home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config:/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/kinova_bringup:/home/amma/Kinova_gen2_rl/install/click_pointer:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/kinova_driver/lib:/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib:/home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/lib:/home/amma/Kinova_gen2_rl/install/trac_ik_lib/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/kinova_demo
+[1.478s] -- Install configuration: ""
+[1.478s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/kinova_demo/environment/pythonpath.sh
+[1.478s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/kinova_demo/environment/pythonpath.dsv
+[1.478s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/local/lib/python3.10/dist-packages/kinova_demo-0.0.1-py3.10.egg-info
+[1.478s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/local/lib/python3.10/dist-packages/kinova_demo-0.0.1-py3.10.egg-info/top_level.txt
+[1.478s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/local/lib/python3.10/dist-packages/kinova_demo-0.0.1-py3.10.egg-info/SOURCES.txt
+[1.478s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/local/lib/python3.10/dist-packages/kinova_demo-0.0.1-py3.10.egg-info/PKG-INFO
+[1.479s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/local/lib/python3.10/dist-packages/kinova_demo-0.0.1-py3.10.egg-info/dependency_links.txt
+[1.479s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/local/lib/python3.10/dist-packages/kinova_demo
+[1.479s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/local/lib/python3.10/dist-packages/kinova_demo/module_to_import.py
+[1.479s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/local/lib/python3.10/dist-packages/kinova_demo/__init__.py
+[1.506s] Listing '/home/amma/Kinova_gen2_rl/install/kinova_demo/local/lib/python3.10/dist-packages/kinova_demo'...
+[1.506s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_demo/local/lib/python3.10/dist-packages/kinova_demo/__init__.py'...
+[1.506s] Compiling '/home/amma/Kinova_gen2_rl/install/kinova_demo/local/lib/python3.10/dist-packages/kinova_demo/module_to_import.py'...
+[1.509s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/lib/kinova_demo/pose_action_client.py
+[1.509s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/ament_index/resource_index/package_run_dependencies/kinova_demo
+[1.509s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/ament_index/resource_index/parent_prefix_path/kinova_demo
+[1.509s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/kinova_demo/environment/ament_prefix_path.sh
+[1.509s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/kinova_demo/environment/ament_prefix_path.dsv
+[1.510s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/kinova_demo/environment/path.sh
+[1.510s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/kinova_demo/environment/path.dsv
+[1.510s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/kinova_demo/local_setup.bash
+[1.510s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/kinova_demo/local_setup.sh
+[1.510s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/kinova_demo/local_setup.zsh
+[1.510s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/kinova_demo/local_setup.dsv
+[1.510s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/kinova_demo/package.dsv
+[1.510s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/ament_index/resource_index/packages/kinova_demo
+[1.510s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/kinova_demo/cmake/kinova_demoConfig.cmake
+[1.511s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/kinova_demo/cmake/kinova_demoConfig-version.cmake
+[1.511s] -- Installing: /home/amma/Kinova_gen2_rl/install/kinova_demo/share/kinova_demo/package.xml
+[1.512s] Invoked command in '/home/amma/Kinova_gen2_rl/build/kinova_demo' returned '0': CMAKE_PREFIX_PATH=/home/amma/Kinova_gen2_rl/install/kinova_driver:/home/amma/Kinova_gen2_rl/install/kinova_msgs:/home/amma/Kinova_gen2_rl/install/trac_ik:/home/amma/Kinova_gen2_rl/install/trac_ik_kinematics:/home/amma/Kinova_gen2_rl/install/trac_ik_examples:/home/amma/Kinova_gen2_rl/install/trac_ik_lib:/home/amma/Kinova_gen2_rl/install/point_goal_test:/home/amma/Kinova_gen2_rl/install/kinova_demo:/home/amma/Kinova_gen2_rl/install/j2s6s200_moveit_config:/home/amma/Kinova_gen2_rl/install/kinova_description:/home/amma/Kinova_gen2_rl/install/kinova_bringup:/home/amma/Kinova_gen2_rl/install/click_pointer:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble LD_LIBRARY_PATH=/home/amma/Kinova_gen2_rl/install/kinova_driver/lib:/home/amma/Kinova_gen2_rl/install/kinova_msgs/lib:/home/amma/Kinova_gen2_rl/install/trac_ik_kinematics/lib:/home/amma/Kinova_gen2_rl/install/trac_ik_lib/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/kinova_demo

@@ -25,6 +25,8 @@ from moveit_msgs.msg import (Constraints, OrientationConstraint,
                               RobotState)
 from control_msgs.action import FollowJointTrajectory
 from builtin_interfaces.msg import Duration as DurationMsg
+from visualization_msgs.msg import Marker, MarkerArray
+from std_msgs.msg import ColorRGBA
 import tf2_ros
 import tf2_geometry_msgs  # noqa: F401
 
@@ -37,8 +39,8 @@ JOINT_NAMES = [
     'j2s6s200_joint_4', 'j2s6s200_joint_5', 'j2s6s200_joint_6',
 ]
 
-APPROACH_RETRACT = 0.05    # stop 5 cm short of clicked point
-CART_SPEED       = 0.04    # m/s
+APPROACH_RETRACT = 0.03  # stop 5 cm short of clicked point
+CART_SPEED       = 0.08    # m/s
 MIN_FRACTION     = 0.90    # require >=90% of straight path
 
 # Progressive orientation tolerances (rad) - try tightest first, relax if needed
@@ -59,6 +61,8 @@ class ArmMoverNode(Node):
 
         self._tf_buffer  = tf2_ros.Buffer()
         self._tf_listener = tf2_ros.TransformListener(self._tf_buffer, self)
+        self._marker_pub  = self.create_publisher(MarkerArray, '/goal_point_markers', 10)
+        self._markers     = []
 
         self._cart_client = self.create_client(
             GetCartesianPath, '/compute_cartesian_path', callback_group=cb)
@@ -94,6 +98,8 @@ class ArmMoverNode(Node):
         tx = msg.point.x + ox
         ty = msg.point.y + oy
         tz = msg.point.z + oz
+
+        self._publish_marker(tx, ty, tz)
 
         # Current EE pose - orientation locked throughout motion
         try:
@@ -212,6 +218,24 @@ class ArmMoverNode(Node):
         res_future = gh.get_result_async()
         rclpy.spin_until_future_complete(self, res_future, timeout_sec=60.0)
         self.get_logger().info('Motion complete')
+
+    def _publish_marker(self, x: float, y: float, z: float):
+        m = Marker()
+        m.header.frame_id = 'root'
+        m.header.stamp    = self.get_clock().now().to_msg()
+        m.ns              = 'goal_points'
+        m.id              = len(self._markers)
+        m.type            = Marker.SPHERE
+        m.action          = Marker.ADD
+        m.pose.position   = Point(x=x, y=y, z=z)
+        m.pose.orientation = Quaternion(x=0.0, y=0.0, z=0.0, w=1.0)
+        m.scale.x = m.scale.y = m.scale.z = 0.03
+        m.color   = ColorRGBA(r=1.0, g=0.3, b=0.0, a=0.9)
+        m.lifetime.sec = 0  # persist forever
+        self._markers.append(m)
+        arr = MarkerArray()
+        arr.markers = list(self._markers)
+        self._marker_pub.publish(arr)
 
     def _make_ori_constraint(self, q, tolerance: float) -> Constraints:
         oc = OrientationConstraint()

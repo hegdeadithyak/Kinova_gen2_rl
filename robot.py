@@ -370,10 +370,6 @@ class FeedingOrchestrator(Node):
         return self._send_and_wait(goal, 'RECORDED')
 
     def move_with_orientation_lock(self, target_rad: List[float], duration_s: float, label: str) -> bool:
-        ok = self.move_cartesian_orientation_locked(target_rad, duration_s, label)
-        if ok:
-            return True
-        self.get_logger().warn(f'[{label}] falling back to joint-space; spoon may tip')
         return self.move_joint_space(target_rad, duration_s, label)
 
     def run_cycles(self, n: int, scoop_start: List[float], transit: List[float], feeding: List[float]) -> int:

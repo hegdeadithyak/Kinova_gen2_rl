@@ -111,6 +111,19 @@ def _launch_setup(context, *args, **kwargs):
     bringup_dir = get_package_share_directory(KINOVA_BRINGUP_PKG)
     rviz_config_file = os.path.join(bringup_dir, "moveit_resource", "handeye_calibration.rviz")
 
+    moveit_params = _moveit_node_params()
+
+    # robot_state_publisher — publishes TF for every link from /joint_states
+    nodes.append(
+        Node(
+            package="robot_state_publisher",
+            executable="robot_state_publisher",
+            name="robot_state_publisher",
+            output="screen",
+            parameters=moveit_params,
+        )
+    )
+
     nodes.append(
         Node(
             package="rviz2",
@@ -118,7 +131,7 @@ def _launch_setup(context, *args, **kwargs):
             name="rviz2",
             output="screen",
             arguments=["-d", rviz_config_file],
-            parameters=_moveit_node_params(),
+            parameters=moveit_params,
         )
     )
 
@@ -128,7 +141,7 @@ def _launch_setup(context, *args, **kwargs):
             executable="move_group",
             name="move_group",
             output="screen",
-            parameters=_moveit_node_params(),
+            parameters=moveit_params,
         )
     )
 
@@ -180,8 +193,28 @@ def _launch_setup(context, *args, **kwargs):
             LogInfo(msg="WARNING: realsense2_camera not found. Start the camera driver separately.")
         )
 
+    # ArUco marker detector — publishes camera_color_optical_frame -> aruco_marker_frame
+    nodes.append(
+        Node(
+            package="kinova_bringup",
+            executable="aruco_tf_publisher.py",
+            name="aruco_tf_publisher",
+            output="screen",
+            parameters=[{
+                "marker_id":    LaunchConfiguration("marker_id"),
+                "marker_size":  LaunchConfiguration("marker_size"),
+                "camera_frame": "camera_color_optical_frame",
+                "marker_frame": "aruco_marker_frame",
+            }],
+        )
+    )
+
     return nodes
 
 
 def generate_launch_description():
-    return LaunchDescription([OpaqueFunction(function=_launch_setup)])
+    return LaunchDescription([
+        DeclareLaunchArgument("marker_id",   default_value="0"),
+        DeclareLaunchArgument("marker_size", default_value="0.0594"),
+        OpaqueFunction(function=_launch_setup),
+    ])

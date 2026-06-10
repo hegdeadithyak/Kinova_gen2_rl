@@ -1,0 +1,121 @@
+[0.464s] Invoking command in '/home/amma/Kinova_gen2_rl/build/point_goal_test': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble /usr/bin/cmake /home/amma/Kinova_gen2_rl/src/kinova-ros2/point_goal_test -DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/point_goal_test
+[0.508s] -- The C compiler identification is GNU 11.4.0
+[0.574s] -- The CXX compiler identification is GNU 11.4.0
+[0.580s] -- Detecting C compiler ABI info
+[0.653s] -- Detecting C compiler ABI info - done
+[0.658s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.658s] -- Detecting C compile features
+[0.659s] -- Detecting C compile features - done
+[0.661s] -- Detecting CXX compiler ABI info
+[0.735s] -- Detecting CXX compiler ABI info - done
+[0.741s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.741s] -- Detecting CXX compile features
+[0.741s] -- Detecting CXX compile features - done
+[0.742s] -- Found ament_cmake: 1.3.14 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.871s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.980s] -- Found rclcpp: 16.0.19 (/opt/ros/humble/share/rclcpp/cmake)
+[1.040s] -- Found rosidl_generator_c: 3.1.8 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[1.047s] -- Found rosidl_adapter: 3.1.8 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[1.058s] -- Found rosidl_generator_cpp: 3.1.8 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[1.074s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[1.096s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[1.156s] -- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[1.160s] -- Found rmw_fastrtps_cpp: 6.2.10 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[1.264s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+[1.289s] -- Found FastRTPS: /opt/ros/humble/include  
+[1.340s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[1.346s] -- Looking for pthread.h
+[1.419s] -- Looking for pthread.h - found
+[1.419s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[1.490s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[1.492s] -- Found Threads: TRUE  
+[1.527s] -- Found geometry_msgs: 4.9.1 (/opt/ros/humble/share/geometry_msgs/cmake)
+[1.536s] -- Found moveit_ros_planning_interface: 2.5.9 (/opt/ros/humble/share/moveit_ros_planning_interface/cmake)
+[1.572s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: date_time filesystem program_options system thread 
+[1.814s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: chrono date_time filesystem iostreams program_options regex serialization system thread 
+[1.876s] -- Found parameter_traits: 0.7.1 (/opt/ros/humble/share/parameter_traits/cmake)
+[1.900s] -- Found rclcpp_lifecycle: 16.0.19 (/opt/ros/humble/share/rclcpp_lifecycle/cmake)
+[1.939s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: filesystem 
+[2.056s] -- library: /usr/lib/x86_64-linux-gnu/libcurl.so
+[2.104s] -- Found Eigen3: TRUE (found version "3.4.0") 
+[2.104s] -- Ensuring Eigen3 include directory is part of orocos-kdl CMake target
+[2.292s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: system filesystem date_time program_options thread chrono 
+[2.338s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: thread system filesystem regex date_time program_options 
+[2.373s] -- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: system filesystem date_time program_options thread 
+[2.604s] -- Configuring done
+[2.640s] -- Generating done
+[2.652s] -- Build files have been written to: /home/amma/Kinova_gen2_rl/build/point_goal_test
+[2.671s] Invoked command in '/home/amma/Kinova_gen2_rl/build/point_goal_test' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble /usr/bin/cmake /home/amma/Kinova_gen2_rl/src/kinova-ros2/point_goal_test -DCMAKE_INSTALL_PREFIX=/home/amma/Kinova_gen2_rl/install/point_goal_test
+[2.673s] Invoking command in '/home/amma/Kinova_gen2_rl/build/point_goal_test': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/point_goal_test -- -j12 -l12
+[2.735s] [ 50%] [32mBuilding CXX object CMakeFiles/feeding_safe_mover.dir/src/feeding_safe_mover.cpp.o[0m
+[2.748s] [ 50%] Built target ament_cmake_python_copy_point_goal_test
+[2.748s] [ 50%] Built target ament_cmake_python_copy_point_goal_test_setup
+[3.093s] running egg_info
+[3.094s] creating point_goal_test.egg-info
+[3.094s] writing point_goal_test.egg-info/PKG-INFO
+[3.094s] writing dependency_links to point_goal_test.egg-info/dependency_links.txt
+[3.095s] writing top-level names to point_goal_test.egg-info/top_level.txt
+[3.095s] writing manifest file 'point_goal_test.egg-info/SOURCES.txt'
+[3.098s] reading manifest file 'point_goal_test.egg-info/SOURCES.txt'
+[3.099s] writing manifest file 'point_goal_test.egg-info/SOURCES.txt'
+[3.134s] [ 50%] Built target ament_cmake_python_build_point_goal_test_egg
+[19.388s] [100%] [32m[1mLinking CXX executable feeding_safe_mover[0m
+[20.190s] [100%] Built target feeding_safe_mover
+[20.205s] Invoked command in '/home/amma/Kinova_gen2_rl/build/point_goal_test' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble /usr/bin/cmake --build /home/amma/Kinova_gen2_rl/build/point_goal_test -- -j12 -l12
+[20.208s] Invoking command in '/home/amma/Kinova_gen2_rl/build/point_goal_test': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/point_goal_test
+[20.217s] -- Install configuration: ""
+[20.217s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/lib/point_goal_test/feeding_safe_mover
+[20.222s] -- Set runtime path of "/home/amma/Kinova_gen2_rl/install/point_goal_test/lib/point_goal_test/feeding_safe_mover" to ""
+[20.222s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/pythonpath.sh
+[20.222s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/pythonpath.dsv
+[20.222s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test-0.0.1-py3.10.egg-info
+[20.223s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test-0.0.1-py3.10.egg-info/top_level.txt
+[20.223s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test-0.0.1-py3.10.egg-info/SOURCES.txt
+[20.223s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test-0.0.1-py3.10.egg-info/PKG-INFO
+[20.223s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test-0.0.1-py3.10.egg-info/dependency_links.txt
+[20.223s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test
+[20.223s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/gazebo_teleop.py
+[20.223s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/point_selector_node.py
+[20.223s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/arm_mover_node.py
+[20.224s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/__init__.py
+[20.224s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/test_scoop_gazebo.py
+[20.259s] Listing '/home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test'...
+[20.260s] Compiling '/home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/__init__.py'...
+[20.260s] Compiling '/home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/arm_mover_node.py'...
+[20.260s] Compiling '/home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/gazebo_teleop.py'...
+[20.260s] Compiling '/home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/point_selector_node.py'...
+[20.260s] Compiling '/home/amma/Kinova_gen2_rl/install/point_goal_test/local/lib/python3.10/dist-packages/point_goal_test/test_scoop_gazebo.py'...
+[20.264s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/lib/point_goal_test/point_selector_node
+[20.264s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/lib/point_goal_test/arm_mover_node
+[20.265s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/lib/point_goal_test/test_scoop_gazebo
+[20.265s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/lib/point_goal_test/gazebo_teleop
+[20.265s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/launch
+[20.265s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/launch/__pycache__
+[20.265s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/launch/__pycache__/point_goal.launch.cpython-310.pyc
+[20.265s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/launch/__pycache__/point_goal.launch.cpython-312.pyc
+[20.266s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/launch/feeding_safe.launch.py
+[20.266s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/launch/point_goal.launch.py
+[20.266s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/launch/point_goal_gazebo.launch.py
+[20.267s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/config
+[20.267s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/config/gz_controllers.yaml
+[20.267s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/config/point_goal.rviz
+[20.267s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/worlds
+[20.267s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/worlds/point_goal_scene.sdf
+[20.267s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/ament_index/resource_index/packages/point_goal_test
+[20.267s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/package.xml
+[20.267s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/ament_index/resource_index/package_run_dependencies/point_goal_test
+[20.268s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/ament_index/resource_index/parent_prefix_path/point_goal_test
+[20.268s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/ament_prefix_path.sh
+[20.268s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/ament_prefix_path.dsv
+[20.268s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/path.sh
+[20.269s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/environment/path.dsv
+[20.269s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/local_setup.bash
+[20.270s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/local_setup.sh
+[20.270s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/local_setup.zsh
+[20.270s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/local_setup.dsv
+[20.270s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/package.dsv
+[20.270s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/ament_index/resource_index/packages/point_goal_test
+[20.271s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/cmake/point_goal_testConfig.cmake
+[20.271s] -- Installing: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/cmake/point_goal_testConfig-version.cmake
+[20.271s] -- Up-to-date: /home/amma/Kinova_gen2_rl/install/point_goal_test/share/point_goal_test/package.xml
+[20.271s] Invoked command in '/home/amma/Kinova_gen2_rl/build/point_goal_test' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/amma/Kinova_gen2_rl/install/mouth_tracking:/opt/ros/humble /usr/bin/cmake --install /home/amma/Kinova_gen2_rl/build/point_goal_test

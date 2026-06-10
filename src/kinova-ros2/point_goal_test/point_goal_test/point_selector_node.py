@@ -27,6 +27,7 @@ class PointSelectorNode(Node):
 
         self.declare_parameter('cam_offset_x', 0.0)
         self.declare_parameter('cam_offset_y', 0.0)
+        self.declare_parameter('cam_offset_z', 0.0)
 
         self._tf_buffer = tf2_ros.Buffer()
         self._tf_listener = tf2_ros.TransformListener(self._tf_buffer, self)
@@ -123,7 +124,7 @@ class PointSelectorNode(Node):
         cx, cy = self._K[0, 2], self._K[1, 2]
         x_c = (u - cx) * depth_m / fx + self.get_parameter('cam_offset_x').value
         y_c = (v - cy) * depth_m / fy + self.get_parameter('cam_offset_y').value
-        z_c = depth_m
+        z_c = depth_m + self.get_parameter('cam_offset_z').value
 
         print(f'\n--- Click ({u},{v}) ---')
         print(f'  raw depth:    {raw_val}  →  {depth_m:.4f} m')

@@ -50,6 +50,9 @@ install(PROGRAMS point_goal_test/test_scoop_gazebo.py
 install(PROGRAMS point_goal_test/gazebo_teleop.py
   RENAME gazebo_teleop
   DESTINATION lib/${PROJECT_NAME})
+install(PROGRAMS point_goal_test/mouth_goal_node.py
+  RENAME mouth_goal_node
+  DESTINATION lib/${PROJECT_NAME})
 
 # ---- shared resources ----
 install(DIRECTORY launch config worlds

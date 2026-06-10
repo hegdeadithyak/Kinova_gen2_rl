@@ -42,13 +42,12 @@ def _robot_urdf_xml():
 
 def _mode_offsets(context):
     mode = str(context.perform_substitution(LaunchConfiguration("mode"))).strip().lower()
+    ox = float(context.perform_substitution(LaunchConfiguration("offset_x")))
+    oy = float(context.perform_substitution(LaunchConfiguration("offset_y")))
+    oz = float(context.perform_substitution(LaunchConfiguration("offset_z")))
     if mode == "picking":
-        return 0.0, 0.0, -0.06
-    return (
-        float(context.perform_substitution(LaunchConfiguration("offset_x"))),
-        float(context.perform_substitution(LaunchConfiguration("offset_y"))),
-        float(context.perform_substitution(LaunchConfiguration("offset_z"))),
-    )
+        return ox - 0.06, oy + 0.005, oz
+    return ox, oy, oz
 
 def _moveit_params():
     ompl_yaml = _load_yaml(MOVEIT_PKG, "config/ompl_planning.yaml")
@@ -104,6 +103,17 @@ def _launch_setup(context, *args, **kwargs):
 
     params = _moveit_params()
     offset_x, offset_y, offset_z = _mode_offsets(context)
+    mode = str(context.perform_substitution(LaunchConfiguration("mode"))).strip().lower()
+
+    cam_x     = context.perform_substitution(LaunchConfiguration("cam_x"))
+    cam_y     = context.perform_substitution(LaunchConfiguration("cam_y"))
+    cam_z     = context.perform_substitution(LaunchConfiguration("cam_z"))
+    cam_roll  = context.perform_substitution(LaunchConfiguration("cam_roll"))
+    cam_pitch = context.perform_substitution(LaunchConfiguration("cam_pitch"))
+    cam_yaw   = context.perform_substitution(LaunchConfiguration("cam_yaw"))
+    cam_offset_x = float(context.perform_substitution(LaunchConfiguration("cam_offset_x")))
+    cam_offset_y = float(context.perform_substitution(LaunchConfiguration("cam_offset_y")))
+    cam_offset_z = float(context.perform_substitution(LaunchConfiguration("cam_offset_z")))
     nodes = []
 
     nodes.append(Node(
@@ -126,17 +136,17 @@ def _launch_setup(context, *args, **kwargs):
                    "--roll", "0", "--pitch", "0", "--yaw", "0",
                    "--frame-id", "world", "--child-frame-id", "root"]))
 
-    # EE -> camera_color_optical_frame hand-eye TF
+    # EE -> camera_color_optical_frame hand-eye TF (values are mode-dependent)
     nodes.append(Node(
         package="tf2_ros", executable="static_transform_publisher",
         name="ee_to_camera_optical", output="screen",
         arguments=[
-            "--x",     LaunchConfiguration("cam_x"),
-            "--y",     LaunchConfiguration("cam_y"),
-            "--z",     LaunchConfiguration("cam_z"),
-            "--roll",  LaunchConfiguration("cam_roll"),
-            "--pitch", LaunchConfiguration("cam_pitch"),
-            "--yaw",   LaunchConfiguration("cam_yaw"),
+            "--x",     str(cam_x),
+            "--y",     str(cam_y),
+            "--z",     str(cam_z),
+            "--roll",  str(cam_roll),
+            "--pitch", str(cam_pitch),
+            "--yaw",   str(cam_yaw),
             "--frame-id", "j2s6s200_end_effector",
             "--child-frame-id", "camera_color_optical_frame"]))
 
@@ -161,9 +171,20 @@ def _launch_setup(context, *args, **kwargs):
         package="point_goal_test", executable="point_selector_node",
         name="point_selector_node", output="screen",
         parameters=[{
-            'cam_offset_x': float(context.perform_substitution(LaunchConfiguration("cam_offset_x"))),
-            'cam_offset_y': float(context.perform_substitution(LaunchConfiguration("cam_offset_y"))),
+            'cam_offset_x': cam_offset_x,
+            'cam_offset_y': cam_offset_y,
+            'cam_offset_z': cam_offset_z,
         }]))
+
+    if mode == "feeding":
+        nodes.append(Node(
+            package="point_goal_test", executable="mouth_goal_node",
+            name="mouth_goal_node", output="screen",
+            parameters=[{
+                'cam_offset_x': cam_offset_x,
+                'cam_offset_y': cam_offset_y,
+                'cam_offset_z': cam_offset_z,
+            }]))
 
     nodes.append(Node(
         package="point_goal_test", executable="arm_mover_node",
@@ -173,6 +194,13 @@ def _launch_setup(context, *args, **kwargs):
             'offset_y': offset_y,
             'offset_z': offset_z,
         }]))
+
+    rviz_config = os.path.join(
+        get_package_share_directory("point_goal_test"), "config", "point_goal.rviz")
+    nodes.append(Node(
+        package="rviz2", executable="rviz2",
+        name="rviz2", output="screen",
+        arguments=["-d", rviz_config]))
 
     return nodes
 
@@ -187,9 +215,10 @@ def generate_launch_description():
         DeclareLaunchArgument("cam_pitch", default_value="2.9800"),
         DeclareLaunchArgument("cam_yaw",   default_value="-1.0334"),
         DeclareLaunchArgument("offset_x",     default_value="0.0"),
-        DeclareLaunchArgument("offset_y",     default_value="-0.035"),
-        DeclareLaunchArgument("offset_z",     default_value="-0.05"),
-        DeclareLaunchArgument("cam_offset_x", default_value="-0.14"),
-        DeclareLaunchArgument("cam_offset_y", default_value="-0.14"),
+        DeclareLaunchArgument("offset_y",     default_value="0.0"),
+        DeclareLaunchArgument("offset_z",     default_value="0.0"),
+        DeclareLaunchArgument("cam_offset_x", default_value="-0.12"),
+        DeclareLaunchArgument("cam_offset_y", default_value="-0.32"),
+        DeclareLaunchArgument("cam_offset_z", default_value="-0.19"),
         OpaqueFunction(function=_launch_setup),
     ])
